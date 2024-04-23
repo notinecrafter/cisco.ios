@@ -1,3 +1,9 @@
+This is a fork of Cisco's own Ansible IOS collection. There is only one change: if the regular expression used to check the privilege level fails to find a match, it is assumed the privilege is 15.
+
+When using parser views to differentiate between different role types instead of linear privileges the `show privilege` command no longer shows you a number, but instead shows which parser view you are in. This breaks the logic in the original Ansible collection, which requests the privilege before every command, and breaks when the result does not match a pre-defined regular expression.
+
+There is a proper way to fix this that can be accepted in to the mainstream collection. This solution will have to hold until such a way has been developed.
+
 # Cisco IOS Collection
 
 [![CI](https://zuul-ci.org/gated.svg)](https://dashboard.zuul.ansible.com/t/ansible/project/github.com/ansible-collections/cisco.ios)

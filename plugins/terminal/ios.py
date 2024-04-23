@@ -74,7 +74,7 @@ class TerminalModule(TerminalBase):
 
         prompt = self.privilege_level_re.search(result)
         if not prompt:
-            raise AnsibleConnectionFailure("unable to check privilege level [%s]" % result)
+            return 15
 
         return int(prompt.group(1))
 
