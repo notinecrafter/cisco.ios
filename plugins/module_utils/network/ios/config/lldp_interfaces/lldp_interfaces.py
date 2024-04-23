@@ -56,7 +56,9 @@ class Lldp_Interfaces(ConfigBase):
             self.gather_network_resources,
             data=data,
         )
-        lldp_interfaces_facts = facts["ansible_network_resources"].get("lldp_interfaces")
+        lldp_interfaces_facts = facts["ansible_network_resources"].get(
+            "lldp_interfaces",
+        )
         if not lldp_interfaces_facts:
             return []
         return lldp_interfaces_facts
@@ -94,7 +96,9 @@ class Lldp_Interfaces(ConfigBase):
                 self._module.fail_json(
                     msg="value of running_config parameter must not be empty for state parsed",
                 )
-            result["parsed"] = self.get_lldp_interfaces_facts(data=running_config)
+            result["parsed"] = self.get_lldp_interfaces_facts(
+                data=running_config,
+            )
         else:
             changed_lldp_interfaces_facts = []
 
@@ -140,7 +144,9 @@ class Lldp_Interfaces(ConfigBase):
 
         if self.state in ("overridden", "merged", "replaced", "rendered") and not want:
             self._module.fail_json(
-                msg="value of config parameter must not be empty for state {0}".format(self.state),
+                msg="value of config parameter must not be empty for state {0}".format(
+                    self.state,
+                ),
             )
 
         if self.state == "overridden":
@@ -308,7 +314,9 @@ class Lldp_Interfaces(ConfigBase):
         if have.get("receive") and have.get("receive") != want.get("receive"):
             cmd = "lldp receive"
             remove_command_from_config_list(interface, cmd, commands)
-        if have.get("transmit") and have.get("transmit") != want.get("transmit"):
+        if have.get("transmit") and have.get("transmit") != want.get(
+            "transmit",
+        ):
             cmd = "lldp transmit"
             remove_command_from_config_list(interface, cmd, commands)
 

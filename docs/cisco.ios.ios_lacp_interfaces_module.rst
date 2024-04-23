@@ -174,7 +174,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOSXE Version 17.3 on CML.
+   - Tested against Cisco IOSv Version 15.2 on VIRL.
    - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html
 
 
@@ -203,15 +203,15 @@ Examples
     - name: Merge provided configuration with device configuration
       cisco.ios.ios_lacp_interfaces:
         config:
-          - name: GigabitEthernet0/1
-            port_priority: 10
-          - name: GigabitEthernet0/2
-            port_priority: 20
-          - name: GigabitEthernet0/3
-            port_priority: 30
-          - name: Port-channel10
-            fast_switchover: true
-            max_bundle: 5
+        - name: GigabitEthernet0/1
+          port_priority: 10
+        - name: GigabitEthernet0/2
+          port_priority: 20
+        - name: GigabitEthernet0/3
+          port_priority: 30
+        - name: Port-channel10
+          fast_switchover: true
+          max_bundle: 5
         state: merged
 
     # After state:
@@ -256,10 +256,10 @@ Examples
     - name: Override device configuration of all lacp_interfaces with provided configuration
       cisco.ios.ios_lacp_interfaces:
         config:
-          - name: GigabitEthernet0/1
-            port_priority: 20
-          - name: Port-channel10
-            max_bundle: 2
+        - name: GigabitEthernet0/1
+          port_priority: 20
+        - name: Port-channel10
+          max_bundle: 2
         state: overridden
 
     # After state:
@@ -301,11 +301,11 @@ Examples
     - name: Replaces device configuration of listed lacp_interfaces with provided configuration
       cisco.ios.ios_lacp_interfaces:
         config:
-          - name: GigabitEthernet0/3
-            port_priority: 40
-          - name: Port-channel10
-            fast_switchover: true
-            max_bundle: 2
+        - name: GigabitEthernet0/3
+          port_priority: 40
+        - name: Port-channel10
+          fast_switchover: true
+          max_bundle: 2
         state: replaced
 
     # After state:
@@ -350,7 +350,7 @@ Examples
     - name: "Delete LACP attributes of given interfaces (Note: This won't delete the interface itself)"
       cisco.ios.ios_lacp_interfaces:
         config:
-          - name: GigabitEthernet0/1
+        - name: GigabitEthernet0/1
         state: deleted
 
     # After state:
@@ -477,13 +477,13 @@ Examples
     - name: Render the commands for provided  configuration
       cisco.ios.ios_lacp_interfaces:
         config:
-          - name: GigabitEthernet0/1
-            port_priority: 10
-          - name: GigabitEthernet0/2
-            port_priority: 20
-          - name: Port-channel10
-            fast_switchover: true
-            max_bundle: 2
+        - name: GigabitEthernet0/1
+          port_priority: 10
+        - name: GigabitEthernet0/2
+          port_priority: 20
+        - name: Port-channel10
+          fast_switchover: true
+          max_bundle: 2
         state: rendered
 
     # Module Execution Result:

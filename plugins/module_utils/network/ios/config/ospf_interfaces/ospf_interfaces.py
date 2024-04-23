@@ -18,7 +18,8 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
+from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
     ResourceModule,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
@@ -27,22 +28,22 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.facts import Facts
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.rm_templates.ospf_interfaces import (
-    Ospf_interfacesTemplate,
+    Ospf_InterfacesTemplate,
 )
 
 
-class Ospf_interfaces(ResourceModule):
+class Ospf_Interfaces(ResourceModule):
     """
     The cisco.ios_ospf_interfaces config class
     """
 
     def __init__(self, module):
-        super(Ospf_interfaces, self).__init__(
+        super(Ospf_Interfaces, self).__init__(
             empty_fact_val={},
             facts_module=Facts(module),
             module=module,
             resource="ospf_interfaces",
-            tmplt=Ospf_interfacesTemplate(),
+            tmplt=Ospf_InterfacesTemplate(),
         )
         self.parsers = []
 
@@ -62,9 +63,18 @@ class Ospf_interfaces(ResourceModule):
         want, have and desired state.
         """
 
-        # turn all lists of dicts into dicts prior to merge
-        wantd = self._list_to_dict(self.want, "want")
-        haved = self._list_to_dict(self.have)
+        wantd = {}
+        haved = {}
+        if self.want:
+            for entry in self.want:
+                wantd.update({(entry["name"]): entry})
+        else:
+            wantd = {}
+        if self.have:
+            for entry in self.have:
+                haved.update({(entry["name"]): entry})
+        else:
+            haved = {}
 
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
@@ -72,38 +82,36 @@ class Ospf_interfaces(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {k: v for k, v in haved.items() if k in wantd or not wantd}
+            temp = {}
+            for k, v in iteritems(haved):
+                if k in wantd or not wantd:
+                    temp.update({k: v})
+            haved = temp
             wantd = {}
 
         # remove superfluous config for overridden and deleted
         if self.state in ["overridden", "deleted"]:
-            for k, have in haved.items():
+            for k, have in iteritems(haved):
                 if k not in wantd:
-                    self._compare(want={}, have=have, interface=k)
+                    self._compare(want={}, have=have)
 
-        for k, want in wantd.items():
-            self._compare(want=want, have=haved.pop(k, {}), interface=k)
+        for k, want in iteritems(wantd):
+            self._compare(want=want, have=haved.pop(k, {}))
 
-    def _compare(self, want, have, interface):
-        begin = len(self.commands)
-        self._compare_afis(want=want, have=have)
-        if len(self.commands) != begin:
-            self.commands.insert(begin, self._tmplt.render({"name": interface}, "name", False))
-
-    def _compare_afis(self, want, have):
+    def _compare(self, want, have):
         """Leverages the base class `compare()` method and
         populates the list of commands to be run by comparing
         the `want` and `have` data with the `parsers` defined
         for the Ospf_interfaces network resource.
         """
-
         parsers = [
             "name",
             "process",
             "adjacency",
             "authentication",
             "bfd",
-            "cost",
+            "cost_ip",
+            "cost_ipv6_dynamic_cost",
             "database_filter",
             "dead_interval",
             "demand_circuit",
@@ -124,27 +132,38 @@ class Ospf_interfaces(ResourceModule):
             "ttl_security",
         ]
 
-        for afi in ("ipv4", "ipv6"):
-            wacls = want.pop(afi, {})
-            hacls = have.pop(afi, {})
+        if want != have:  # and (want.get('address_family') or self.state == 'deleted'):
+            if have.get("address_family"):
+                self.addcmd(have, "name", False)
+            elif want.get("address_family"):
+                self.addcmd(want, "name", False)
 
-            self.compare(parsers=parsers, want=wacls, have=hacls)
-
-    def _list_to_dict(self, entry, attr_type=None):
-        if self.state == "deleted" and attr_type == "want":
-            del_list = {}
-            for intf in entry:
-                del_list[intf.get("name")] = {}
-            return del_list
-
-        list_to_dict = {}
-        for intf in entry:
-            if intf.get("address_family"):
-                list_to_dict[intf.get("name")] = self.process_list_attr(intf)
-        return list_to_dict
-
-    def process_list_attr(self, add_fam):
-        item = {}
-        for ag in add_fam.get("address_family", []):
-            item[ag.get("afi")] = ag
-        return item
+        if want.get("address_family"):
+            for each in want["address_family"]:
+                set_want = True
+                if have.get("address_family"):
+                    have_elements = len(have.get("address_family"))
+                    while have_elements:
+                        if have.get("address_family")[have_elements - 1].get(
+                            "afi",
+                        ) == each.get("afi"):
+                            set_want = False
+                            h_each = have["address_family"].pop(
+                                have_elements - 1,
+                            )
+                            self.compare(
+                                parsers=parsers,
+                                want=each,
+                                have=h_each,
+                            )
+                        have_elements -= 1
+                else:
+                    h_each = dict()
+                    self.compare(parsers=parsers, want=each, have=h_each)
+                    set_want = False
+                if set_want:
+                    self.compare(parsers=parsers, want=each, have=dict())
+        if self.state in ["overridden", "deleted"]:
+            if have.get("address_family"):
+                for each in have["address_family"]:
+                    self.compare(parsers=parsers, want=dict(), have=each)

@@ -20,7 +20,7 @@ short_description: Resource module to configure logging.
 description: This module manages the logging attributes of Cisco IOS network devices
 author: Sagar Paul (@KB-perByte)
 notes:
-  - Tested against Cisco IOSXE Version 17.3 on CML.
+  - Tested against Cisco IOSv Version 15.6
   - This module works with connection C(network_cli).
     See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html)
   - The Configuration defaults of the Cisco IOS network devices
@@ -72,18 +72,7 @@ options:
           severity:
             description: Logging severity level
             type: str
-            choices:
-              [
-                "alerts",
-                "critical",
-                "debugging",
-                "emergencies",
-                "errors",
-                "informational",
-                "notifications",
-                "warnings",
-                "guaranteed",
-              ]
+            choices: ["alerts","critical","debugging","emergencies","errors","informational","notifications","warnings","guaranteed"]
           discriminator: *discriminator
           filtered: *filtered
           xml: *xml
@@ -183,7 +172,7 @@ options:
               tag:
                 description: Include hostname in session ID tag
                 type: str
-                choices: ["hostname", "ipv4", "ipv6"]
+                choices: ["hostname","ipv4","ipv6"]
               text:
                 description: Include custom string in session ID tag
                 type: str
@@ -234,7 +223,7 @@ options:
             description: IP address of the syslog server
             type: str
             aliases:
-              - hostname
+            - hostname
       message_counter:
         description: Configure log message to include certain counter value
         type: list
@@ -259,7 +248,7 @@ options:
           tag:
             description: Include hostname in session ID tag
             type: str
-            choices: ["hostname", "ip", "ipv6"]
+            choices: ["hostname","ip","ipv6"]
           text:
             description: Include custom string in session ID tag
             type: str
@@ -318,7 +307,7 @@ options:
           size: &rate_limit_size
             description: (1-10000) message per second
             type: int
-            required: true
+            required: True
           all:
             description: (1-10000) message per second
             type: bool
@@ -364,35 +353,34 @@ options:
         description: Enable logging of user info on privileged mode enabling
         type: bool
   running_config:
-    description:
+      description:
       - This option is used only with state I(parsed).
       - The value of this option should be the output received from the IOS device by
         executing the command B(show running-config | include logging).
       - The state I(parsed) reads the configuration from C(running_config) option and
         transforms it into Ansible structured data as per the resource module's argspec
         and the value is then returned in the I(parsed) key within the result.
-    type: str
+      type: str
   state:
     choices:
-      - merged
-      - replaced
-      - overridden
-      - deleted
-      - gathered
-      - parsed
-      - rendered
+    - merged
+    - replaced
+    - overridden
+    - deleted
+    - gathered
+    - parsed
+    - rendered
     default: merged
     description:
-      - The state the configuration should be left in
-      - With state I(replaced), for the listed logging configurations,
-        that are in running-config and can have multiple set of commands
-        but not in the task are negated.
-      - With state I(overridden), all configurations that are in running-config but
-        not in the task are negated.
-      - Please refer to examples for more details.
+    - The state the configuration should be left in
+    - With state I(replaced), for the listed logging configurations,
+      that are in running-config and can have multiple set of commands
+      but not in the task are negated.
+    - With state I(overridden), all configurations that are in running-config but
+      not in the task are negated.
+    - Please refer to examples for more details.
     type: str
 """
-
 EXAMPLES = """
 # Using state: merged
 
@@ -415,17 +403,17 @@ EXAMPLES = """
       buffered:
         severity: notifications
         size: 5099
-        xml: true
+        xml: True
       console:
         severity: critical
-        xml: true
+        xml: True
       facility: local5
       hosts:
         - hostname: 172.16.1.12
         - hostname: 172.16.1.11
-          xml: true
+          xml: True
         - hostname: 172.16.1.10
-          filtered: true
+          filtered: True
           stream: 10
         - hostname: 172.16.1.13
           transport:
@@ -437,10 +425,10 @@ EXAMPLES = """
       snmp_trap:
         - errors
       trap: errors
-      userinfo: true
+      userinfo: True
       policy_firewall:
         rate_limit: 10
-      logging_on: enable
+      logging_on: True
       exception: 4099
       dmvpn:
         rate_limit: 10
@@ -469,6 +457,7 @@ EXAMPLES = """
 #       "logging snmp-trap errors",
 #       "logging host 172.16.1.11 xml"
 #     ],
+
 
 # After state:
 # ------------
@@ -587,7 +576,7 @@ EXAMPLES = """
     config:
       hosts:
         - hostname: 172.16.1.27
-          filtered: true
+          filtered: True
     state: overridden
 
 # Commands Fired:
@@ -702,7 +691,7 @@ EXAMPLES = """
 # Before state:
 # -------------
 
-# router-ios#show running-config | section logging
+#router-ios#show running-config | section logging
 # logging exception 4099
 # logging message-counter log
 # logging userinfo
@@ -820,17 +809,17 @@ EXAMPLES = """
       buffered:
         severity: notifications
         size: 5099
-        xml: true
+        xml: True
       console:
         severity: critical
-        xml: true
+        xml: True
       facility: local5
       hosts:
         - hostname: 172.16.1.12
         - hostname: 172.16.1.11
-          xml: true
+          xml: True
         - hostname: 172.16.1.10
-          filtered: true
+          filtered: True
           stream: 10
         - hostname: 172.16.1.13
           transport:
@@ -841,10 +830,10 @@ EXAMPLES = """
       message_counter: log
       snmp_trap: errors
       trap: errors
-      userinfo: true
+      userinfo: True
       policy_firewall:
-        rate_limit: 10
-      logging_on: enable
+          rate_limit: 10
+      logging_on: True
       exception: 10
       dmvpn:
         rate_limit: 10
@@ -1017,7 +1006,6 @@ EXAMPLES = """
 #     "userinfo": true
 # }
 """
-
 RETURN = """
 before:
   description: The configuration prior to the model invocation.

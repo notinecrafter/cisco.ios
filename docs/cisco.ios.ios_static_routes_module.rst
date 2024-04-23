@@ -353,29 +353,6 @@ Parameters
                         <div>Refer to vendor documentation for valid values.</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>unicast</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>unicast route (ipv6 specific)</div>
-                </td>
-            </tr>
 
             <tr>
                     <td class="elbow-placeholder"></td>
@@ -470,9 +447,8 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOSXE Version 17.3 on CML.
+   - Tested against Cisco IOSv Version 15.2 on VIRL.
    - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html
-   - The module examples uses callback plugin (stdout_callback = yaml) to generate task output in yaml format.
 
 
 
@@ -491,84 +467,47 @@ Examples
     - name: Merge provided configuration with device configuration
       cisco.ios.ios_static_routes:
         config:
-          - vrf: blue
-            address_families:
-              - afi: ipv4
-                routes:
-                  - dest: 192.0.2.0/24
-                    next_hops:
-                      - forward_router_address: 192.0.2.1
-                        name: merged_blue
-                        tag: 50
-                        track: 150
-          - address_families:
-              - afi: ipv4
-                routes:
-                  - dest: 198.51.100.0/24
-                    next_hops:
-                      - forward_router_address: 198.51.101.1
-                        name: merged_route_1
-                        distance_metric: 110
-                        tag: 40
-                        multicast: true
-                      - forward_router_address: 198.51.101.2
-                        name: merged_route_2
-                        distance_metric: 30
-                      - forward_router_address: 198.51.101.3
-                        name: merged_route_3
-              - afi: ipv6
-                routes:
-                  - dest: 2001:DB8:0:3::/64
-                    next_hops:
-                      - forward_router_address: 2001:DB8:0:3::2
-                        name: merged_v6
-                        tag: 105
+        - vrf: blue
+          address_families:
+          - afi: ipv4
+            routes:
+            - dest: 192.0.2.0/24
+              next_hops:
+              - forward_router_address: 192.0.2.1
+                name: merged_blue
+                tag: 50
+                track: 150
+        - address_families:
+          - afi: ipv4
+            routes:
+            - dest: 198.51.100.0/24
+              next_hops:
+              - forward_router_address: 198.51.101.1
+                name: merged_route_1
+                distance_metric: 110
+                tag: 40
+                multicast: true
+              - forward_router_address: 198.51.101.2
+                name: merged_route_2
+                distance_metric: 30
+              - forward_router_address: 198.51.101.3
+                name: merged_route_3
+          - afi: ipv6
+            routes:
+            - dest: 2001:DB8:0:3::/64
+              next_hops:
+              - forward_router_address: 2001:DB8:0:3::2
+                name: merged_v6
+                tag: 105
         state: merged
 
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - {}
-    # commands:
-    # - ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name merged_v6
-    # - ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name merged_route_1 multicast
-    # - ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name merged_route_2
-    # - ip route 198.51.100.0 255.255.255.0 198.51.101.3 name merged_route_3
-    # - ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name merged_blue track 150
-    # after:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - forward_router_address: 198.51.101.3
-    #         name: merged_route_3
-    #       - distance_metric: 30
-    #         forward_router_address: 198.51.101.2
-    #         name: merged_route_2
-    #       - distance_metric: 110
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: merged_route_1
-    #         tag: 40
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: merged_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: merged_blue
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
+    # Commands fired:
+    # ---------------
+    # ip route vrf blue 192.0.2.0 255.255.255.0 10.0.0.8 name merged_blue track 150 tag 50
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name merged_route_1 tag 40
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name merged_route_2
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name merged_route_3
+    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 name merged_v6 tag 105
 
     # After state:
     # ------------
@@ -586,103 +525,41 @@ Examples
     # -------------
     #
     # vios#show running-config | include ip route|ipv6 route
-    # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name merged_blue track 150
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name merged_route_3
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name merged_route_2
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name merged_route_1 multicast
-    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name merged_v6
+    # ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 name test_v6 tag 105
 
     - name: Replace provided configuration with device configuration
       cisco.ios.ios_static_routes:
         config:
-          - address_families:
-              - afi: ipv4
-                routes:
-                  - dest: 198.51.100.0/24
-                    next_hops:
-                      - forward_router_address: 198.51.101.1
-                        name: replaced_route
-                        distance_metric: 175
-                        tag: 70
-                        multicast: true
+        - address_families:
+          - afi: ipv4
+            routes:
+            - dest: 198.51.100.0/24
+              next_hops:
+              - forward_router_address: 198.51.101.1
+                name: replaced_route
+                distance_metric: 175
+                tag: 70
+                multicast: true
         state: replaced
 
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - forward_router_address: 198.51.101.3
-    #         name: merged_route_3
-    #       - distance_metric: 30
-    #         forward_router_address: 198.51.101.2
-    #         name: merged_route_2
-    #       - distance_metric: 110
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: merged_route_1
-    #         tag: 40
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: merged_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: merged_blue
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
-    # commands:
-    # - ip route 198.51.100.0 255.255.255.0 198.51.101.1 175 tag 70 name replaced_route multicast
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.3 name merged_route_3
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name merged_route_2
-    # after:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - distance_metric: 175
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: replaced_route
-    #         tag: 70
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: merged_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: merged_blue
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
+    # Commands fired:
+    # ---------------
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 175 name replaced_route track 150 tag 70
 
     # After state:
     # ------------
     #
     # vios#show running-config | include ip route|ipv6 route
-    # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name merged_blue track 150
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 175 tag 70 name replaced_route multicast
-    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name merged_v6
+    # ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 175 name replaced_route track 150 tag 70
+    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
 
     # Using overridden
 
@@ -690,71 +567,35 @@ Examples
     # -------------
     #
     # vios#show running-config | include ip route|ipv6 route
-    # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name merged_blue track 150
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 175 tag 70 name replaced_route multicast
-    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name merged_v6
+    # ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 name test_v6 tag 105
 
     - name: Override provided configuration with device configuration
       cisco.ios.ios_static_routes:
         config:
-          - vrf: blue
-            address_families:
-              - afi: ipv4
-                routes:
-                  - dest: 192.0.2.0/24
-                    next_hops:
-                      - forward_router_address: 192.0.2.1
-                        name: override_vrf
-                        tag: 50
-                        track: 150
+        - vrf: blue
+          address_families:
+          - afi: ipv4
+            routes:
+            - dest: 192.0.2.0/24
+              next_hops:
+              - forward_router_address: 192.0.2.1
+                name: override_vrf
+                tag: 50
+                track: 150
         state: overridden
 
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - distance_metric: 175
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: replaced_route
-    #         tag: 70
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: merged_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: merged_blue
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
-    # commands:
-    # - ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name override_vrf track 150
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.1 175 tag 70 name replaced_route multicast
-    # - no ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name merged_v6
-    # after:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: override_vrf
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
+    # Commands fired:
+    # ---------------
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # no ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 198.51.101.8 name test_vrf track 150 tag 50
+    # no ipv6 route FD5D:12C9:2201:1::/64 FD5D:12C9:2202::2 name test_v6 tag 105
+    # ip route vrf blue 192.0.2.0 255.255.255.0 198.51.101.4 name override_vrf track 150 tag 50
 
     # After state:
     # ------------
@@ -762,270 +603,132 @@ Examples
     # vios#show running-config | include ip route|ipv6 route
     # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name override_vrf track 150
 
-    # Using deleted
+    # Using Deleted
+
+    # Example 1:
+    # ----------
+    # To delete the exact static routes, with all the static routes explicitly mentioned in want
 
     # Before state:
     # -------------
+    #
     # vios#show running-config | include ip route|ipv6 route
-    # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
     # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
-    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 name test_v6 tag 105
 
-    - name: Delete the exact static routes, with all the static routes explicitly mentioned in want
+    - name: Delete provided configuration from the device configuration
       cisco.ios.ios_static_routes:
         config:
-          - vrf: blue
-            address_families:
-              - afi: ipv4
-                routes:
-                  - dest: 192.0.2.0/24
-                    next_hops:
-                      - forward_router_address: 192.0.2.1
-                        name: test_vrf
-                        tag: 50
-                        track: 150
-          - address_families:
-              - afi: ipv4
-                routes:
-                  - dest: 198.51.100.0/24
-                    next_hops:
-                      - forward_router_address: 198.51.101.1
-                        name: route_1
-                        distance_metric: 110
-                        tag: 40
-                        multicast: true
-                      - forward_router_address: 198.51.101.2
-                        name: route_2
-                        distance_metric: 30
-                      - forward_router_address: 198.51.101.3
-                        name: route_3
-              - afi: ipv6
-                routes:
-                  - dest: 2001:DB8:0:3::/64
-                    next_hops:
-                      - forward_router_address: 2001:DB8:0:3::2
-                        name: test_v6
-                        tag: 105
+        - vrf: ansible_temp_vrf
+          address_families:
+          - afi: ipv4
+            routes:
+            - dest: 192.0.2.0/24
+              next_hops:
+              - forward_router_address: 192.0.2.1
+                name: test_vrf
+                tag: 50
+                track: 150
+        - address_families:
+          - afi: ipv4
+            routes:
+            - dest: 198.51.100.0/24
+              next_hops:
+              - forward_router_address: 198.51.101.1
+                name: route_1
+                distance_metric: 110
+                tag: 40
+                multicast: true
+              - forward_router_address: 198.51.101.2
+                name: route_2
+                distance_metric: 30
+              - forward_router_address: 198.51.101.3
+                name: route_3
+          - afi: ipv6
+            routes:
+            - dest: 2001:DB8:0:3::/64
+              next_hops:
+              - forward_router_address: 2001:DB8:0:3::2
+                name: test_v6
+                tag: 105
         state: deleted
 
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - forward_router_address: 198.51.101.3
-    #         name: route_3
-    #       - distance_metric: 30
-    #         forward_router_address: 198.51.101.2
-    #         name: route_2
-    #       - distance_metric: 110
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: route_1
-    #         tag: 40
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: test_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: test_vrf
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
-    # commands:
-    # - no ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
-    # - no ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
-    # after: {}
+    # Commands fired:
+    # ---------------
+    # no ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 198.51.101.8 name test_vrf track 150 tag 50
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # no ipv6 route FD5D:12C9:2201:1::/64 FD5D:12C9:2202::2 name test_v6 tag 105
 
     # After state:
     # ------------
     #
     # vios#show running-config | include ip route|ipv6 route
 
-    # Using deleted - delete based on specific routes
+    # Example 2:
+    # ----------
+    # To delete the destination specific static routes
 
     # Before state:
     # -------------
     #
     # vios#show running-config | include ip route|ipv6 route
-    # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
     # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
-    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 name test_v6 tag 105
 
-    - name: Delete destination specific static routes
+    - name: Delete provided configuration from the device configuration
       cisco.ios.ios_static_routes:
         config:
-          - address_families:
-              - afi: ipv4
-                routes:
-                  - dest: 198.51.100.0/24
+        - address_families:
+          - afi: ipv4
+            routes:
+            - dest: 198.51.100.0/24
         state: deleted
 
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - forward_router_address: 198.51.101.3
-    #         name: route_3
-    #       - distance_metric: 30
-    #         forward_router_address: 198.51.101.2
-    #         name: route_2
-    #       - distance_metric: 110
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: route_1
-    #         tag: 40
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: test_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: test_vrf
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
-    # commands:
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
-    # after:
-    # - address_families:
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: test_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: test_vrf
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
+    # Commands fired:
+    # ---------------
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
 
     # After state:
     # ------------
     #
     # vios#show running-config | include ip route|ipv6 route
-    # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
+    # ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
     # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
 
-    # Using deleted - delete based on vrfs
+
+    # Example 3:
+    # ----------
+    # To delete the vrf specific static routes
 
     # Before state:
     # -------------
     #
     # vios#show running-config | include ip route|ipv6 route
-    # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
     # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
-    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 name test_v6 tag 105
 
-    - name: Delete vrf specific static routes
+    - name: Delete provided configuration from the device configuration
       cisco.ios.ios_static_routes:
         config:
-          - vrf: blue
+        - vrf: ansible_temp_vrf
         state: deleted
 
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - forward_router_address: 198.51.101.3
-    #         name: route_3
-    #       - distance_metric: 30
-    #         forward_router_address: 198.51.101.2
-    #         name: route_2
-    #       - distance_metric: 110
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: route_1
-    #         tag: 40
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: test_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: test_vrf
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
-    # commands:
-    # - no ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
-    # after:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - forward_router_address: 198.51.101.3
-    #         name: route_3
-    #       - distance_metric: 30
-    #         forward_router_address: 198.51.101.2
-    #         name: route_2
-    #       - distance_metric: 110
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: route_1
-    #         tag: 40
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: test_v6
-    #         tag: 105
+    # Commands fired:
+    # ---------------
+    # no ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50
 
     # After state:
     # ------------
@@ -1036,70 +739,36 @@ Examples
     # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
     # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
 
-    # Using deleted - delete all
+    # Using Deleted without any config passed
+    #"(NOTE: This will delete all of configured resource module attributes from each configured interface)"
 
     # Before state:
     # -------------
     #
     # vios#show running-config | include ip route|ipv6 route
-    # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
     # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
-    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 name test_v6 tag 105
 
-    - name: Delete ALL configured static routes
+    - name: Delete ALL configured IOS static routes
       cisco.ios.ios_static_routes:
         state: deleted
 
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - forward_router_address: 198.51.101.3
-    #         name: route_3
-    #       - distance_metric: 30
-    #         forward_router_address: 198.51.101.2
-    #         name: route_2
-    #       - distance_metric: 110
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: route_1
-    #         tag: 40
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: test_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: test_vrf
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
-    # commands:
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
-    # - no ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
-    # - no ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
-    # - no ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
-    # after: {}
+    # Commands fired:
+    # ---------------
+    # no ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
+    # no ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
+    # no ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
 
     # After state:
     # -------------
     #
     # vios#show running-config | include ip route|ipv6 route
+    #
 
     # Using gathered
 
@@ -1107,155 +776,148 @@ Examples
     # -------------
     #
     # vios#show running-config | include ip route|ipv6 route
-    # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
     # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
-    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 name test_v6 tag 105
 
-    - name: Gather facts of static routes
+    - name: Gather listed static routes with provided configurations
       cisco.ios.ios_static_routes:
         config:
         state: gathered
 
-    # Task Output
-    # -----------
+    # Module Execution Result:
+    # ------------------------
     #
-    # gathered:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - forward_router_address: 198.51.101.3
-    #         name: route_3
-    #       - distance_metric: 30
-    #         forward_router_address: 198.51.101.2
-    #         name: route_2
-    #       - distance_metric: 110
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: route_1
-    #         tag: 40
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: test_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: test_vrf
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
+    # "gathered": [
+    #         {
+    #             "address_families": [
+    #                 {
+    #                     "afi": "ipv4",
+    #                     "routes": [
+    #                         {
+    #                             "dest": "192.0.2.0/24",
+    #                             "next_hops": [
+    #                                 {
+    #                                     "forward_router_address": "192.0.2.1",
+    #                                     "name": "test_vrf",
+    #                                     "tag": 50,
+    #                                     "track": 150
+    #                                 }
+    #                             ]
+    #                         }
+    #                     ]
+    #                 }
+    #             ],
+    #             "vrf": "ansible_temp_vrf"
+    #         },
+    #         {
+    #             "address_families": [
+    #                 {
+    #                     "afi": "ipv6",
+    #                     "routes": [
+    #                         {
+    #                             "dest": "2001:DB8:0:3::/64",
+    #                             "next_hops": [
+    #                                 {
+    #                                     "forward_router_address": "2001:DB8:0:3::2",
+    #                                     "name": "test_v6",
+    #                                     "tag": 105
+    #                                 }
+    #                             ]
+    #                         }
+    #                     ]
+    #                 },
+    #                 {
+    #                     "afi": "ipv4",
+    #                     "routes": [
+    #                         {
+    #                             "dest": "198.51.100.0/24",
+    #                             "next_hops": [
+    #                                 {
+    #                                     "distance_metric": 110,
+    #                                     "forward_router_address": "198.51.101.1",
+    #                                     "multicast": true,
+    #                                     "name": "route_1",
+    #                                     "tag": 40
+    #                                 },
+    #                                 {
+    #                                     "distance_metric": 30,
+    #                                     "forward_router_address": "198.51.101.2",
+    #                                     "name": "route_2"
+    #                                 },
+    #                                 {
+    #                                     "forward_router_address": "198.51.101.3",
+    #                                     "name": "route_3"
+    #                                 }
+    #                             ]
+    #                         }
+    #                     ]
+    #                 }
+    #             ]
+    #         }
+    #     ]
+
+    # After state:
+    # ------------
+    #
+    # vios#show running-config | include ip route|ipv6 route
+    # ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
+    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
+    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 name test_v6 tag 105
 
     # Using rendered
 
-    - name: Render the commands for provided configuration
+    - name: Render the commands for provided  configuration
       cisco.ios.ios_static_routes:
         config:
-          - vrf: blue
-            address_families:
-              - afi: ipv4
-                routes:
-                  - dest: 192.0.2.0/24
-                    next_hops:
-                      - forward_router_address: 192.0.2.1
-                        name: test_vrf
-                        tag: 50
-                        track: 150
-          - address_families:
-              - afi: ipv4
-                routes:
-                  - dest: 198.51.100.0/24
-                    next_hops:
-                      - forward_router_address: 198.51.101.1
-                        name: route_1
-                        distance_metric: 110
-                        tag: 40
-                        multicast: true
-                      - forward_router_address: 198.51.101.2
-                        name: route_2
-                        distance_metric: 30
-                      - forward_router_address: 198.51.101.3
-                        name: route_3
-              - afi: ipv6
-                routes:
-                  - dest: 2001:DB8:0:3::/64
-                    next_hops:
-                      - forward_router_address: 2001:DB8:0:3::2
-                        name: test_v6
-                        tag: 105
+        - vrf: ansible_temp_vrf
+          address_families:
+          - afi: ipv4
+            routes:
+            - dest: 192.0.2.0/24
+              next_hops:
+              - forward_router_address: 192.0.2.1
+                name: test_vrf
+                tag: 50
+                track: 150
+        - address_families:
+          - afi: ipv4
+            routes:
+            - dest: 198.51.100.0/24
+              next_hops:
+              - forward_router_address: 198.51.101.1
+                name: route_1
+                distance_metric: 110
+                tag: 40
+                multicast: true
+              - forward_router_address: 198.51.101.2
+                name: route_2
+                distance_metric: 30
+              - forward_router_address: 198.51.101.3
+                name: route_3
+          - afi: ipv6
+            routes:
+            - dest: 2001:DB8:0:3::/64
+              next_hops:
+              - forward_router_address: 2001:DB8:0:3::2
+                name: test_v6
+                tag: 105
         state: rendered
 
-    # Task Output
-    # -----------
+    # Module Execution Result:
+    # ------------------------
     #
-    # rendered:
-    # - ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
-    # - ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
-    # - ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
-    # - ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
-    # - ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
-
-    # Using parsed
-
-    # File: parsed.cfg
-    # ----------------
-    #
-    # ip route vrf blue 192.0.2.0 255.255.255.0 192.0.2.1 tag 50 name test_vrf track 150
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2
-    # ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 tag 40 name route_1 multicast
-    # ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6
-
-    - name: Parse the provided configuration
-      cisco.ios.ios_static_routes:
-        running_config: "{{ lookup('file', 'parsed.cfg') }}"
-        state: parsed
-
-    # Task Output
-    # -----------
-    #
-    # parsed:
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 198.51.100.0/24
-    #       next_hops:
-    #       - forward_router_address: 198.51.101.3
-    #         name: route_3
-    #       - distance_metric: 30
-    #         forward_router_address: 198.51.101.2
-    #         name: route_2
-    #       - distance_metric: 110
-    #         forward_router_address: 198.51.101.1
-    #         multicast: true
-    #         name: route_1
-    #         tag: 40
-    #   - afi: ipv6
-    #     routes:
-    #     - dest: 2001:DB8:0:3::/64
-    #       next_hops:
-    #       - forward_router_address: 2001:DB8:0:3::2
-    #         name: test_v6
-    #         tag: 105
-    # - address_families:
-    #   - afi: ipv4
-    #     routes:
-    #     - dest: 192.0.2.0/24
-    #       next_hops:
-    #       - forward_router_address: 192.0.2.1
-    #         name: test_vrf
-    #         tag: 50
-    #         track: 150
-    #   vrf: blue
+    # "rendered": [
+    #         "ip route vrf ansible_temp_vrf 192.0.2.0 255.255.255.0 192.0.2.1 name test_vrf track 150 tag 50",
+    #         "ip route 198.51.100.0 255.255.255.0 198.51.101.1 110 multicast name route_1 tag 40",
+    #         "ip route 198.51.100.0 255.255.255.0 198.51.101.2 30 name route_2",
+    #         "ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3",
+    #         "ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 name test_v6 tag 105"
+    #     ]
 
 
 
@@ -1370,7 +1032,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>The set of CLI commands generated from the value in <code>config</code> option</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ip route 198.51.100.0 255.255.255.0 198.51.101.3 name route_3&#x27;, &#x27;ipv6 route 2001:DB8:0:3::/64 2001:DB8:0:3::2 tag 105 name test_v6&#x27;]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;interface Ethernet1/1&#x27;, &#x27;mtu 1800&#x27;]</div>
                 </td>
             </tr>
     </table>
@@ -1384,5 +1046,4 @@ Status
 Authors
 ~~~~~~~
 
-- Sagar Paul (@KB-perByte)
 - Sumit Jaiswal (@justjais)

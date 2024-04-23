@@ -12,11 +12,16 @@
           - name: Loopback999
             ipv4:
               - address: 192.0.2.1/24
-          - name: GigabitEthernet1
+          - name: GigabitEthernet0/0
             ipv4:
               - dhcp:
                   enable: true
-          - name: GigabitEthernet3
+          - name: GigabitEthernet0/1
+            ipv4:
+              - dhcp:
+                  client_id: GigabitEthernet0/0
+                  hostname: test.com
+          - name: GigabitEthernet0/2
             ipv4:
               - address: 198.51.100.1/24
                 secondary: true
@@ -40,7 +45,7 @@
           - name: Loopback999
             ipv4:
               - address: 192.0.2.2/24
-          - name: GigabitEthernet1
+          - name: GigabitEthernet0/0
             ipv4:
               - dhcp:
                   enable: true

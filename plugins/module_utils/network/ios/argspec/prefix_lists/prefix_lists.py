@@ -47,7 +47,10 @@ class Prefix_listsArgs(object):
                             "type": "list",
                             "elements": "dict",
                             "options": {
-                                "action": {"type": "str", "choices": ["deny", "permit"]},
+                                "action": {
+                                    "type": "str",
+                                    "choices": ["deny", "permit"],
+                                },
                                 "sequence": {"type": "int"},
                                 "description": {"type": "str"},
                                 "prefix": {"type": "str"},

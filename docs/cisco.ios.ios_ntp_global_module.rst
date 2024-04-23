@@ -1539,7 +1539,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOSXE Version 17.3 on CML.
+   - Tested against Cisco IOSv Version 15.6.
    - This module works with connection ``network_cli``.
 
 
@@ -1571,10 +1571,10 @@ Examples
               - access_list: preauth_ipv6_acl
                 ipv6: true
                 kod: true
-              - access_list: "2"
+              - access_list: '2'
                 kod: true
             query_only:
-              - access_list: "10"
+              - access_list: '10'
           allow:
             control:
               rate_limit: 4
@@ -1658,6 +1658,7 @@ Examples
     #     "ntp trusted-key 3 - 3",
     #     "ntp trusted-key 21"
     # ],
+
 
     # After state:
     # ------------
@@ -1793,8 +1794,8 @@ Examples
               use_ipv4: true
           access_group:
             peer:
-              - access_list: DHCP-Server
-                ipv6: true
+            - access_list: DHCP-Server
+              ipv6: true
         state: overridden
 
     # Commands Fired:
@@ -1884,7 +1885,7 @@ Examples
     # Before state:
     # -------------
 
-    # router-ios#show running-config | section ^ntp
+    #router-ios#show running-config | section ^ntp
     # ntp max-associations 34
     # ntp logging
     # ntp allow mode control 4
@@ -2059,10 +2060,10 @@ Examples
               - access_list: preauth_ipv6_acl
                 ipv6: true
                 kod: true
-              - access_list: "2"
+              - access_list: '2'
                 kod: true
             query_only:
-              - access_list: "10"
+              - access_list: '10'
           allow:
             control:
               rate_limit: 4
@@ -2111,7 +2112,7 @@ Examples
             - range_end: 3
               range_start: 10
             - range_start: 21
-          update_calendar: true
+          update_calendar: True
         state: rendered
 
     # Module Execution Result:

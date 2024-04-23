@@ -2,7 +2,7 @@
 authors:
   - Ansible Network Community (ansible-network)
 dependencies:
-  "ansible.netcommon": ">=6.1.0"
+  "ansible.netcommon": ">=2.5.1"
 license_file: LICENSE
 name: ios
 namespace: cisco
@@ -11,4 +11,6 @@ readme: README.md
 repository: https://github.com/ansible-collections/cisco.ios
 issues: https://github.com/ansible-collections/cisco.ios/issues
 tags: [cisco, ios, iosxe, networking]
-version: "8.0.0"
+# NOTE(pabelanger): We create an empty version key to keep ansible-galaxy
+# happy. We dynamically inject version info based on git information.
+version: "0.0.0"

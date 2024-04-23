@@ -7,10 +7,11 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
+
 from textwrap import dedent
-from unittest.mock import patch
 
 from ansible_collections.cisco.ios.plugins.modules import ios_ping
+from ansible_collections.cisco.ios.tests.unit.compat.mock import patch
 from ansible_collections.cisco.ios.tests.unit.modules.utils import set_module_args
 
 from .ios_module import TestIosModule
@@ -61,7 +62,11 @@ class TestIosPingModule(TestIosModule):
             """,
         )
         set_module_args(
-            dict(count=2, dest="2001:db8:ffff:ffff:ffff:ffff:ffff:ffff", afi="ipv6"),
+            dict(
+                count=2,
+                dest="2001:db8:ffff:ffff:ffff:ffff:ffff:ffff",
+                afi="ipv6",
+            ),
         )
         result = self.execute_module()
         mock_res = {
@@ -88,7 +93,6 @@ class TestIosPingModule(TestIosModule):
                 "afi": "ip",
                 "count": 4,
                 "dest": "8.8.8.8",
-                "size": 800,
                 "df_bit": True,
                 "source": "Loopback88",
                 "state": "present",
@@ -97,7 +101,7 @@ class TestIosPingModule(TestIosModule):
         )
         result = self.execute_module()
         mock_res = {
-            "commands": "ping vrf DummyVrf ip 8.8.8.8 repeat 4 df-bit size 800 source Loopback88",
+            "commands": "ping vrf DummyVrf ip 8.8.8.8 repeat 4 df-bit source Loopback88",
             "packet_loss": "0%",
             "packets_rx": 2,
             "packets_tx": 2,

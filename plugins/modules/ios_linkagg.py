@@ -19,7 +19,6 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-
 DOCUMENTATION = r"""
 module: ios_linkagg
 author: Trishna Guha (@trishnaguha)
@@ -27,10 +26,10 @@ short_description: Module to configure link aggregation groups.
 deprecated:
   alternative: ios_lag_interfaces
   why: Updated modules released with more functionality.
-  removed_at_date: "2024-06-01"
+  removed_at_date: '2024-06-01'
 description:
-  - This module provides declarative management of link aggregation groups on Cisco
-    IOS network devices.
+- This module provides declarative management of link aggregation groups on Cisco
+  IOS network devices.
 version_added: 1.0.0
 notes:
   - Tested against IOS 15.2
@@ -39,23 +38,23 @@ notes:
 options:
   group:
     description:
-      - Channel-group number for the port-channel Link aggregation group. Range 1-255.
+    - Channel-group number for the port-channel Link aggregation group. Range 1-255.
     type: int
   mode:
     description:
-      - Mode of the link aggregation group.
-      - On mode has to be quoted as 'on' or else pyyaml will convert
-        to True before it gets to Ansible.
+    - Mode of the link aggregation group.
+    - On mode has to be quoted as 'on' or else pyyaml will convert
+      to True before it gets to Ansible.
     choices:
-      - active
-      - "on"
-      - passive
-      - auto
-      - desirable
+    - active
+    - 'on'
+    - passive
+    - auto
+    - desirable
     type: str
   members:
     description:
-      - List of members of the link aggregation group.
+    - List of members of the link aggregation group.
     type: list
     elements: str
   aggregate:
@@ -65,83 +64,81 @@ options:
     suboptions:
       group:
         description:
-          - Channel-group number for the port-channel Link aggregation group. Range 1-255.
+        - Channel-group number for the port-channel Link aggregation group. Range 1-255.
         type: str
         required: true
       mode:
         description:
-          - Mode of the link aggregation group.
-          - On mode has to be quoted as 'on' or else pyyaml will convert
-            to True before it gets to Ansible.
+        - Mode of the link aggregation group.
+        - On mode has to be quoted as 'on' or else pyyaml will convert
+          to True before it gets to Ansible.
         choices:
-          - active
-          - "on"
-          - passive
-          - auto
-          - desirable
+        - active
+        - 'on'
+        - passive
+        - auto
+        - desirable
         type: str
       members:
         description:
-          - List of members of the link aggregation group.
+        - List of members of the link aggregation group.
         type: list
         elements: str
       state:
         description:
-          - State of the link aggregation group.
+        - State of the link aggregation group.
         choices:
-          - present
-          - absent
+        - present
+        - absent
         type: str
   state:
     description:
-      - State of the link aggregation group.
+    - State of the link aggregation group.
     default: present
     choices:
-      - present
-      - absent
+    - present
+    - absent
     type: str
   purge:
     description:
-      - Purge links not defined in the I(aggregate) parameter.
+    - Purge links not defined in the I(aggregate) parameter.
     default: false
     type: bool
 extends_documentation_fragment:
-  - cisco.ios.ios
+- cisco.ios.ios
 """
-
 EXAMPLES = """
-- name: Create link aggregation group
+- name: create link aggregation group
   cisco.ios.ios_linkagg:
     group: 10
     state: present
 
-- name: Delete link aggregation group
+- name: delete link aggregation group
   cisco.ios.ios_linkagg:
     group: 10
     state: absent
 
-- name: Set link aggregation group to members
+- name: set link aggregation group to members
   cisco.ios.ios_linkagg:
     group: 200
     mode: active
     members:
-      - GigabitEthernet0/0
-      - GigabitEthernet0/1
+    - GigabitEthernet0/0
+    - GigabitEthernet0/1
 
-- name: Remove link aggregation group from GigabitEthernet0/0
+- name: remove link aggregation group from GigabitEthernet0/0
   cisco.ios.ios_linkagg:
     group: 200
     mode: active
     members:
-      - GigabitEthernet0/1
+    - GigabitEthernet0/1
 
 - name: Create aggregate of linkagg definitions
   cisco.ios.ios_linkagg:
     aggregate:
-      - { group: 3, mode: "on", members: [GigabitEthernet0/1] }
-      - { group: 100, mode: passive, members: [GigabitEthernet0/2] }
+    - {group: 3, mode: on, members: [GigabitEthernet0/1]}
+    - {group: 100, mode: passive, members: [GigabitEthernet0/2]}
 """
-
 RETURN = """
 commands:
   description: The list of configuration mode commands to send to the device
@@ -167,6 +164,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.ios import (
     get_config,
+    ios_argument_spec,
     load_config,
 )
 
@@ -200,29 +198,46 @@ def map_obj_to_commands(updates, module):
                 if members:
                     for m in members:
                         commands.append("interface {0}".format(m))
-                        commands.append("channel-group {0} mode {1}".format(group, mode))
+                        commands.append(
+                            "channel-group {0} mode {1}".format(group, mode),
+                        )
             elif members:
                 if "members" not in obj_in_have.keys():
                     for m in members:
                         commands.extend(cmd)
                         commands.append("interface {0}".format(m))
-                        commands.append("channel-group {0} mode {1}".format(group, mode))
+                        commands.append(
+                            "channel-group {0} mode {1}".format(group, mode),
+                        )
                 elif set(members) != set(obj_in_have["members"]):
-                    missing_members = list(set(members) - set(obj_in_have["members"]))
+                    missing_members = list(
+                        set(members) - set(obj_in_have["members"]),
+                    )
                     for m in missing_members:
                         commands.extend(cmd)
                         commands.append("interface {0}".format(m))
-                        commands.append("channel-group {0} mode {1}".format(group, mode))
-                    superfluous_members = list(set(obj_in_have["members"]) - set(members))
+                        commands.append(
+                            "channel-group {0} mode {1}".format(group, mode),
+                        )
+                    superfluous_members = list(
+                        set(obj_in_have["members"]) - set(members),
+                    )
                     for m in superfluous_members:
                         commands.extend(cmd)
                         commands.append("interface {0}".format(m))
-                        commands.append("no channel-group {0} mode {1}".format(group, mode))
+                        commands.append(
+                            "no channel-group {0} mode {1}".format(
+                                group,
+                                mode,
+                            ),
+                        )
     if purge:
         for h in have:
             obj_in_want = search_obj_in_list(h["group"], want)
             if not obj_in_want:
-                commands.append("no interface port-channel {0}".format(h["group"]))
+                commands.append(
+                    "no interface port-channel {0}".format(h["group"]),
+                )
     return commands
 
 
@@ -256,7 +271,11 @@ def parse_mode(module, config, group, member):
     body = netcfg.get_section(parents)
     match_int = re.findall("interface {0}\\n".format(member), body, re.M)
     if match_int:
-        match = re.search("channel-group {0} mode (\\S+)".format(group), body, re.M)
+        match = re.search(
+            "channel-group {0} mode (\\S+)".format(group),
+            body,
+            re.M,
+        )
         if match:
             mode = match.group(1)
     return mode
@@ -265,11 +284,15 @@ def parse_mode(module, config, group, member):
 def parse_members(module, config, group):
     members = []
     for line in config.strip().split("!"):
-        lineStrip = line.strip()
-        if lineStrip.startswith("interface"):
-            match_group = re.findall("channel-group {0} mode".format(group), lineStrip, re.M)
+        l = line.strip()
+        if l.startswith("interface"):
+            match_group = re.findall(
+                "channel-group {0} mode".format(group),
+                l,
+                re.M,
+            )
             if match_group:
-                match = re.search("interface (\\S+)", lineStrip, re.M)
+                match = re.search("interface (\\S+)", l, re.M)
                 if match:
                     members.append(match.group(1))
     return members
@@ -291,8 +314,8 @@ def map_config_to_obj(module):
     objs = list()
     config = get_config(module)
     for line in config.split("\n"):
-        lStrip = line.strip()
-        match = re.search("interface Port-channel(\\S+)", lStrip, re.M)
+        l = line.strip()
+        match = re.search("interface Port-channel(\\S+)", l, re.M)
         if match:
             obj = {}
             group = match.group(1)
@@ -327,6 +350,7 @@ def main():
         purge=dict(default=False, type="bool"),
     )
     argument_spec.update(element_spec)
+    argument_spec.update(ios_argument_spec)
     module = AnsibleModule(
         argument_spec=argument_spec,
         required_one_of=required_one_of,

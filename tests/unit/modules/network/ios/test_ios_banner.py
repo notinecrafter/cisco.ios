@@ -18,15 +18,16 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-from unittest.mock import patch
 
 from ansible_collections.cisco.ios.plugins.modules import ios_banner
+from ansible_collections.cisco.ios.tests.unit.compat.mock import patch
 from ansible_collections.cisco.ios.tests.unit.modules.utils import set_module_args
 
 from .ios_module import TestIosModule, load_fixture
 
 
 class TestIosBannerModule(TestIosModule):
+
     module = ios_banner
 
     def setUp(self):
@@ -55,8 +56,12 @@ class TestIosBannerModule(TestIosModule):
 
     def test_ios_banner_create(self):
         for banner_type in ("login", "motd", "exec", "incoming", "slip-ppp"):
-            set_module_args(dict(banner=banner_type, text="test\nbanner\nstring"))
-            commands = ["banner {0} @\ntest\nbanner\nstring\n@".format(banner_type)]
+            set_module_args(
+                dict(banner=banner_type, text="test\nbanner\nstring"),
+            )
+            commands = [
+                "banner {0} @\ntest\nbanner\nstring\n@".format(banner_type),
+            ]
             self.execute_module(changed=True, commands=commands)
 
     def test_ios_banner_remove(self):
@@ -83,7 +88,9 @@ class TestIosBannerModule(TestIosModule):
                     multiline_delimiter="c",
                 ),
             )
-            commands = ["banner {0} c\ntest\nbanner\nstring\nc".format(banner_type)]
+            commands = [
+                "banner {0} c\ntest\nbanner\nstring\nc".format(banner_type),
+            ]
             self.execute_module(changed=True, commands=commands)
 
 

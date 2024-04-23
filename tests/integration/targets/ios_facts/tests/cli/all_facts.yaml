@@ -1,14 +1,13 @@
 ---
 - ansible.builtin.debug: msg="START cli/all_facts.yaml on connection={{ ansible_connection }}"
 
-- name: Test fetching all facts
+- name: Test getting all facts
   register: result
   cisco.ios.ios_facts:
     gather_subset:
       - all
 
-- name: Assert output of all facts
-  ansible.builtin.assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - "'config' in result.ansible_facts.ansible_net_gather_subset"
@@ -20,10 +19,8 @@
       - result.ansible_facts.ansible_net_memtotal_mb > 1
 
 - ansible.builtin.assert:
-    that: "{{ my_var.value.spacetotal_kb }} > {{ my_var.value.spacefree_kb }}"
+    that: "{{ item.value.spacetotal_kb }} > {{ item.value.spacefree_kb }}"
   loop: "{{ lookup('dict', result.ansible_facts.ansible_net_filesystems_info, wantlist=True) }}"
-  loop_control:
-    loop_var: my_var
 
 - ansible.builtin.set_fact:
     supported_network_resources:
@@ -36,9 +33,6 @@
       - lldp_global
       - lldp_interfaces
       - l3_interfaces
-      - evpn_global
-      - evpn_evi
-      - vxlan_vtep
       - logging_global
       - acl_interfaces
       - static_routes
@@ -52,7 +46,6 @@
       - snmp_server
       - prefix_lists
       - ntp_global
-      - service
       - hostname
 
 - name: Collect list of available network resources for IOS

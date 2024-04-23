@@ -21,9 +21,9 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-from unittest.mock import patch
 
 from ansible_collections.cisco.ios.plugins.modules import ios_vrf
+from ansible_collections.cisco.ios.tests.unit.compat.mock import patch
 from ansible_collections.cisco.ios.tests.unit.modules.utils import set_module_args
 
 from .ios_module import TestIosModule, load_fixture
@@ -71,7 +71,9 @@ class TestIosVrfModule(TestIosModule):
         self.execute_module(changed=True, commands=commands, sort=False)
 
     def test_ios_vrf_name_unchanged(self):
-        set_module_args(dict(name="test_1", rd="1:100", description="test vrf 1"))
+        set_module_args(
+            dict(name="test_1", rd="1:100", description="test vrf 1"),
+        )
         self.execute_module()
 
     def test_ios_vrf_description(self):
@@ -154,7 +156,10 @@ class TestIosVrfModule(TestIosModule):
         self.execute_module(changed=True, commands=commands, sort=False)
 
     def test_ios_vrfs_local_override_description(self):
-        vrfs = [{"name": "test_1", "description": "test vrf 1"}, {"name": "test_2"}]
+        vrfs = [
+            {"name": "test_1", "description": "test vrf 1"},
+            {"name": "test_2"},
+        ]
         set_module_args(dict(vrfs=vrfs, description="test string"))
         commands = ["vrf definition test_2", "description test string"]
         self.execute_module(changed=True, commands=commands, sort=False)
@@ -170,7 +175,9 @@ class TestIosVrfModule(TestIosModule):
         self.execute_module(changed=True, commands=commands, sort=False)
 
     def test_ios_vrf_route_both(self):
-        set_module_args(dict(name="test_5", rd="2:100", route_both=["2:100", "3:100"]))
+        set_module_args(
+            dict(name="test_5", rd="2:100", route_both=["2:100", "3:100"]),
+        )
         commands = [
             "vrf definition test_5",
             "address-family ipv4",
@@ -411,81 +418,3 @@ class TestIosVrfModule(TestIosModule):
             ),
         )
         self.execute_module(changed=False, commands=[], sort=False)
-
-    def test_ios_vrf_interface_brownfield(self):
-        set_module_args(dict(name="test_19", interfaces=["Ethernet1"]))
-        commands = [
-            "interface Ethernet1",
-            "vrf forwarding test_19",
-            "ip address 1.2.3.4/5",
-        ]
-        self.execute_module(changed=True, commands=commands, sort=False)
-
-    def test_ios_mdt(self):
-        set_module_args(
-            {
-                "name": "blue",
-                "address_family": [
-                    {
-                        "afi": "ipv4",
-                        "mdt": {
-                            "overlay": {
-                                "use_bgp": {
-                                    "enable": True,
-                                    "spt_only": True,
-                                },
-                            },
-                            "auto_discovery": {
-                                "vxlan": {
-                                    "enable": True,
-                                    "inter_as": True,
-                                },
-                            },
-                            "default": {
-                                "vxlan_mcast_group": "239.1.1.1",
-                            },
-                            "data": {
-                                "vxlan_mcast_group": "225.2.2.0 0.0.0.255",
-                                "threshold": "112",
-                            },
-                        },
-                    },
-                    {
-                        "afi": "ipv6",
-                        "mdt": {
-                            "overlay": {
-                                "use_bgp": {
-                                    "enable": True,
-                                    "spt_only": True,
-                                },
-                            },
-                            "auto_discovery": {
-                                "vxlan": {
-                                    "enable": True,
-                                    "inter_as": True,
-                                },
-                            },
-                            "default": {
-                                "vxlan_mcast_group": "239.1.1.2",
-                            },
-                        },
-                    },
-                ],
-            },
-        )
-        commands = [
-            "vrf definition blue",
-            "address-family ipv4",
-            "mdt overlay use-bgp spt-only",
-            "mdt auto-discovery vxlan inter-as",
-            "mdt default vxlan 239.1.1.1",
-            "mdt data vxlan 225.2.2.0 0.0.0.255",
-            "mdt data threshold 112",
-            "exit-address-family",
-            "address-family ipv6",
-            "mdt overlay use-bgp spt-only",
-            "mdt auto-discovery vxlan inter-as",
-            "mdt default vxlan 239.1.1.2",
-            "exit-address-family",
-        ]
-        self.execute_module(changed=True, commands=commands, sort=False)

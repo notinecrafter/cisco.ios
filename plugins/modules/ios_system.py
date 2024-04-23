@@ -19,97 +19,94 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-
 DOCUMENTATION = """
 module: ios_system
 author: Peter Sprygada (@privateip)
 short_description: Module to manage the system attributes.
 description:
-  - This module provides declarative management of node system attributes on Cisco IOS
-    devices.  It provides an option to configure host system parameters or remove those
-    parameters from the device active configuration.
+- This module provides declarative management of node system attributes on Cisco IOS
+  devices.  It provides an option to configure host system parameters or remove those
+  parameters from the device active configuration.
 version_added: 1.0.0
 extends_documentation_fragment:
-  - cisco.ios.ios
+- cisco.ios.ios
 notes:
-  - Tested against Cisco IOSXE Version 17.3 on CML.
+  - Tested against IOS 15.6
   - This module works with connection C(network_cli).
     See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html)
 options:
   hostname:
     description:
-      - Configure the device hostname parameter. This option takes an ASCII string value.
+    - Configure the device hostname parameter. This option takes an ASCII string value.
     type: str
   domain_name:
     description:
-      - Configure the IP domain name on the remote device to the provided value. Value
-        should be in the dotted name form and will be appended to the C(hostname) to
-        create a fully-qualified domain name.
+    - Configure the IP domain name on the remote device to the provided value. Value
+      should be in the dotted name form and will be appended to the C(hostname) to
+      create a fully-qualified domain name.
     type: list
     elements: raw
   domain_search:
     description:
-      - Provides the list of domain suffixes to append to the hostname for the purpose
-        of doing name resolution. This argument accepts a list of names and will be
-        reconciled with the current active configuration on the running node.
+    - Provides the list of domain suffixes to append to the hostname for the purpose
+      of doing name resolution. This argument accepts a list of names and will be
+      reconciled with the current active configuration on the running node.
     type: list
     elements: raw
   lookup_source:
     description:
-      - Provides one or more source interfaces to use for performing DNS lookups.  The
-        interface provided in C(lookup_source) must be a valid interface configured
-        on the device.
+    - Provides one or more source interfaces to use for performing DNS lookups.  The
+      interface provided in C(lookup_source) must be a valid interface configured
+      on the device.
     type: str
   lookup_enabled:
     description:
-      - Administrative control for enabling or disabling DNS lookups.  When this argument
-        is set to True, lookups are performed and when it is set to False, lookups are
-        not performed.
+    - Administrative control for enabling or disabling DNS lookups.  When this argument
+      is set to True, lookups are performed and when it is set to False, lookups are
+      not performed.
     type: bool
   name_servers:
     description:
-      - List of DNS name servers by IP address to use to perform name resolution lookups.  This
-        argument accepts either a list of DNS servers See examples.
+    - List of DNS name servers by IP address to use to perform name resolution lookups.  This
+      argument accepts either a list of DNS servers See examples.
     type: list
     elements: raw
   state:
     description:
-      - State of the configuration values in the device's current active configuration.  When
-        set to I(present), the values should be configured in the device active configuration
-        and when set to I(absent) the values should not be in the device active configuration
+    - State of the configuration values in the device's current active configuration.  When
+      set to I(present), the values should be configured in the device active configuration
+      and when set to I(absent) the values should not be in the device active configuration
     default: present
     choices:
-      - present
-      - absent
+    - present
+    - absent
     type: str
 """
-
 EXAMPLES = """
-- name: Configure hostname and domain name
+- name: configure hostname and domain name
   cisco.ios.ios_system:
     hostname: ios01
     domain_name: test.example.com
     domain_search:
-      - ansible.com
-      - redhat.com
-      - cisco.com
+    - ansible.com
+    - redhat.com
+    - cisco.com
 
-- name: Remove configuration
+- name: remove configuration
   cisco.ios.ios_system:
     state: absent
 
-- name: Configure DNS lookup sources
+- name: configure DNS lookup sources
   cisco.ios.ios_system:
     lookup_source: MgmtEth0/0/CPU0/0
-    lookup_enabled: true
+    lookup_enabled: yes
 
-- name: Configure name servers
+- name: configure name servers
   cisco.ios.ios_system:
     name_servers:
-      - 8.8.8.8
-      - 8.8.4.4
+    - 8.8.8.8
+    - 8.8.4.4
 """
-
 RETURN = """
 commands:
   description: The list of configuration mode commands to send to the device
@@ -128,6 +125,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.ios import (
     get_config,
+    ios_argument_spec,
     load_config,
 )
 
@@ -166,7 +164,9 @@ def map_obj_to_commands(want, have, module):
         if have["hostname"] != "Router":
             commands.append("no hostname")
         if have["lookup_source"]:
-            commands.append("no ip domain lookup source-interface %s" % have["lookup_source"])
+            commands.append(
+                "no ip domain lookup source-interface %s" % have["lookup_source"],
+            )
         if have["lookup_enabled"] is False:
             commands.append("ip domain lookup")
         vrfs = set()
@@ -197,7 +197,9 @@ def map_obj_to_commands(want, have, module):
         if needs_update("hostname"):
             commands.append("hostname %s" % want["hostname"])
         if needs_update("lookup_source"):
-            commands.append("ip domain lookup source-interface %s" % want["lookup_source"])
+            commands.append(
+                "ip domain lookup source-interface %s" % want["lookup_source"],
+            )
         if needs_update("lookup_enabled"):
             cmd = "ip domain lookup"
             if want["lookup_enabled"] is False:
@@ -207,39 +209,57 @@ def map_obj_to_commands(want, have, module):
             adds, removes = diff_list(want["domain_name"], have["domain_name"])
             for item in removes:
                 if item["vrf"]:
-                    commands.append("no ip domain name vrf %s %s" % (item["vrf"], item["name"]))
+                    commands.append(
+                        "no ip domain name vrf %s %s" % (item["vrf"], item["name"]),
+                    )
                 else:
                     commands.append("no ip domain name %s" % item["name"])
             for item in adds:
                 if item["vrf"]:
                     requires_vrf(module, item["vrf"])
-                    commands.append("ip domain name vrf %s %s" % (item["vrf"], item["name"]))
+                    commands.append(
+                        "ip domain name vrf %s %s" % (item["vrf"], item["name"]),
+                    )
                 else:
                     commands.append("ip domain name %s" % item["name"])
         if want["domain_search"]:
-            adds, removes = diff_list(want["domain_search"], have["domain_search"])
+            adds, removes = diff_list(
+                want["domain_search"],
+                have["domain_search"],
+            )
             for item in removes:
                 if item["vrf"]:
-                    commands.append("no ip domain list vrf %s %s" % (item["vrf"], item["name"]))
+                    commands.append(
+                        "no ip domain list vrf %s %s" % (item["vrf"], item["name"]),
+                    )
                 else:
                     commands.append("no ip domain list %s" % item["name"])
             for item in adds:
                 if item["vrf"]:
                     requires_vrf(module, item["vrf"])
-                    commands.append("ip domain list vrf %s %s" % (item["vrf"], item["name"]))
+                    commands.append(
+                        "ip domain list vrf %s %s" % (item["vrf"], item["name"]),
+                    )
                 else:
                     commands.append("ip domain list %s" % item["name"])
         if want["name_servers"]:
-            adds, removes = diff_list(want["name_servers"], have["name_servers"])
+            adds, removes = diff_list(
+                want["name_servers"],
+                have["name_servers"],
+            )
             for item in removes:
                 if item["vrf"]:
-                    commands.append("no ip name-server vrf %s %s" % (item["vrf"], item["server"]))
+                    commands.append(
+                        "no ip name-server vrf %s %s" % (item["vrf"], item["server"]),
+                    )
                 else:
                     commands.append("no ip name-server %s" % item["server"])
             for item in adds:
                 if item["vrf"]:
                     requires_vrf(module, item["vrf"])
-                    commands.append("ip name-server vrf %s %s" % (item["vrf"], item["server"]))
+                    commands.append(
+                        "ip name-server vrf %s %s" % (item["vrf"], item["server"]),
+                    )
                 else:
                     commands.append("ip name-server %s" % item["server"])
     return commands
@@ -251,7 +271,11 @@ def parse_hostname(config):
 
 
 def parse_domain_name(config):
-    match = re.findall("^ip domain[- ]name (?:vrf (\\S+) )*(\\S+)", config, re.M)
+    match = re.findall(
+        "^ip domain[- ]name (?:vrf (\\S+) )*(\\S+)",
+        config,
+        re.M,
+    )
     matches = list()
     for vrf, name in match:
         if not vrf:
@@ -261,7 +285,11 @@ def parse_domain_name(config):
 
 
 def parse_domain_search(config):
-    match = re.findall("^ip domain[- ]list (?:vrf (\\S+) )*(\\S+)", config, re.M)
+    match = re.findall(
+        "^ip domain[- ]list (?:vrf (\\S+) )*(\\S+)",
+        config,
+        re.M,
+    )
     matches = list()
     for vrf, name in match:
         if not vrf:
@@ -282,7 +310,11 @@ def parse_name_servers(config):
 
 
 def parse_lookup_source(config):
-    match = re.search("ip domain[- ]lookup source-interface (\\S+)", config, re.M)
+    match = re.search(
+        "ip domain[- ]lookup source-interface (\\S+)",
+        config,
+        re.M,
+    )
     if match:
         return match.group(1)
 
@@ -332,7 +364,11 @@ def main():
         lookup_enabled=dict(type="bool"),
         state=dict(choices=["present", "absent"], default="present"),
     )
-    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
+    argument_spec.update(ios_argument_spec)
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+    )
     result = {"changed": False}
     warnings = list()
     result["warnings"] = warnings

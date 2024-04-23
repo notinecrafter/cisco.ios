@@ -21,7 +21,7 @@ description:
 version_added: 2.1.0
 author: Sumit Jaiswal (@justjais)
 notes:
-  - Tested against Cisco IOSXE Version 17.3 on CML.
+  - Tested against Cisco IOSv Version 15.2 on VIRL
   - This module works with connection C(network_cli).
     See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html)
 options:
@@ -46,7 +46,7 @@ options:
           action:
             description: Route map set operations
             type: str
-            choices: ["deny", "permit"]
+            choices: ['deny', 'permit']
           continue_entry:
             description: Continue on a different entry within the route-map
             type: dict
@@ -950,7 +950,7 @@ options:
                 suboptions:
                   deviation:
                     description: Add or subtract metric
-                    choices: ["plus", "minus"]
+                    choices: ['plus', 'minus']
                     type: str
                   metric_value:
                     description:
@@ -1067,6 +1067,7 @@ options:
 """
 
 EXAMPLES = """
+
 # Using deleted
 
 # Before state:
@@ -2297,6 +2298,7 @@ EXAMPLES = """
 #             "route_map": "test_2"
 #         }
 #     ]
+
 """
 
 RETURN = """

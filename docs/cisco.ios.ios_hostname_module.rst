@@ -119,7 +119,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOSXE Version 17.3 on CML.
+   - Tested against Cisco IOSv Version 15.6.
    - This module works with connection ``network_cli``.
 
 
@@ -152,6 +152,7 @@ Examples
     # "commands": [
     #         "hostname Router1",
     # ],
+
 
     # After state:
     # ------------
@@ -204,6 +205,7 @@ Examples
           hostname: RouterTest
         state: overridden
 
+
     # Commands Fired:
     # ---------------
     # "commands": [
@@ -215,6 +217,7 @@ Examples
 
     # router-ios#show running-config | section ^hostname
     # hostname RouterTest
+
 
     # Using state: replaced
 
@@ -249,7 +252,7 @@ Examples
     # Before state:
     # -------------
 
-    # router-ios#show running-config | section ^hostname
+    #router-ios#show running-config | section ^hostname
     # hostname RouterTest
 
     # Gathered play:
@@ -290,6 +293,7 @@ Examples
     # ----------------
 
     # hostname RouterTest
+
 
     # Parsed play:
     # ------------

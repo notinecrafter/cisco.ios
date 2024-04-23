@@ -13,10 +13,11 @@ __metaclass__ = type
 
 import socket
 
-from itertools import count, groupby
-
-from ansible.module_utils.common.network import is_masklen, to_netmask
 from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    is_masklen,
+    to_netmask,
+)
 
 
 def remove_command_from_config_list(interface, cmd, commands):
@@ -45,7 +46,9 @@ def reverify_diff_py35(want, have):
     for each_want in want:
         diff = True
         for each_have in have:
-            if each_have == sorted(each_want) or sorted(each_have) == sorted(each_want):
+            if each_have == sorted(each_want) or sorted(each_have) == sorted(
+                each_want,
+            ):
                 diff = False
         if diff:
             return True
@@ -77,7 +80,7 @@ def new_dict_to_set(input_dict, temp_list, test_set, count=0):
                 temp_list.append(k)
                 for each in v:
                     if isinstance(each, dict):
-                        if [True for i in each.values() if isinstance(i, list)]:
+                        if [True for i in each.values() if type(i) == list]:
                             new_dict_to_set(each, temp_list, test_set, count)
                         else:
                             new_dict_to_set(each, temp_list, test_set, 0)
@@ -105,12 +108,9 @@ def new_dict_to_set(input_dict, temp_list, test_set, count=0):
                     expand_dict(new_dict)
                     if tuple(iteritems(temp_dict)) not in test_set:
                         test_set.add(tuple(iteritems(temp_dict)))
-    return test_dict
 
 
-def dict_to_set(sample_dict, sort_dictionary=False):
-    if sort_dictionary:
-        sample_dict = sort_dict(sample_dict)
+def dict_to_set(sample_dict):
     # Generate a set with passed dictionary for comparison
     test_dict = dict()
     if isinstance(sample_dict, dict):
@@ -230,6 +230,24 @@ def validate_ipv4(value, module):
                     address[1],
                 ),
             )
+
+
+def validate_ipv6(value, module):
+    if value:
+        address = value.split("/")
+        if len(address) != 2:
+            module.fail_json(
+                msg="address format is <ipv6 address>/<mask>, got invalid format {0}".format(
+                    value,
+                ),
+            )
+        else:
+            if not 0 <= int(address[1]) <= 128:
+                module.fail_json(
+                    msg="invalid value for mask: {0}, mask should be in range 0-128".format(
+                        address[1],
+                    ),
+                )
 
 
 def validate_n_expand_ipv4(module, want):
@@ -364,61 +382,3 @@ def get_interface_type(interface):
         return "Serial"
     else:
         return "unknown"
-
-
-def get_ranges(data):
-    """
-    Returns a generator object that yields lists of
-    consecutive integers from a list of integers.
-    """
-    for _k, group in groupby(data, lambda t, c=count(): int(t) - next(c)):
-        yield list(group)
-
-
-def numerical_sort(string_int_list):
-    """Sorts list of integers that are digits in numerical order."""
-
-    as_int_list = []
-
-    for vlan in string_int_list:
-        as_int_list.append(int(vlan))
-    as_int_list.sort()
-    return as_int_list
-
-
-def vlan_list_to_range(cmd):
-    """
-    Converts a comma separated list of vlan IDs
-    into ranges.
-    """
-    ranges = []
-    for v in get_ranges(cmd):
-        ranges.append("-".join(map(str, (v[0], v[-1])[: len(v)])))
-    return ",".join(ranges)
-
-
-def vlan_range_to_list(vlans):
-    result = []
-    if vlans:
-        for part in vlans:
-            if part == "none":
-                break
-            if "-" in part:
-                a, b = part.split("-")
-                a, b = int(a), int(b)
-                result.extend(range(a, b + 1))
-            else:
-                a = int(part)
-                result.append(a)
-        return numerical_sort(result)
-    return result
-
-
-def sort_dict(dictionary):
-    sorted_dict = dict()
-    for key, value in sorted(dictionary.items()):
-        if isinstance(value, dict):
-            sorted_dict[key] = sort_dict(value)
-        else:
-            sorted_dict[key] = value
-    return sorted_dict

@@ -310,7 +310,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOSXE Version 17.3 on CML.
+   - Tested against Cisco IOSv Version 15.2 on VIRL
    - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html
 
 
@@ -348,85 +348,16 @@ Examples
               - name: test_prefix
         state: deleted
 
-    # Task Output
-    # -------------
-    # before:
-    # - afi: ipv4
-    #   prefix_lists:
-    #   - description: this is test description
-    #     entries:
-    #     - action: deny
-    #       le: 15
-    #       prefix: 1.0.0.0/8
-    #       sequence: 5
-    #     - action: deny
-    #       ge: 10
-    #       prefix: 35.0.0.0/8
-    #       sequence: 10
-    #     - action: deny
-    #       ge: 15
-    #       prefix: 12.0.0.0/8
-    #       sequence: 15
-    #     - action: deny
-    #       ge: 20
-    #       le: 21
-    #       prefix: 14.0.0.0/8
-    #       sequence: 20
-    #     name: '10'
-    #   - description: this is test
-    #     entries:
-    #     - action: deny
-    #       ge: 15
-    #       prefix: 12.0.0.0/8
-    #       sequence: 50
-    #     name: test
-    #   - description: this is for prefix-list
-    #     entries:
-    #     - action: deny
-    #       ge: 10
-    #       le: 15
-    #       prefix: 35.0.0.0/8
-    #       sequence: 5
-    #     - action: deny
-    #       ge: 20
-    #       prefix: 35.0.0.0/8
-    #       sequence: 10
-    #     name: test_prefix
-    # - afi: ipv6
-    #   prefix_lists:
-    #   - description: this is ipv6 prefix-list
-    #     entries:
-    #     - action: deny
-    #       ge: 80
-    #       prefix: 2001:DB8:0:4::/64
-    #       sequence: 10
-    #     name: test_ipv6
-    # commands:
-    # - no ip prefix-list 10
-    # - no ip prefix-list test_prefix
-    # after:
-    # - afi: ipv4
-    #   prefix_lists:
-    #   - description: this is test
-    #     entries:
-    #     - action: deny
-    #       ge: 15
-    #       prefix: 12.0.0.0/8
-    #       sequence: 50
-    #     name: test
-    # - afi: ipv6
-    #   prefix_lists:
-    #   - description: this is ipv6 prefix-list
-    #     entries:
-    #     - action: deny
-    #       ge: 80
-    #       prefix: 2001:DB8:0:4::/64
-    #       sequence: 10
-    #    name: test_ipv6
-
+    #  Commands Fired:
+    #  ---------------
+    #
+    #  "commands": [
+    #         "no ip prefix-list 10",
+    #         "no ip prefix-list test_prefix"
+    #     ]
 
     # After state:
-    # ------------
+    # -------------
     # router-ios#sh running-config | section ^ip prefix-list|^ipv6 prefix-list
     # ip prefix-list test description this is test
     # ip prefix-list test seq 50 deny 12.0.0.0/8 ge 15
@@ -458,74 +389,14 @@ Examples
           - afi: ipv4
         state: deleted
 
-    # Task Output
-    # -------------
-    # before:
-    # - afi: ipv4
-    #   prefix_lists:
-    #   - description: this is test description
-    #     entries:
-    #     - action: deny
-    #       le: 15
-    #       prefix: 1.0.0.0/8
-    #       sequence: 5
-    #     - action: deny
-    #       ge: 10
-    #       prefix: 35.0.0.0/8
-    #       sequence: 10
-    #     - action: deny
-    #       ge: 15
-    #       prefix: 12.0.0.0/8
-    #       sequence: 15
-    #     - action: deny
-    #       ge: 20
-    #       le: 21
-    #       prefix: 14.0.0.0/8
-    #       sequence: 20
-    #     name: '10'
-    #   - description: this is test
-    #     entries:
-    #     - action: deny
-    #       ge: 15
-    #       prefix: 12.0.0.0/8
-    #       sequence: 50
-    #     name: test
-    #   - description: this is for prefix-list
-    #     entries:
-    #     - action: deny
-    #       ge: 10
-    #       le: 15
-    #       prefix: 35.0.0.0/8
-    #       sequence: 5
-    #     - action: deny
-    #       ge: 20
-    #       prefix: 35.0.0.0/8
-    #       sequence: 10
-    #     name: test_prefix
-    # - afi: ipv6
-    #   prefix_lists:
-    #   - description: this is ipv6 prefix-list
-    #     entries:
-    #     - action: deny
-    #       ge: 80
-    #       prefix: 2001:DB8:0:4::/64
-    #       sequence: 10
-    #     name: test_ipv6
-    # commands:
-    #   - "no ip prefix-list test",
-    #   - "no ip prefix-list 10",
-    #   - "no ip prefix-list test_prefix"
-    # after:
-    # - afi: ipv6
-    #   prefix_lists:
-    #   - description: this is ipv6 prefix-list
-    #     entries:
-    #     - action: deny
-    #       ge: 80
-    #       prefix: 2001:DB8:0:4::/64
-    #       sequence: 10
-    #    name: test_ipv6
-
+    #  Commands Fired:
+    #  ---------------
+    #
+    #  "commands": [
+    #         "no ip prefix-list test",
+    #         "no ip prefix-list 10",
+    #         "no ip prefix-list test_prefix"
+    #     ]
 
     # After state:
     # -------------
@@ -1266,5 +1137,4 @@ Status
 Authors
 ~~~~~~~
 
-- Sagar Paul (@KB-perByte)
 - Sumit Jaiswal (@justjais)

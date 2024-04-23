@@ -18,7 +18,7 @@ the given network resource.
 import re
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
 
@@ -43,13 +43,13 @@ def _tmplt_route_map_match(config_data):
                     "lower_limit",
                 ):
                     cmd += " lower-limit {lower_limit}".format(
-                        **config_data["match"]["additional_paths"]["best_range"],
+                        **config_data["match"]["additional_paths"]["best_range"]
                     )
                 if config_data["match"]["additional_paths"]["best_range"].get(
                     "upper_limit",
                 ):
                     cmd += " upper-limit {upper_limit}".format(
-                        **config_data["match"]["additional_paths"]["best_range"],
+                        **config_data["match"]["additional_paths"]["best_range"]
                     )
             if config_data["match"]["additional_paths"].get("group_best"):
                 cmd += " group-best"
@@ -95,7 +95,9 @@ def _tmplt_route_map_match(config_data):
             cmd += " ".join(sorted(temp))
             command.append(cmd)
         if match.get("length"):
-            command.append("match length {minimum} {maximum}".format(**match["length"]))
+            command.append(
+                "match length {minimum} {maximum}".format(**match["length"]),
+            )
         if match.get("local_preference"):
             cmd = "match local-preference "
             if match["local_preference"].get("value"):
@@ -271,20 +273,26 @@ def _tmplt_route_map_match_ip(config_data):
                 )
         if config_data["match"]["ip"].get("redistribution_source"):
             cmd += " redistribution-source"
-            if config_data["match"]["ip"]["redistribution_source"].get("prefix_lists"):
+            if config_data["match"]["ip"]["redistribution_source"].get(
+                "prefix_lists",
+            ):
                 cmd += " prefix-list"
                 cmd = construct_cmd_from_list(
                     cmd,
                     config_data["match"]["ip"]["redistribution_source"]["prefix_lists"],
                 )
-            elif config_data["match"]["ip"]["redistribution_source"].get("acls"):
+            elif config_data["match"]["ip"]["redistribution_source"].get(
+                "acls",
+            ):
                 cmd = construct_cmd_from_list(
                     cmd,
                     config_data["match"]["ip"]["redistribution_source"]["acls"],
                 )
         if config_data["match"]["ip"].get("route_source"):
             cmd += " route-source"
-            if config_data["match"]["ip"]["route_source"].get("redistribution_source"):
+            if config_data["match"]["ip"]["route_source"].get(
+                "redistribution_source",
+            ):
                 cmd += " redistribution-source"
             if config_data["match"]["ip"]["route_source"].get("prefix_lists"):
                 cmd += " prefix-list"
@@ -307,7 +315,7 @@ def _tmplt_route_map_match_ipv6(config_data):
             cmd += " address"
             if config_data["match"]["ipv6"]["address"].get("prefix_list"):
                 cmd += " prefix-list {prefix_list}".format(
-                    **config_data["match"]["ipv6"]["address"],
+                    **config_data["match"]["ipv6"]["address"]
                 )
             elif config_data["match"]["ipv6"]["address"].get("acl"):
                 cmd += " {acl}".format(**config_data["match"]["ipv6"]["address"])
@@ -319,7 +327,7 @@ def _tmplt_route_map_match_ipv6(config_data):
                 cmd += " src-pfx"
             if config_data["match"]["ipv6"]["flowspec"].get("prefix_list"):
                 cmd += " prefix-list {prefix_list}".format(
-                    **config_data["match"]["ipv6"]["flowspec"],
+                    **config_data["match"]["ipv6"]["flowspec"]
                 )
             elif config_data["match"]["ipv6"]["flowspec"].get("acl"):
                 cmd += " {acl}".format(**config_data["match"]["ipv6"]["flowspec"])
@@ -327,7 +335,7 @@ def _tmplt_route_map_match_ipv6(config_data):
             cmd += " next-hop"
             if config_data["match"]["ipv6"]["next_hop"].get("prefix_list"):
                 cmd += " prefix-list {prefix_list}".format(
-                    **config_data["match"]["ipv6"]["next_hop"],
+                    **config_data["match"]["ipv6"]["next_hop"]
                 )
             elif config_data["match"]["ipv6"]["next_hop"].get("acl"):
                 cmd += " {acl}".format(**config_data["match"]["ipv6"]["next_hop"])
@@ -335,7 +343,7 @@ def _tmplt_route_map_match_ipv6(config_data):
             cmd += " route-source"
             if config_data["match"]["ipv6"]["route_source"].get("prefix_list"):
                 cmd += " prefix-list {prefix_list}".format(
-                    **config_data["match"]["ipv6"]["route_source"],
+                    **config_data["match"]["ipv6"]["route_source"]
                 )
             elif config_data["match"]["ipv6"]["route_source"].get("acl"):
                 cmd += " {acl}".format(**config_data["match"]["ipv6"]["route_source"])
@@ -358,7 +366,9 @@ def _tmplt_route_map_set(config_data):
             if set["as_path"].get("prepend"):
                 cmd += " prepend"
                 if set["as_path"]["prepend"].get("as_number"):
-                    cmd += " {0}".format(set["as_path"]["prepend"].get("as_number"))
+                    cmd += " {0}".format(
+                        " ".join(set["as_path"]["prepend"].get("as_number")),
+                    )
                 elif set["as_path"]["prepend"].get("last_as"):
                     cmd += " last-as {last_as}".format(**set["as_path"]["prepend"])
             if set["as_path"].get("tag"):
@@ -373,7 +383,9 @@ def _tmplt_route_map_set(config_data):
         if set.get("community"):
             cmd = "set community"
             if set["community"].get("number"):
-                cmd += " " + " ".join(i for i in set["community"]["number"])
+                cmd += " {number}".format(**set["community"])
+            if set["community"].get("additive"):
+                cmd += " additive"
             if set["community"].get("gshut"):
                 cmd += " gshut"
             if set["community"].get("internet"):
@@ -386,20 +398,21 @@ def _tmplt_route_map_set(config_data):
                 cmd += " no-export"
             if set["community"].get("none"):
                 cmd += " none"
-            # additive must be set last last
-            if set["community"].get("additive"):
-                cmd += " additive"
             command.append(cmd)
         if set.get("dampening"):
             command.append(
                 "set dampening {penalty_half_time} {reuse_route_val} {suppress_route_val} {max_suppress}".format(
-                    **set["dampening"],
+                    **set["dampening"]
                 ),
             )
         if set.get("default"):
-            command.append("set default interface {default}".format(**set["default"]))
+            command.append(
+                "set default interface {default}".format(**set["default"]),
+            )
         if set.get("extcomm_list"):
-            command.append("set extcomm-list {extcomm_list} delete".format(**set))
+            command.append(
+                "set extcomm-list {extcomm_list} delete".format(**set),
+            )
         if set.get("extcommunity"):
             if set["extcommunity"].get("cost"):
                 cmd = "set extcommunity cost"
@@ -416,7 +429,7 @@ def _tmplt_route_map_set(config_data):
                 cmd = "set extcommunity rt"
                 if set["extcommunity"]["rt"].get("range"):
                     cmd += " range {lower_limit} {upper_limit}".format(
-                        **set["extcommunity"]["rt"]["range"],
+                        **set["extcommunity"]["rt"]["range"]
                     )
                 elif set["extcommunity"]["rt"].get("address"):
                     cmd += " {address}".format(**set["extcommunity"]["rt"])
@@ -431,12 +444,10 @@ def _tmplt_route_map_set(config_data):
                 cmd = "set extcommunity vpn-distinguisher"
                 if set["extcommunity"]["vpn_distinguisher"].get("range"):
                     cmd += " range {lower_limit} {upper_limit}".format(
-                        **set["extcommunity"]["vpn_distinguisher"]["range"],
+                        **set["extcommunity"]["vpn_distinguisher"]["range"]
                     )
                 elif set["extcommunity"]["vpn_distinguisher"].get("address"):
-                    cmd += " {address}".format(
-                        **set["extcommunity"]["vpn_distinguisher"],
-                    )
+                    cmd += " {address}".format(**set["extcommunity"]["vpn_distinguisher"])
                 if set["extcommunity"]["vpn_distinguisher"].get("additive"):
                     cmd += " additive"
                 command.append(cmd)
@@ -462,7 +473,9 @@ def _tmplt_route_map_set(config_data):
         if set.get("lisp"):
             command.append("set lisp locator-set {lisp}".format(**set))
         if set.get("local_preference"):
-            command.append("set local-preference {local_preference}".format(**set))
+            command.append(
+                "set local-preference {local_preference}".format(**set),
+            )
         if set.get("metric"):
             cmd = "set metric"
             if set["metric"].get("metric_value"):
@@ -471,16 +484,18 @@ def _tmplt_route_map_set(config_data):
                     if set["metric"]["deviation"] == "plus":
                         cmd += (
                             " +{eigrp_delay} {metric_reliability} {metric_bandwidth} {mtu}".format(
-                                **set["metric"],
+                                **set["metric"]
                             )
                         )
                     elif set["metric"]["deviation"] == "minus":
                         cmd += (
                             " -{eigrp_delay} {metric_reliability} {metric_bandwidth} {mtu}".format(
-                                **set["metric"],
+                                **set["metric"]
                             )
                         )
-            if set["metric"].get("deviation") and not set["metric"].get("eigrp_delay"):
+            if set["metric"].get("deviation") and not set["metric"].get(
+                "eigrp_delay",
+            ):
                 if set["metric"]["deviation"] == "plus":
                     cmd = "set metric +{metric_value}".format(**set["metric"])
                 elif set["metric"]["deviation"] == "minus":
@@ -522,14 +537,16 @@ def _tmplt_route_map_set_ip(config_data):
         set_ip = config_data["set"]["ip"]
         cmd = "set ip"
         if set_ip.get("address"):
-            command.append("{0} address prefix-list {address}".format(cmd, **set_ip))
+            command.append(
+                "{0} address prefix-list {address}".format(cmd, **set_ip),
+            )
         if set_ip.get("df"):
             command.append("{0} df {df}".format(cmd, **set_ip))
         if set_ip.get("global_route"):
             cmd += " global next-hop"
             if set_ip["global_route"].get("verify_availability"):
                 cmd += " verify-availability {address} {sequence} track {track}".format(
-                    **set_ip["global_route"]["verify_availability"],
+                    **set_ip["global_route"]["verify_availability"]
                 )
             elif set_ip["global_route"].get("address"):
                 cmd += " {address}".format(**set_ip["global_route"])
@@ -537,15 +554,14 @@ def _tmplt_route_map_set_ip(config_data):
         if set_ip.get("next_hop"):
             cmd += " next-hop"
             if set_ip["next_hop"].get("address"):
-                command.append("{0} {address}".format(cmd, **set_ip["next_hop"]))
+                command.append(
+                    "{0} {address}".format(cmd, **set_ip["next_hop"]),
+                )
             if set_ip["next_hop"].get("dynamic"):
                 command.append("{0} dynamic dhcp".format(cmd))
             if set_ip["next_hop"].get("encapsulate"):
                 command.append(
-                    "{0} encapsulate l3vpn {encapsulate}".format(
-                        cmd,
-                        **set_ip["next_hop"],
-                    ),
+                    "{0} encapsulate l3vpn {encapsulate}".format(cmd, **set_ip["next_hop"]),
                 )
             if set_ip["next_hop"].get("peer_address"):
                 command.append("{0} peer-address".format(cmd))
@@ -563,8 +579,7 @@ def _tmplt_route_map_set_ip(config_data):
             if set_ip["next_hop"].get("verify_availability"):
                 command.append(
                     "{0} verify-availability {address} {sequence} track {track}".format(
-                        cmd,
-                        **set_ip["next_hop"]["verify_availability"],
+                        cmd, **set_ip["next_hop"]["verify_availability"]
                     ),
                 )
         if set_ip.get("precedence"):
@@ -605,7 +620,7 @@ def _tmplt_route_map_set_ip(config_data):
             cmd += " vrf {vrf} next-hop".format(**set_ip)
             if set_ip["vrf"].get("verify_availability").get("address"):
                 cmd += " verify-availability {address} {sequence} track {track}".format(
-                    **set_ip["vrf"]["verify_availability"],
+                    **set_ip["vrf"]["verify_availability"]
                 )
             elif set_ip["vrf"].get("address"):
                 cmd += " {address}".format(**set_ip["vrf"])
@@ -625,7 +640,7 @@ def _tmplt_route_map_set_ipv6(config_data):
             cmd += " global next-hop"
             if set_ipv6["global_route"].get("verify_availability"):
                 cmd += " verify-availability {address} {sequence} track {track}".format(
-                    **set_ipv6["global_route"]["verify_availability"],
+                    **set_ipv6["global_route"]["verify_availability"]
                 )
             elif set_ipv6["global_route"].get("address"):
                 cmd += " {address}".format(**set_ipv6["global_route"])
@@ -642,7 +657,7 @@ def _tmplt_route_map_set_ipv6(config_data):
         if set_ipv6.get("vrf"):
             cmd += (
                 " vrf {vrf} next-hop verify-availability {address} {sequence} track {track}".format(
-                    **set_ipv6["vrf"]["verify_availability"],
+                    **set_ipv6["vrf"]["verify_availability"]
                 )
             )
         return cmd
@@ -714,7 +729,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "result": {
                 "{{ route_map }}": {
                     "{{ action|d() + '_' + sequence|d() }}": {
-                        "entries": {"description": "'{{ description }}'"},
+                        "entries": {"description": "{{ description }}"},
                     },
                 },
             },
@@ -972,7 +987,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 r"""
                 \s+set*
                 \s*(?P<aigp_metric>aigp-metric\sigp-metric|aigp-metric\s\d+)*
-                \s*(?P<as_path>as-path\s(prepend\s(last-as\s\d+|\d+(?:\s\d+)*)|tag))*
+                \s*(?P<as_path>as-path\s(prepend\s(last-as\s\d+|\S+)|tag))*
                 \s*(?P<automatic_tag>automatic-tag)*
                 \s*(?P<clns>clns\snext-hop\s\S.*)*
                 \s*(?P<comm_list>comm-list\s\S+\sdelete)*
@@ -1021,15 +1036,16 @@ class Route_mapsTemplate(NetworkTemplate):
                                 "clns": "{{ clns.split('clns next-hop ')[1] if clns is defined }}",
                                 "comm_list": "{{ comm_list.split(' ')[1] if comm_list is defined }}",
                                 "community": {
-                                    "number": "{{ community.split(' ')[1:]|reject('in',\
-                                        ['additive','gshut','internet','local-AS','no-advertise','no-export','none']\
-                                    )|join(' ')}}",
+                                    "number": "{{ community.split(' ')[1] if community is defined and 'additive' not in community.split(' ')\
+                                                 and 'gshut' not in community.split(' ') and 'internet' not in community.split(' ')\
+                                                     and 'internet' not in community.split(' ') and 'local_as' not in community.split(' ')\
+                                                         and 'no_advertise' not in community.split(' ') and 'no_export' not in community.split(' ') }}",
                                     "additive": "{{ True if community is defined and 'additive' in community }}",
                                     "gshut": "{{ True if community is defined and 'gshut' in community }}",
                                     "internet": "{{ True if community is defined and 'internet' in community }}",
-                                    "local_as": "{{ True if community is defined and 'local-AS' in community }}",
-                                    "no_advertise": "{{ True if community is defined and 'no-advertise' in community }}",
-                                    "no_export": "{{ True if community is defined and 'no-export' in community }}",
+                                    "local_as": "{{ True if community is defined and 'local_as' in community }}",
+                                    "no_advertise": "{{ True if community is defined and 'no_advertise' in community }}",
+                                    "no_export": "{{ True if community is defined and 'no_export' in community }}",
                                     "none": "{{ True if community is defined and 'none' in community }}",
                                 },
                                 "dampening": {

@@ -1,5 +1,4 @@
 ---
-- name: Main task for ospf_interfaces module
-  ansible.builtin.include_tasks: cli.yaml
+- ansible.builtin.include: cli.yaml
   tags:
     - network_cli

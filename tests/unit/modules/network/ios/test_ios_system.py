@@ -21,15 +21,16 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-from unittest.mock import patch
 
 from ansible_collections.cisco.ios.plugins.modules import ios_system
+from ansible_collections.cisco.ios.tests.unit.compat.mock import patch
 from ansible_collections.cisco.ios.tests.unit.modules.utils import set_module_args
 
 from .ios_module import TestIosModule, load_fixture
 
 
 class TestIosSystemModule(TestIosModule):
+
     module = ios_system
 
     def setUp(self):
@@ -95,7 +96,9 @@ class TestIosSystemModule(TestIosModule):
         self.execute_module(changed=True, commands=commands, sort=False)
 
     def test_ios_system_domain_search_complex(self):
-        set_module_args(dict(domain_search=[{"name": "ansible.com", "vrf": "test"}]))
+        set_module_args(
+            dict(domain_search=[{"name": "ansible.com", "vrf": "test"}]),
+        )
         commands = [
             "no ip domain list vrf management example.net",
             "no ip domain list example.net",

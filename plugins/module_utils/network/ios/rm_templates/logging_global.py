@@ -17,7 +17,7 @@ the given network resource.
 
 import re
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
 
@@ -44,17 +44,23 @@ def tmplt_host(verb):
             session_id = verb.get("session_id")
             changed = True
             if session_id.get("text"):
-                cmd += " session-id string {text}".format(text=session_id["text"])
+                cmd += " session-id string {text}".format(
+                    text=session_id["text"],
+                )
             elif session_id.get("tag"):
                 cmd += " session-id {tag}".format(tag=session_id["tag"])
         if verb.get("stream"):
             cmd += " stream {stream}".format(stream=verb["stream"])
             changed = True
         if verb.get("sequence_num_session"):
-            cmd += " {sequence_num_session}".format(sequence_num_session="sequence-num-session")
+            cmd += " {sequence_num_session}".format(
+                sequence_num_session="sequence-num-session",
+            )
             changed = True
         if verb.get("discriminator"):
-            cmd += " discriminator {discriminator}".format(discriminator=verb["discriminator"])
+            cmd += " discriminator {discriminator}".format(
+                discriminator=verb["discriminator"],
+            )
             changed = True
     if not changed:
         cmd = None
@@ -92,17 +98,23 @@ def tmplt_host_transport(verb):
             if verb.get("filtered"):
                 cmd += " {filtered}".format(filtered="filtered")
             if verb.get("discriminator"):
-                cmd += " discriminator {discriminator}".format(discriminator=verb["discriminator"])
+                cmd += " discriminator {discriminator}".format(
+                    discriminator=verb["discriminator"],
+                )
             if verb.get("stream"):
                 cmd += " stream {stream}".format(stream=verb["stream"])
             if verb.get("session_id"):
                 session_id = verb.get("session_id")
                 if session_id.get("text"):
-                    cmd += " session-id string {text}".format(text=session_id["text"])
+                    cmd += " session-id string {text}".format(
+                        text=session_id["text"],
+                    )
                 elif session_id.get("tag"):
                     cmd += " session-id {tag}".format(tag=session_id["tag"])
             if verb.get("sequence_num_session"):
-                cmd += " {sequence_num_session}".format(sequence_num_session="sequence-num-session")
+                cmd += " {sequence_num_session}".format(
+                    sequence_num_session="sequence-num-session",
+                )
     return cmd
 
 
@@ -128,6 +140,10 @@ def tmplt_host_transport_del(verb):
 
 def tmplt_buffered(config_data):
     return tmplt_common(config_data.get("buffered"), "logging buffered")
+
+
+def tmplt_history(config_data):
+    return tmplt_common(config_data.get("history"), "logging history")
 
 
 def tmplt_console(config_data):
@@ -165,7 +181,9 @@ def tmplt_message_counter(verb):
     cmd = "logging message-counter"
 
     if verb.get("message_counter"):
-        cmd += " {message_counter}".format(message_counter=verb["message_counter"])
+        cmd += " {message_counter}".format(
+            message_counter=verb["message_counter"],
+        )
     return cmd
 
 
@@ -198,9 +216,13 @@ def tmplt_common(verb, cmd):
         if verb.get("console"):
             cmd += " {console}".format(console="console")
         if verb.get("message_limit"):
-            cmd += " message-limit {message_limit}".format(message_limit=verb["message_limit"])
+            cmd += " message-limit {message_limit}".format(
+                message_limit=verb["message_limit"],
+            )
         if verb.get("discriminator"):
-            cmd += " discriminator {discriminator}".format(discriminator=verb.get("discriminator"))
+            cmd += " discriminator {discriminator}".format(
+                discriminator=verb.get("discriminator"),
+            )
         if verb.get("filtered"):
             cmd += " {filtered}".format(filtered="filtered")
         if verb.get("xml"):
@@ -210,7 +232,9 @@ def tmplt_common(verb, cmd):
         if verb.get("severity"):
             cmd += " {severity}".format(severity=verb["severity"])
         if verb.get("except_severity"):
-            cmd += " except {exceptSev}".format(exceptSev=verb["except_severity"])
+            cmd += " except {exceptSev}".format(
+                exceptSev=verb["except_severity"],
+            )
         if verb.get("tag"):
             cmd += " {tag}".format(tag=verb["tag"])
         if verb.get("text"):
@@ -247,7 +271,11 @@ def tmplt_persistent(config_data):
 
 class Logging_globalTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
-        super(Logging_globalTemplate, self).__init__(lines=lines, tmplt=self, module=module)
+        super(Logging_globalTemplate, self).__init__(
+            lines=lines,
+            tmplt=self,
+            module=module,
+        )
 
     # fmt: off
     PARSERS = [
@@ -514,32 +542,19 @@ class Logging_globalTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "history.size",
-            "getval": re.compile(
-                r"""
-                ^logging\shistory\ssize
-                (\s(?P<size>\d+))
-                $""", re.VERBOSE,
-            ),
-            "setval": "logging history size {{ history.size }}",
-            "result": {
-                "history": {
-                    "size": "{{ size }}",
-                },
-            },
-        },
-        {
-            "name": "history.severity",
+            "name": "history",
             "getval": re.compile(
                 r"""
                 ^logging\shistory
-                (\s(?P<severity>alerts|critical|debugging|emergencies|errors|informational|notifications|warnings))
+                (\s(?P<size>\d+))?
+                (\s(?P<severity>alerts|critical|debugging|emergencies|errors|informational|notifications|warnings))?
                 $""", re.VERBOSE,
             ),
-            "setval": "logging history {{ history.severity }}",
+            "setval": tmplt_history,
             "result": {
                 "history": {
                     "severity": "{{ severity }}",
+                    "size": "{{ size }}",
                 },
             },
         },

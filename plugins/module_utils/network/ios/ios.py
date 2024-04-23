@@ -32,11 +32,48 @@ __metaclass__ = type
 import json
 
 from ansible.module_utils._text import to_text
+from ansible.module_utils.basic import env_fallback
 from ansible.module_utils.connection import Connection, ConnectionError
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
 
 
 _DEVICE_CONFIGS = {}
+
+ios_provider_spec = {
+    "host": dict(),
+    "port": dict(type="int"),
+    "username": dict(fallback=(env_fallback, ["ANSIBLE_NET_USERNAME"])),
+    "password": dict(
+        fallback=(env_fallback, ["ANSIBLE_NET_PASSWORD"]),
+        no_log=True,
+    ),
+    "ssh_keyfile": dict(
+        fallback=(env_fallback, ["ANSIBLE_NET_SSH_KEYFILE"]),
+        type="path",
+    ),
+    "authorize": dict(
+        default=False,
+        fallback=(env_fallback, ["ANSIBLE_NET_AUTHORIZE"]),
+        type="bool",
+    ),
+    "auth_pass": dict(
+        fallback=(env_fallback, ["ANSIBLE_NET_AUTH_PASS"]),
+        no_log=True,
+    ),
+    "timeout": dict(type="int"),
+}
+ios_argument_spec = {
+    "provider": dict(
+        type="dict",
+        options=ios_provider_spec,
+        removed_at_date="2022-06-01",
+        removed_from_collection="cisco.ios",
+    ),
+}
+
+
+def get_provider_argspec():
+    return ios_provider_spec
 
 
 def get_connection(module):
@@ -93,7 +130,9 @@ def get_config(module, flags=None):
                 # Some ios devices don't understand `| section foo`
                 out = get_config(module, flags=flags[:-1])
             else:
-                module.fail_json(msg=to_text(exc, errors="surrogate_then_replace"))
+                module.fail_json(
+                    msg=to_text(exc, errors="surrogate_then_replace"),
+                )
         cfg = to_text(out, errors="surrogate_then_replace").strip()
         _DEVICE_CONFIGS[flag_str] = cfg
         return cfg

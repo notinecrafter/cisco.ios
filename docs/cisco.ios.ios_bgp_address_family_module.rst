@@ -70,66 +70,6 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="6">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>advertise</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configure path advertise/export to other address-family</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="5">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>afi</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>l2vpn</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Address family for VRF advertise/export</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="5">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>safi</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>evpn</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Advertise/export prefixes to address family</div>
-                </td>
-            </tr>
-
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="6">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>afi</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -156,7 +96,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="6">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>aggregate_addresses</b>
+                    <b>aggregate_address</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
@@ -167,7 +107,6 @@ Parameters
                 </td>
                 <td>
                         <div>Configure BGP aggregate entries</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: aggregate_address</div>
                 </td>
             </tr>
                                 <tr>
@@ -390,29 +329,6 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>install</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Additional paths to install into RIB</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>receive</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -480,30 +396,6 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>backup</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Select backup path</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>best</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -514,30 +406,6 @@ Parameters
                 </td>
                 <td>
                         <div>Select best N paths (2-3).</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>best_external</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Select best-external path</div>
                 </td>
             </tr>
             <tr>
@@ -932,160 +800,6 @@ Parameters
                 </td>
                 <td>
                         <div>Nexthop triggering</div>
-                        <div>This option is DEPRECATED and replaced with slow_peer_options, this attribute will be removed after 2025-01-01.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>detection</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Slow-peer detection</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>enable</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Enable slow-peer detection</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>threshold</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Set the slow-peer detection threshold</div>
-                        <div>Threshold value (seconds)</div>
-                        <div>Please refer vendor documentation for valid values</div>
-                </td>
-            </tr>
-
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>split_update_group</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configure slow-peer split-update-group</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>dynamic</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Dynamically split the slow peer to slow-update group</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>permanent</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Keep the slow-peer permanently in slow-update group</div>
-                </td>
-            </tr>
-
-
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="5">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>slow_peer_options</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Nexthop triggering</div>
                 </td>
             </tr>
                                 <tr>
@@ -1407,7 +1121,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="6">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>neighbors</b>
+                    <b>neighbor</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
@@ -1418,7 +1132,6 @@ Parameters
                 </td>
                 <td>
                         <div>Specify a neighbor router</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbor</div>
                 </td>
             </tr>
                                 <tr>
@@ -1547,7 +1260,6 @@ Parameters
                 </td>
                 <td>
                         <div>Neighbor address (A.B.C.D)</div>
-                        <div>This option is DEPRECATED and replaced with neighbor_address, this attribute will be removed after 2025-01-01.</div>
                 </td>
             </tr>
             <tr>
@@ -1731,204 +1443,6 @@ Parameters
                         <div>Minimum interval between sending BGP routing updates</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="5">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>advertises</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Advertise to this neighbor</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>additional_paths</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Advertise additional paths</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>all</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Select all available paths</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>best</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Select best N paths (2-3).</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>group_best</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Select group-best path</div>
-                </td>
-            </tr>
-
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>best_external</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Advertise best-external (at RRs best-internal) path</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>diverse_path</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Advertise additional paths</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>backup</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Diverse path can be backup path</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>mpath</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Diverse path can be multipath</div>
-                </td>
-            </tr>
-
-
             <tr>
                     <td class="elbow-placeholder"></td>
                     <td class="elbow-placeholder"></td>
@@ -3028,7 +2542,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>ipv6_address</b>
+                    <b>ipv6_adddress</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -3038,8 +2552,7 @@ Parameters
                 </td>
                 <td>
                         <div>Neighbor ipv6 address (X:X:X:X::X)</div>
-                        <div>This option is DEPRECATED and replaced with neighbor_address, this attribute will be removed after 2025-01-01.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: ipv6_adddress</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: ipv6_address</div>
                 </td>
             </tr>
             <tr>
@@ -3161,7 +2674,7 @@ Parameters
                     <b>number</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">string</span>
+                        <span style="color: purple">integer</span>
                     </div>
                 </td>
                 <td>
@@ -3367,18 +2880,21 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>neighbor_address</b>
+                    <b>next_hop_self</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">string</span>
+                        <span style="color: purple">boolean</span>
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
                 </td>
                 <td>
-                        <div>Neighbor address (A.B.C.D)</div>
-                        <div>Neighbor tag</div>
-                        <div>Neighbor ipv6 address (X:X:X:X::X)</div>
+                        <div>Disable the next hop calculation for this neighbor</div>
+                        <div>This option is DEPRECATED and is replaced with nexthop_self which accepts dict as input this attribute will be removed after 2023-06-01.</div>
                 </td>
             </tr>
             <tr>
@@ -3390,63 +2906,19 @@ Parameters
                     <b>next_hop_unchanged</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">boolean</span>
                     </div>
                 </td>
                 <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
                 </td>
                 <td>
                         <div>Propagate next hop unchanged for iBGP paths to this neighbor</div>
-                        <div>Propagate next hop unchanged for all paths (iBGP and eBGP) to this neighbor</div>
                 </td>
             </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>allpaths</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Propagate next hop unchanged for all paths (iBGP and eBGP) to this neighbor</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>set</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Enable next-hop-unchanged</div>
-                </td>
-            </tr>
-
             <tr>
                     <td class="elbow-placeholder"></td>
                     <td class="elbow-placeholder"></td>
@@ -3528,66 +3000,8 @@ Parameters
                 </td>
                 <td>
                         <div>Set a password</div>
-                        <div>This option is DEPRECATED and is replaced with password_options which accepts dict as input, this attribute will be removed after 2024-06-01.</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="5">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>password_options</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Set a password with encryption type</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>encryption</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Encryption type (0 to disable encryption, 7 for proprietary)</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>pass_key</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The password</div>
-                </td>
-            </tr>
-
             <tr>
                     <td class="elbow-placeholder"></td>
                     <td class="elbow-placeholder"></td>
@@ -3895,24 +3309,6 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>peer_group_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Member of the peer-group</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="5">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>prefix_list</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -4086,7 +3482,7 @@ Parameters
                     <b>remote_as</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">string</span>
+                        <span style="color: purple">integer</span>
                     </div>
                 </td>
                 <td>
@@ -4590,254 +3986,6 @@ Parameters
                 </td>
                 <td>
                         <div>Configure slow-peer</div>
-                        <div>This option is DEPRECATED and replaced with slow_peer_options, this attribute will be removed after 2025-01-01.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>detection</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configure slow-peer</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>disable</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Disable slow-peer detection</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>enable</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Enable slow-peer detection</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>threshold</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Set the slow-peer detection threshold</div>
-                </td>
-            </tr>
-
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>split_update_group</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configure slow-peer</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>dynamic</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configure slow-peer</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>disable</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure slow-peer</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>enable</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure slow-peer</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>permanent</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure slow-peer</div>
-                </td>
-            </tr>
-
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>static</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure slow-peer</div>
-                </td>
-            </tr>
-
-
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="5">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>slow_peer_options</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Configure slow-peer options</div>
                 </td>
             </tr>
                                 <tr>
@@ -5126,7 +4274,6 @@ Parameters
                 </td>
                 <td>
                         <div>Neighbor tag</div>
-                        <div>This option is DEPRECATED and replaced with neighbor_address, this attribute will be removed after 2025-01-01.</div>
                 </td>
             </tr>
             <tr>
@@ -5465,7 +4612,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="6">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>networks</b>
+                    <b>network</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
@@ -5476,7 +4623,6 @@ Parameters
                 </td>
                 <td>
                         <div>Specify a network to announce via BGP</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: network</div>
                 </td>
             </tr>
                                 <tr>
@@ -5517,28 +4663,6 @@ Parameters
                 </td>
                 <td>
                         <div>Specify a BGP backdoor route</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="5">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>evpn</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Advertise or Export to EVPN address-family</div>
                 </td>
             </tr>
             <tr>
@@ -6140,29 +5264,6 @@ Parameters
                         <div>Route map reference</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>set</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Set the top level attribute</div>
-                </td>
-            </tr>
 
             <tr>
                     <td class="elbow-placeholder"></td>
@@ -6218,29 +5319,6 @@ Parameters
                 </td>
                 <td>
                         <div>Route map reference</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>set</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Set the top level attribute</div>
                 </td>
             </tr>
 
@@ -6300,29 +5378,6 @@ Parameters
                         <div>Route map reference</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>set</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Set the top level attribute</div>
-                </td>
-            </tr>
 
             <tr>
                     <td class="elbow-placeholder"></td>
@@ -6349,29 +5404,6 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>include_connected</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Include connected. Only applicable under IPv6 AFI</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>match</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -6381,7 +5413,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Redistribute matched routes</div>
+                        <div>On Demand stub Routes</div>
                 </td>
             </tr>
                                 <tr>
@@ -6406,80 +5438,8 @@ Parameters
                 </td>
                 <td>
                         <div>Redistribute OSPF external routes</div>
-                        <div>This option is DEPRECATED and replaced with externals option, this attribute will be removed after 2025-01-01.</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>externals</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Redistribute OSPF external routes</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>type_1</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Redistribute OSPF External type 1 routes</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>type_2</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Redistribute OSPF External type 1 routes</div>
-                </td>
-            </tr>
-
             <tr>
                     <td class="elbow-placeholder"></td>
                     <td class="elbow-placeholder"></td>
@@ -6526,80 +5486,8 @@ Parameters
                 </td>
                 <td>
                         <div>Redistribute OSPF NSSA external routes</div>
-                        <div>This option is DEPRECATED and replaced with nssa_externals option, this attribute will be removed after 2025-01-01.</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>nssa_externals</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Redistribute OSPF NSSA external routes</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>type_1</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Redistribute NSSA external type 1 routes</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>type_2</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Redistribute NSSA external type 2 routes</div>
-                </td>
-            </tr>
-
             <tr>
                     <td class="elbow-placeholder"></td>
                     <td class="elbow-placeholder"></td>
@@ -6622,7 +5510,6 @@ Parameters
                 </td>
                 <td>
                         <div>Redistribute NSSA external type 1 routes</div>
-                        <div>This option is DEPRECATED and replaced with nssa_externals.type_1 option, this attribute will be removed after 2025-01-01.</div>
                 </td>
             </tr>
             <tr>
@@ -6647,7 +5534,6 @@ Parameters
                 </td>
                 <td>
                         <div>Redistribute NSSA external type 2 routes</div>
-                        <div>This option is DEPRECATED and replaced with nssa_externals.type_2 option, this attribute will be removed after 2025-01-01.</div>
                 </td>
             </tr>
 
@@ -6762,7 +5648,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Redistribute matched routes</div>
+                        <div>On Demand stub Routes</div>
                 </td>
             </tr>
                                 <tr>
@@ -6787,80 +5673,8 @@ Parameters
                 </td>
                 <td>
                         <div>Redistribute OSPF external routes</div>
-                        <div>This option is DEPRECATED and replaced with externals, this attribute will be removed after 2025-01-01.</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>externals</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Redistribute OSPF external routes</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>type_1</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Redistribute OSPF External type 1 routes</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>type_2</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Redistribute OSPF External type 1 routes</div>
-                </td>
-            </tr>
-
             <tr>
                     <td class="elbow-placeholder"></td>
                     <td class="elbow-placeholder"></td>
@@ -6906,81 +5720,9 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Redistribute OSPF internal routes</div>
-                        <div>This option is DEPRECATED and replaced with nssa_externals, this attribute will be removed after 2025-01-01.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>nssa_externals</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
                         <div>Redistribute OSPF NSSA external routes</div>
                 </td>
             </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>type_1</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Redistribute NSSA external type 1 routes</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>type_2</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Redistribute NSSA external type 2 routes</div>
-                </td>
-            </tr>
-
             <tr>
                     <td class="elbow-placeholder"></td>
                     <td class="elbow-placeholder"></td>
@@ -7003,7 +5745,6 @@ Parameters
                 </td>
                 <td>
                         <div>Redistribute NSSA external type 1 routes</div>
-                        <div>This option is DEPRECATED and replaced with nssa_externals.type_1 option, this attribute will be removed after 2025-01-01.</div>
                 </td>
             </tr>
             <tr>
@@ -7028,7 +5769,6 @@ Parameters
                 </td>
                 <td>
                         <div>Redistribute NSSA external type 2 routes</div>
-                        <div>This option is DEPRECATED and replaced with nssa_externals.type_2 option, this attribute will be removed after 2025-01-01.</div>
                 </td>
             </tr>
 
@@ -7146,29 +5886,6 @@ Parameters
                         <div>Route map reference</div>
                 </td>
             </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>set</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Set the top level attribute</div>
-                </td>
-            </tr>
 
             <tr>
                     <td class="elbow-placeholder"></td>
@@ -7270,29 +5987,6 @@ Parameters
                 </td>
                 <td>
                         <div>Route map reference</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>set</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Set the top level attribute</div>
                 </td>
             </tr>
 
@@ -7814,91 +6508,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>aes128</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Use 128 bit AES algorithm for encryption</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>aes192</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Use 192 bit 3DES algorithm for encryption</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>aes256</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Use 256 bit DES algorithm for encryption</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>des</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Use 56 bit DES algorithm for encryption</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>des56</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -8060,9 +6670,8 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOS-XE Version 17.3 on CML.
+   - Tested against Cisco IOSv Version 15.2 on VIRL
    - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html
-   - The module examples uses callback plugin (stdout_callback = yaml) to generate task output in yaml format.
 
 
 
@@ -8163,102 +6772,36 @@ Examples
                 filter: true
         state: merged
 
-    # Task Output:
-    # ------------
-    #
-    # before: {}
-    # commands:
-    #   - router bgp 65000
-    #   - address-family ipv4 multicast vrf blue
-    #   - bgp aggregate-timer 10
-    #   - bgp dampening 1 1 1 1
-    #   - bgp slow-peer detection threshold 150
-    #   - snmp context snmp_con community community ro 10
-    #   - neighbor 198.51.100.1 remote-as 10
-    #   - neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-    #   - neighbor 198.51.100.1 slow-peer detection threshold 150
-    #   - network 198.51.110.10 mask 255.255.255.255 backdoor
-    #   - aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    #   - address-family ipv4 multicast
-    #   - default-metric 12
-    #   - distance bgp 10 10 100
-    #   - table-map test_tableMap filter
-    #   - network 198.51.111.11 mask 255.255.255.255 route-map test
-    #   - aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
-    #   - address-family ipv4 mdt
-    #   - bgp dmzlink-bw
-    #   - bgp soft-reconfig-backup
-    #   - bgp dampening 1 10 100 5
-    # after:
-    #   address_family:
-    #   - afi: ipv4
-    #     aggregate_addresses:
-    #     - address: 192.0.2.1
-    #       as_confed_set: true
-    #       netmask: 255.255.255.255
-    #     bgp:
-    #       aggregate_timer: 10
-    #       dampening:
-    #         max_suppress: 1
-    #         penalty_half_time: 1
-    #         reuse_route_val: 1
-    #         suppress_route_val: 1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     neighbors:
-    #     - activate: true
-    #       aigp:
-    #         send:
-    #           cost_community:
-    #             id: 100
-    #             poi:
-    #               igp_cost: true
-    #               transitive: true
-    #       neighbor_address: 198.51.100.1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     networks:
-    #     - address: 198.51.110.10
-    #       backdoor: true
-    #       mask: 255.255.255.255
-    #     snmp:
-    #       context:
-    #         community:
-    #           acl: '10'
-    #           ro: true
-    #           snmp_community: community
-    #         name: snmp_con
-    #   - afi: ipv4
-    #     aggregate_addresses:
-    #     - address: 192.0.3.1
-    #       as_confed_set: true
-    #       netmask: 255.255.255.255
-    #     default_metric: 12
-    #     distance:
-    #       external: 10
-    #       internal: 10
-    #       local: 100
-    #     networks:
-    #     - address: 198.51.111.11
-    #       mask: 255.255.255.255
-    #       route_map: test
-    #     safi: multicast
-    #     table_map:
-    #       filter: true
-    #       name: test_tableMap
-    #   - afi: ipv4
-    #     bgp:
-    #       dampening:
-    #         max_suppress: 5
-    #         penalty_half_time: 1
-    #         reuse_route_val: 10
-    #         suppress_route_val: 100
-    #       dmzlink_bw: true
-    #       soft_reconfig_backup: true
-    #     safi: mdt
-    #   as_number: '65000'
+    # Commands fired:
+    # ---------------
+    # "commands": [
+    #     "router bgp 65000",
+    #     "address-family ipv4 multicast vrf blue",
+    #     "bgp aggregate-timer 10",
+    #     "bgp slow-peer detection threshold 150",
+    #     "bgp dampening 1 1 1 1",
+    #     "neighbor 198.51.100.1 remote-as 10",
+    #     "neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive",
+    #     "neighbor 198.51.100.1 route-map test-route out",
+    #     "neighbor 198.51.100.1 route-server-client",
+    #     "neighbor 198.51.100.1 slow-peer detection threshold 150",
+    #     "network 198.51.110.10 mask 255.255.255.255 backdoor",
+    #     "snmp context snnmp_con_1 community community ro 10",
+    #     "aggregate-address 192.0.2.1 255.255.255.255 as-confed-set",
+    #     "exit-address-family",
+    #     "address-family ipv4 mdt",
+    #     "bgp dmzlink-bw",
+    #     "bgp dampening 1 10 100 5",
+    #     "bgp soft-reconfig-backup",
+    #     "exit-address-family",
+    #     "address-family ipv4 multicast",
+    #     "network 1.1.1.1 mask 255.255.255.255 route-map test",
+    #     "aggregate-address 192.0.3.1 255.255.255.255 as-confed-set",
+    #     "default-metric 12",
+    #     "distance bgp 10 10 100",
+    #     "table-map test_tableMap filter"
+    #     "exit-address-family",
+    # ]
 
     # After state:
     # ------------
@@ -8266,25 +6809,11 @@ Examples
     # vios#sh running-config | section ^router bgp
     # router bgp 65000
     #  bgp log-neighbor-changes
-    #  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-    #  snmp context snmp_con community community RO 10
-    #  neighbor 198.51.100.1 remote-as 10
-    #  !
-    #  address-family ipv4
-    #   snmp context snmp_con community community RO 10
-    #   bgp aggregate-timer 10
-    #   bgp slow-peer detection threshold 150
-    #   bgp dampening 1 1 1 1
-    #   network 198.51.110.10 mask 255.255.255.255 backdoor
-    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    #   neighbor 198.51.100.1 activate
-    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-    #   neighbor 198.51.100.1 slow-peer detection threshold 150
-    #  exit-address-family
+    #  bgp nopeerup-delay cold-boot 20
     #  !
     #  address-family ipv4 multicast
     #   table-map test_tableMap filter
-    #   network 198.51.111.11 mask 255.255.255.255 route-map test
+    #   network 1.1.1.1 mask 255.255.255.255 route-map test
     #   aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
     #   default-metric 12
     #   distance bgp 10 10 100
@@ -8294,6 +6823,20 @@ Examples
     #   bgp dampening 1 10 100 5
     #   bgp dmzlink-bw
     #   bgp soft-reconfig-backup
+    #  exit-address-family
+    #  !
+    #  address-family ipv4 multicast vrf blue
+    #   bgp aggregate-timer 10
+    #   bgp slow-peer detection threshold 150
+    #   bgp dampening 1 1 1 1
+    #   network 198.51.110.10 mask 255.255.255.255 backdoor
+    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+    #   neighbor 198.51.100.1 remote-as 10
+    #   neighbor 198.51.100.1 activate
+    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+    #   neighbor 198.51.100.1 route-server-client
+    #   neighbor 198.51.100.1 slow-peer detection threshold 150
+    #   neighbor 198.51.100.1 route-map test-route out
     #  exit-address-family
 
     # Using replaced
@@ -8304,25 +6847,11 @@ Examples
     # vios#sh running-config | section ^router bgp
     # router bgp 65000
     #  bgp log-neighbor-changes
-    #  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-    #  snmp context snmp_con community community RO 10
-    #  neighbor 198.51.100.1 remote-as 10
-    #  !
-    #  address-family ipv4
-    #   snmp context snmp_con community community RO 10
-    #   bgp aggregate-timer 10
-    #   bgp slow-peer detection threshold 150
-    #   bgp dampening 1 1 1 1
-    #   network 198.51.110.10 mask 255.255.255.255 backdoor
-    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    #   neighbor 198.51.100.1 activate
-    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-    #   neighbor 198.51.100.1 slow-peer detection threshold 150
-    #  exit-address-family
+    #  bgp nopeerup-delay cold-boot 20
     #  !
     #  address-family ipv4 multicast
     #   table-map test_tableMap filter
-    #   network 198.51.111.11 mask 255.255.255.255 route-map test
+    #   network 1.1.1.1 mask 255.255.255.255 route-map test
     #   aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
     #   default-metric 12
     #   distance bgp 10 10 100
@@ -8332,6 +6861,20 @@ Examples
     #   bgp dampening 1 10 100 5
     #   bgp dmzlink-bw
     #   bgp soft-reconfig-backup
+    #  exit-address-family
+    #  !
+    #  address-family ipv4 multicast vrf blue
+    #   bgp aggregate-timer 10
+    #   bgp slow-peer detection threshold 150
+    #   bgp dampening 1 1 1 1
+    #   network 198.51.110.10 mask 255.255.255.255 backdoor
+    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+    #   neighbor 198.51.100.1 remote-as 10
+    #   neighbor 198.51.100.1 activate
+    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+    #   neighbor 198.51.100.1 route-server-client
+    #   neighbor 198.51.100.1 slow-peer detection threshold 150
+    #   neighbor 198.51.100.1 route-map test-route out
     #  exit-address-family
 
     - name: Replaces device configuration of listed AF BGP with provided configuration
@@ -8370,6 +6913,10 @@ Examples
                     - detection:
                         threshold: 150
                   remote_as: 10
+                  route_maps:
+                    - name: test-replaced-route
+                      out: true
+                  route_server_client: true
               network:
                 - address: 198.51.110.10
                   mask: 255.255.255.255
@@ -8392,180 +6939,36 @@ Examples
                   route_map: test
         state: replaced
 
-    # Task Output:
-    # ------------
-    # before:
-    #     address_family:
-    #     - afi: ipv4
-    #       aggregate_addresses:
-    #       - address: 192.0.2.1
-    #         as_confed_set: true
-    #         netmask: 255.255.255.255
-    #       bgp:
-    #         aggregate_timer: 10
-    #         dampening:
-    #           max_suppress: 1
-    #           penalty_half_time: 1
-    #           reuse_route_val: 1
-    #           suppress_route_val: 1
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 150
-    #       neighbors:
-    #       - activate: true
-    #         aigp:
-    #           send:
-    #             cost_community:
-    #               id: 100
-    #               poi:
-    #                 igp_cost: true
-    #                 transitive: true
-    #         neighbor_address: 198.51.100.1
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 150
-    #       networks:
-    #       - address: 198.51.110.10
-    #         backdoor: true
-    #         mask: 255.255.255.255
-    #       snmp:
-    #         context:
-    #           community:
-    #             acl: '10'
-    #             ro: true
-    #             snmp_community: community
-    #           name: snmp_con
-    #     - afi: ipv4
-    #       aggregate_addresses:
-    #       - address: 192.0.3.1
-    #         as_confed_set: true
-    #         netmask: 255.255.255.255
-    #       default_metric: 12
-    #       distance:
-    #         external: 10
-    #         internal: 10
-    #         local: 100
-    #       networks:
-    #       - address: 198.51.111.11
-    #         mask: 255.255.255.255
-    #         route_map: test
-    #       safi: multicast
-    #       table_map:
-    #         filter: true
-    #         name: test_tableMap
-    #     - afi: ipv4
-    #       bgp:
-    #         dampening:
-    #           max_suppress: 5
-    #           penalty_half_time: 1
-    #           reuse_route_val: 10
-    #           suppress_route_val: 100
-    #         dmzlink_bw: true
-    #         soft_reconfig_backup: true
-    #       safi: mdt
-    #     as_number: '65000'
-    # commands:
-    # - router bgp 65000
-    # - address-family ipv4 multicast vrf blue
-    # - bgp aggregate-timer 10
-    # - bgp dampening 1 1 1 1
-    # - bgp slow-peer detection threshold 150
-    # - neighbor 198.51.110.1 remote-as 10
-    # - neighbor 198.51.110.1 activate
-    # - neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-    # - neighbor 198.51.110.1 slow-peer detection threshold 150
-    # - network 198.51.110.10 mask 255.255.255.255 backdoor
-    # - aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    # - address-family ipv4 multicast
-    # - no default-metric 12
-    # - no distance bgp 10 10 100
-    # - no table-map test_tableMap filter
-    # - bgp aggregate-timer 10
-    # - bgp dampening 10 10 10 10
-    # - bgp slow-peer detection threshold 200
-    # - network 192.0.2.1 mask 255.255.255.255 route-map test
-    # - no network 198.51.111.11 mask 255.255.255.255 route-map test
-    # - no aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
-    # after:
-    #   address_family:
-    #   - afi: ipv4
-    #     aggregate_addresses:
-    #     - address: 192.0.2.1
-    #       as_confed_set: true
-    #       netmask: 255.255.255.255
-    #     bgp:
-    #       aggregate_timer: 10
-    #       dampening:
-    #         max_suppress: 1
-    #         penalty_half_time: 1
-    #         reuse_route_val: 1
-    #         suppress_route_val: 1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     neighbors:
-    #     - activate: true
-    #       aigp:
-    #         send:
-    #           cost_community:
-    #             id: 100
-    #             poi:
-    #               igp_cost: true
-    #               transitive: true
-    #       neighbor_address: 198.51.100.1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     - activate: true
-    #       aigp:
-    #         send:
-    #           cost_community:
-    #             id: 200
-    #             poi:
-    #               igp_cost: true
-    #               transitive: true
-    #       neighbor_address: 198.51.110.1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     networks:
-    #     - address: 198.51.110.10
-    #       backdoor: true
-    #       mask: 255.255.255.255
-    #     snmp:
-    #       context:
-    #         community:
-    #           acl: '10'
-    #           ro: true
-    #           snmp_community: community
-    #         name: snmp_con
-    #   - afi: ipv4
-    #     bgp:
-    #       aggregate_timer: 10
-    #       dampening:
-    #         max_suppress: 10
-    #         penalty_half_time: 10
-    #         reuse_route_val: 10
-    #         suppress_route_val: 10
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 200
-    #     networks:
-    #     - address: 192.0.2.1
-    #       mask: 255.255.255.255
-    #       route_map: test
-    #     safi: multicast
-    #   - afi: ipv4
-    #     bgp:
-    #       dampening:
-    #         max_suppress: 5
-    #         penalty_half_time: 1
-    #         reuse_route_val: 10
-    #         suppress_route_val: 100
-    #       dmzlink_bw: true
-    #       soft_reconfig_backup: true
-    #     safi: mdt
-    #   as_number: '65000'
+    # Commands fired:
+    # ---------------
+    # "commands": [
+    #         "router bgp 65000",
+    #         "address-family ipv4 multicast vrf blue",
+    #         "neighbor 198.51.110.1 remote-as 10",
+    #         "neighbor 198.51.110.1 activate",
+    #         "neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive",
+    #         "neighbor 198.51.110.1 route-map test-replaced-route out",
+    #         "neighbor 198.51.110.1 route-server-client",
+    #         "neighbor 198.51.110.1 slow-peer detection threshold 150",
+    #         "no neighbor 198.51.100.1 remote-as 10",
+    #         "no neighbor 198.51.100.1 activate",
+    #         "no neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive",
+    #         "no neighbor 198.51.100.1 route-map test-route out",
+    #         "no neighbor 198.51.100.1 route-server-client",
+    #         "no neighbor 198.51.100.1 slow-peer detection threshold 150",
+    #         "exit-address-family",
+    #         "address-family ipv4 multicast",
+    #         "bgp aggregate-timer 10",
+    #         "bgp slow-peer detection threshold 200",
+    #         "bgp dampening 10 10 10 10",
+    #         "network 192.0.2.1 mask 255.255.255.255 route-map test",
+    #         "no network 1.1.1.1 mask 255.255.255.255 route-map test",
+    #         "no aggregate-address 192.0.3.1 255.255.255.255 as-confed-set",
+    #         "no default-metric 12",
+    #         "no distance bgp 10 10 100",
+    #         "no table-map test_tableMap filter"
+    #         "exit-address-family",
+    #     ]
 
     # After state:
     # -------------
@@ -8573,25 +6976,7 @@ Examples
     # vios#sh running-config | section ^router bgp
     # router bgp 65000
     #  bgp log-neighbor-changes
-    #  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-    #  snmp context snmp_con community community RO 10
-    #  neighbor 198.51.100.1 remote-as 10
-    #  neighbor 198.51.110.1 remote-as 10
-    #  !
-    #  address-family ipv4
-    #   snmp context snmp_con community community RO 10
-    #   bgp aggregate-timer 10
-    #   bgp slow-peer detection threshold 150
-    #   bgp dampening 1 1 1 1
-    #   network 198.51.110.10 mask 255.255.255.255 backdoor
-    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    #   neighbor 198.51.100.1 activate
-    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-    #   neighbor 198.51.100.1 slow-peer detection threshold 150
-    #   neighbor 198.51.110.1 activate
-    #   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-    #   neighbor 198.51.110.1 slow-peer detection threshold 150
-    #  exit-address-family
+    #  bgp nopeerup-delay cold-boot 20
     #  !
     #  address-family ipv4 multicast
     #   bgp aggregate-timer 10
@@ -8604,6 +6989,20 @@ Examples
     #   bgp dampening 1 10 100 5
     #   bgp dmzlink-bw
     #   bgp soft-reconfig-backup
+    #  exit-address-family
+    #  !
+    #  address-family ipv4 multicast vrf blue
+    #   bgp aggregate-timer 10
+    #   bgp slow-peer detection threshold 150
+    #   bgp dampening 1 1 1 1
+    #   network 198.51.110.10 mask 255.255.255.255 backdoor
+    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+    #   neighbor 198.51.110.1 remote-as 10
+    #   neighbor 198.51.110.1 activate
+    #   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
+    #   neighbor 198.51.110.1 route-server-client
+    #   neighbor 198.51.110.1 slow-peer detection threshold 150
+    #   neighbor 198.51.110.1 route-map test-replaced-route out
     #  exit-address-family
 
     # Using overridden
@@ -8614,37 +7013,34 @@ Examples
     # vios#sh running-config | section ^router bgp
     # router bgp 65000
     #  bgp log-neighbor-changes
-    #  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-    #  snmp context snmp_con community community RO 10
-    #  neighbor 198.51.100.1 remote-as 10
-    #  neighbor 198.51.110.1 remote-as 10
-    #  !
-    #  address-family ipv4
-    #   snmp context snmp_con community community RO 10
-    #   bgp aggregate-timer 10
-    #   bgp slow-peer detection threshold 150
-    #   bgp dampening 1 1 1 1
-    #   network 198.51.110.10 mask 255.255.255.255 backdoor
-    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    #   neighbor 198.51.100.1 activate
-    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-    #   neighbor 198.51.100.1 slow-peer detection threshold 150
-    #   neighbor 198.51.110.1 activate
-    #   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-    #   neighbor 198.51.110.1 slow-peer detection threshold 150
-    #  exit-address-family
+    #  bgp nopeerup-delay cold-boot 20
     #  !
     #  address-family ipv4 multicast
-    #   bgp aggregate-timer 10
-    #   bgp slow-peer detection threshold 200
-    #   bgp dampening 10 10 10 10
-    #   network 192.0.2.1 mask 255.255.255.255 route-map test
+    #   table-map test_tableMap filter
+    #   network 1.1.1.1 mask 255.255.255.255 route-map test
+    #   aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
+    #   default-metric 12
+    #   distance bgp 10 10 100
     #  exit-address-family
     #  !
     #  address-family ipv4 mdt
     #   bgp dampening 1 10 100 5
     #   bgp dmzlink-bw
     #   bgp soft-reconfig-backup
+    #  exit-address-family
+    #  !
+    #  address-family ipv4 multicast vrf blue
+    #   bgp aggregate-timer 10
+    #   bgp slow-peer detection threshold 150
+    #   bgp dampening 1 1 1 1
+    #   network 198.51.110.10 mask 255.255.255.255 backdoor
+    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+    #   neighbor 198.51.100.1 remote-as 10
+    #   neighbor 198.51.100.1 activate
+    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+    #   neighbor 198.51.100.1 route-server-client
+    #   neighbor 198.51.100.1 slow-peer detection threshold 150
+    #   neighbor 198.51.100.1 route-map test-route out
     #  exit-address-family
 
     - name: Override device configuration of all AF BGP with provided configuration
@@ -8682,6 +7078,10 @@ Examples
                     - detection:
                         threshold: 150
                   remote_as: 100
+                  route_maps:
+                    - name: test-override-route
+                      out: true
+                  route_server_client: true
                   version: 4
               network:
                 - address: 198.51.110.10
@@ -8705,153 +7105,34 @@ Examples
                   route_map: test_ipv6
         state: overridden
 
-    # Task Output:
-    # ------------
-    #
-    # before:
-    #     address_family:
-    #     - afi: ipv4
-    #       aggregate_addresses:
-    #       - address: 192.0.2.1
-    #         as_confed_set: true
-    #         netmask: 255.255.255.255
-    #       bgp:
-    #         aggregate_timer: 10
-    #         dampening:
-    #           max_suppress: 10
-    #           penalty_half_time: 10
-    #           reuse_route_val: 10
-    #           suppress_route_val: 10
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 200
-    #       default_information: true
-    #       neighbors:
-    #       - activate: true
-    #         aigp:
-    #           send:
-    #             cost_community:
-    #               id: 100
-    #               poi:
-    #                 igp_cost: true
-    #                 transitive: true
-    #         neighbor_address: 198.51.100.1
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 150
-    #       - activate: true
-    #         aigp:
-    #           send:
-    #             cost_community:
-    #               id: 200
-    #               poi:
-    #                 igp_cost: true
-    #                 transitive: true
-    #         maximum_prefix:
-    #           number: 1
-    #           restart: 100
-    #           threshold_value: 10
-    #         neighbor_address: 198.51.110.1
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 150
-    #       networks:
-    #       - address: 198.51.110.10
-    #         backdoor: true
-    #         mask: 255.255.255.255
-    #     - afi: ipv4
-    #       safi: multicast
-    #     - afi: ipv4
-    #       safi: mdt
-    #     - afi: ipv6
-    #       safi: multicast
-    #     as_number: '65000'
-    # commands:
-    # - router bgp 65000
-    # - address-family ipv4
-    # - no default-information originate
-    # - no bgp aggregate-timer 10
-    # - no bgp dampening 10 10 10 10
-    # - no bgp slow-peer detection threshold 200
-    # - no neighbor 198.51.100.1
-    # - no neighbor 198.51.110.1
-    # - no network 198.51.110.10 mask 255.255.255.255 backdoor
-    # - no aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    # - address-family ipv4 multicast vrf blue
-    # - bgp aggregate-timer 10
-    # - bgp dampening 10 10 100 50
-    # - bgp slow-peer detection threshold 150
-    # - neighbor 198.51.110.1 remote-as 100
-    # - neighbor 198.51.110.1 activate
-    # - neighbor 198.51.110.1 disable
-    # - neighbor 198.51.110.1 maximum-prefix 1 10 restart 100
-    # - neighbor 198.51.110.1 slow-peer detection threshold 150
-    # - neighbor 198.51.110.1 version 4
-    # - network 198.51.110.10 mask 255.255.255.255 backdoor
-    # - aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    # - address-family ipv6 multicast
-    # - default-information originate
-    # - bgp aggregate-timer 10
-    # - bgp dampening 10 10 10 10
-    # - bgp slow-peer detection threshold 200
-    # after:
-    #   address_family:
-    #   - afi: ipv4
-    #     aggregate_addresses:
-    #     - address: 192.0.2.1
-    #       as_confed_set: true
-    #       netmask: 255.255.255.255
-    #     bgp:
-    #       aggregate_timer: 10
-    #       dampening:
-    #         max_suppress: 10
-    #         penalty_half_time: 10
-    #         reuse_route_val: 10
-    #         suppress_route_val: 10
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 200
-    #     default_information: true
-    #     neighbors:
-    #     - activate: true
-    #       aigp:
-    #         send:
-    #           cost_community:
-    #             id: 100
-    #             poi:
-    #               igp_cost: true
-    #               transitive: true
-    #       neighbor_address: 198.51.100.1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     - activate: true
-    #       aigp:
-    #         send:
-    #           cost_community:
-    #             id: 200
-    #             poi:
-    #               igp_cost: true
-    #               transitive: true
-    #       maximum_prefix:
-    #         number: 1
-    #         restart: 100
-    #         threshold_value: 10
-    #       neighbor_address: 198.51.110.1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     networks:
-    #     - address: 198.51.110.10
-    #       backdoor: true
-    #       mask: 255.255.255.255
-    #   - afi: ipv4
-    #     safi: multicast
-    #   - afi: ipv4
-    #     safi: mdt
-    #   - afi: ipv6
-    #     safi: multicast
-    #   as_number: '65000'
+    # Commands fired:
+    # ---------------
+    # "commands": [
+    #       "router bgp 65000",
+    #       "no address-family ipv4 multicast",
+    #       "no address-family ipv4 mdt",
+    #       "address-family ipv4 multicast vrf blue",
+    #       "bgp aggregate-timer 10",
+    #       "bgp slow-peer detection threshold 150",
+    #       "bgp dampening 10 10 100 50",
+    #       "neighbor 198.51.110.1 remote-as 100",
+    #       "neighbor 198.51.110.1 activate",
+    #       "neighbor 198.51.110.1 log-neighbor-changes disable",
+    #       "neighbor 198.51.110.1 maximum-prefix 1 10 restart 100",
+    #       "neighbor 198.51.110.1 route-map test-override-route out",
+    #       "neighbor 198.51.110.1 route-server-client",
+    #       "neighbor 198.51.110.1 version 4",
+    #       "neighbor 198.51.110.1 slow-peer detection threshold 150",
+    #       "network 198.51.110.10 mask 255.255.255.255 backdoor",
+    #       "aggregate-address 192.0.2.1 255.255.255.255 as-confed-set",
+    #       "exit-address-family",
+    #       "address-family ipv6 multicast",
+    #       "bgp aggregate-timer 10",
+    #       "bgp slow-peer detection threshold 200",
+    #       "bgp dampening 10 10 10 10",
+    #       "network 2001:DB8:0:3::/64 route-map test_ipv6"
+    #       "exit-address-family",
+    #   ]
 
     # After state:
     # -------------
@@ -8859,38 +7140,38 @@ Examples
     # vios#sh running-config | section ^router bgp
     # router bgp 65000
     #  bgp log-neighbor-changes
-    #  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
+    #  bgp nopeerup-delay cold-boot 20
+    #  bgp nopeerup-delay post-boot 10
+    #  bgp bestpath med confed
+    #  snmp context snnmp_con_1 community community RO 10
+    #  neighbor 192.0.2.1 remote-as 100
+    #  neighbor 192.0.2.1 description replace neighbor
     #  neighbor 198.51.100.1 remote-as 10
-    #  neighbor 198.51.110.1 remote-as 100
-    #  neighbor 198.51.110.1 disable-connected-check
-    #  neighbor 198.51.110.1 version 4
     #  !
-    #  address-family ipv4
+    #  address-family ipv6 multicast
     #   bgp aggregate-timer 10
     #   bgp slow-peer detection threshold 200
     #   bgp dampening 10 10 10 10
+    #   network 2001:DB8:0:3::/64 route-map test_ipv6
+    #  exit-address-family
+    #  !
+    #  address-family ipv4 multicast vrf blue
+    #   bgp aggregate-timer 10
+    #   bgp slow-peer detection threshold 150
+    #   bgp dampening 10 10 100 50
     #   network 198.51.110.10 mask 255.255.255.255 backdoor
     #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    #   neighbor 198.51.100.1 activate
-    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-    #   neighbor 198.51.100.1 slow-peer detection threshold 150
+    #   neighbor 198.51.110.1 remote-as 100
+    #   neighbor 198.51.110.1 log-neighbor-changes disable
+    #   neighbor 198.51.110.1 version 4
     #   neighbor 198.51.110.1 activate
-    #   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
+    #   neighbor 198.51.110.1 route-server-client
     #   neighbor 198.51.110.1 slow-peer detection threshold 150
+    #   neighbor 198.51.110.1 route-map test-override-route out
     #   neighbor 198.51.110.1 maximum-prefix 1 10 restart 100
-    #   default-information originate
-    #  exit-address-family
-    #  !
-    #  address-family ipv4 multicast
-    #  exit-address-family
-    #  !
-    #  address-family ipv4 mdt
-    #  exit-address-family
-    #  !
-    #  address-family ipv6 multicast
     #  exit-address-family
 
-    # Using deleted
+    # Using Deleted
 
     # Before state:
     # -------------
@@ -8898,35 +7179,34 @@ Examples
     # vios#sh running-config | section ^router bgp
     # router bgp 65000
     #  bgp log-neighbor-changes
-    #  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-    #  neighbor 198.51.100.1 remote-as 10
-    #  neighbor 198.51.110.1 remote-as 100
-    #  neighbor 198.51.110.1 disable-connected-check
-    #  neighbor 198.51.110.1 version 4
-    #  !
-    #  address-family ipv4
-    #   bgp aggregate-timer 10
-    #   bgp slow-peer detection threshold 200
-    #   bgp dampening 10 10 10 10
-    #   network 198.51.110.10 mask 255.255.255.255 backdoor
-    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    #   neighbor 198.51.100.1 activate
-    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-    #   neighbor 198.51.100.1 slow-peer detection threshold 150
-    #   neighbor 198.51.110.1 activate
-    #   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-    #   neighbor 198.51.110.1 slow-peer detection threshold 150
-    #   neighbor 198.51.110.1 maximum-prefix 1 10 restart 100
-    #   default-information originate
-    #  exit-address-family
+    #  bgp nopeerup-delay cold-boot 20
     #  !
     #  address-family ipv4 multicast
+    #   table-map test_tableMap filter
+    #   network 1.1.1.1 mask 255.255.255.255 route-map test
+    #   aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
+    #   default-metric 12
+    #   distance bgp 10 10 100
     #  exit-address-family
     #  !
     #  address-family ipv4 mdt
+    #   bgp dampening 1 10 100 5
+    #   bgp dmzlink-bw
+    #   bgp soft-reconfig-backup
     #  exit-address-family
     #  !
-    #  address-family ipv6 multicast
+    #  address-family ipv4 multicast vrf blue
+    #   bgp aggregate-timer 10
+    #   bgp slow-peer detection threshold 150
+    #   bgp dampening 1 1 1 1
+    #   network 198.51.110.10 mask 255.255.255.255 backdoor
+    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+    #   neighbor 198.51.100.1 remote-as 10
+    #   neighbor 198.51.100.1 activate
+    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+    #   neighbor 198.51.100.1 route-server-client
+    #   neighbor 198.51.100.1 slow-peer detection threshold 150
+    #   neighbor 198.51.100.1 route-map test-route out
     #  exit-address-family
 
     - name: "Delete AF BGP (Note: This won't delete the all configured AF BGP)"
@@ -8940,309 +7220,50 @@ Examples
               safi: mdt
         state: deleted
 
-    # Task Output:
-    # ------------
-    #
-    # before:
-    #     address_family:
-    #     - afi: ipv4
-    #       aggregate_addresses:
-    #       - address: 192.0.2.1
-    #         as_confed_set: true
-    #         netmask: 255.255.255.255
-    #       bgp:
-    #         aggregate_timer: 10
-    #         dampening:
-    #           max_suppress: 10
-    #           penalty_half_time: 10
-    #           reuse_route_val: 10
-    #           suppress_route_val: 10
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 200
-    #       default_information: true
-    #       neighbors:
-    #       - activate: true
-    #         aigp:
-    #           send:
-    #             cost_community:
-    #               id: 100
-    #               poi:
-    #                 igp_cost: true
-    #                 transitive: true
-    #         neighbor_address: 198.51.100.1
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 150
-    #       - activate: true
-    #         aigp:
-    #           send:
-    #             cost_community:
-    #               id: 200
-    #               poi:
-    #                 igp_cost: true
-    #                 transitive: true
-    #         maximum_prefix:
-    #           number: 1
-    #           restart: 100
-    #           threshold_value: 10
-    #         neighbor_address: 198.51.110.1
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 150
-    #       networks:
-    #       - address: 198.51.110.10
-    #         backdoor: true
-    #         mask: 255.255.255.255
-    #     - afi: ipv4
-    #       safi: multicast
-    #     - afi: ipv4
-    #       safi: mdt
-    #     - afi: ipv6
-    #       safi: multicast
-    #     as_number: '65000'
-    # commands:
-    # - router bgp 65000
-    # - no address-family ipv4 multicast
-    # - no address-family ipv4 mdt
-    # after:
-    #   address_family:
-    #   - afi: ipv4
-    #     aggregate_addresses:
-    #     - address: 192.0.2.1
-    #       as_confed_set: true
-    #       netmask: 255.255.255.255
-    #     bgp:
-    #       aggregate_timer: 10
-    #       dampening:
-    #         max_suppress: 10
-    #         penalty_half_time: 10
-    #         reuse_route_val: 10
-    #         suppress_route_val: 10
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 200
-    #     default_information: true
-    #     neighbors:
-    #     - activate: true
-    #       aigp:
-    #         send:
-    #           cost_community:
-    #             id: 100
-    #             poi:
-    #               igp_cost: true
-    #               transitive: true
-    #       neighbor_address: 198.51.100.1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     - activate: true
-    #       aigp:
-    #         send:
-    #           cost_community:
-    #             id: 200
-    #             poi:
-    #               igp_cost: true
-    #               transitive: true
-    #       maximum_prefix:
-    #         number: 1
-    #         restart: 100
-    #         threshold_value: 10
-    #       neighbor_address: 198.51.110.1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     networks:
-    #     - address: 198.51.110.10
-    #       backdoor: true
-    #       mask: 255.255.255.255
-    #   - afi: ipv6
-    #     safi: multicast
-    #   as_number: '65000'
+    # Commands fired:
+    # ---------------
+    # "commands": [
+    #       "router bgp 65000",
+    #       "no address-family ipv4 multicast",
+    #       "no address-family ipv4 mdt"
+    #   ]
 
     # After state:
     # -------------
     #
     # vios#sh running-config | section ^router bg
-    # hostname#show running-config | section ^router bgp
     # router bgp 65000
     #  bgp log-neighbor-changes
-    #  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-    #  neighbor 198.51.100.1 remote-as 10
-    #  neighbor 198.51.110.1 remote-as 100
-    #  neighbor 198.51.110.1 disable-connected-check
-    #  neighbor 198.51.110.1 version 4
+    #  bgp nopeerup-delay cold-boot 20
     #  !
-    #  address-family ipv4
-    #   bgp aggregate-timer 10
-    #   bgp slow-peer detection threshold 200
-    #   bgp dampening 10 10 10 10
-    #   network 198.51.110.10 mask 255.255.255.255 backdoor
-    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    #   neighbor 198.51.100.1 activate
-    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-    #   neighbor 198.51.100.1 slow-peer detection threshold 150
-    #   neighbor 198.51.110.1 activate
-    #   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-    #   neighbor 198.51.110.1 slow-peer detection threshold 150
-    #   neighbor 198.51.110.1 maximum-prefix 1 10 restart 100
-    #   default-information originate
-    #  exit-address-family
-    #  !
-    #  address-family ipv6 multicast
-    #  exit-address-family
-
-    # Using Deleted without any config passed (delete all)
-
-    # Before state:
-    # -------------
-    #
-    # vios#sh running-config | section ^router bg
-    # hostname#show running-config | section ^router bgp
-    # router bgp 65000
-    #  bgp log-neighbor-changes
-    #  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-    #  neighbor 198.51.100.1 remote-as 10
-    #  neighbor 198.51.110.1 remote-as 100
-    #  neighbor 198.51.110.1 disable-connected-check
-    #  neighbor 198.51.110.1 version 4
-    #  !
-    #  address-family ipv4
-    #   bgp aggregate-timer 10
-    #   bgp slow-peer detection threshold 200
-    #   bgp dampening 10 10 10 10
-    #   network 198.51.110.10 mask 255.255.255.255 backdoor
-    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    #   neighbor 198.51.100.1 activate
-    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-    #   neighbor 198.51.100.1 slow-peer detection threshold 150
-    #   neighbor 198.51.110.1 activate
-    #   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-    #   neighbor 198.51.110.1 slow-peer detection threshold 150
-    #   neighbor 198.51.110.1 maximum-prefix 1 10 restart 100
-    #   default-information originate
-    #  exit-address-family
-    #  !
-    #  address-family ipv6 multicast
-    #  exit-address-family
-
-    - name: "Delete ALL of configured AF BGP"
-      cisco.ios.ios_bgp_address_family:
-        state: deleted
-
-    # Task Output:
-    # ------------
-    #
-    # before:
-    #   address_family:
-    #   - afi: ipv4
-    #     aggregate_addresses:
-    #     - address: 192.0.2.1
-    #       as_confed_set: true
-    #       netmask: 255.255.255.255
-    #     bgp:
-    #       aggregate_timer: 10
-    #       dampening:
-    #         max_suppress: 10
-    #         penalty_half_time: 10
-    #         reuse_route_val: 10
-    #         suppress_route_val: 10
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 200
-    #     default_information: true
-    #     neighbors:
-    #     - activate: true
-    #       aigp:
-    #         send:
-    #           cost_community:
-    #             id: 100
-    #             poi:
-    #               igp_cost: true
-    #               transitive: true
-    #       neighbor_address: 198.51.100.1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     - activate: true
-    #       aigp:
-    #         send:
-    #           cost_community:
-    #             id: 200
-    #             poi:
-    #               igp_cost: true
-    #               transitive: true
-    #       maximum_prefix:
-    #         number: 1
-    #         restart: 100
-    #         threshold_value: 10
-    #       neighbor_address: 198.51.110.1
-    #       slow_peer_options:
-    #         detection:
-    #           threshold: 150
-    #     networks:
-    #     - address: 198.51.110.10
-    #       backdoor: true
-    #       mask: 255.255.255.255
-    #   - afi: ipv6
-    #     safi: multicast
-    #   as_number: '65000'
-    # commands:
-    # - router bgp 65000
-    # - no address-family ipv4
-    # - no address-family ipv6 multicast
-    # after:
-    #   address_family:
-    #   - afi: ipv4
-    #     bgp:
-    #       aggregate_timer: 10
-    #   as_number: '65000'
-
-    # After state:
-    # -------------
-    #
-    # vios#sh running-config | section ^router bgp
-    # router bgp 65000
-    #  bgp log-neighbor-changes
-    #  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-    #  neighbor 198.51.100.1 remote-as 10
-    #  neighbor 198.51.110.1 remote-as 100
-    #  neighbor 198.51.110.1 disable-connected-check
-    #  neighbor 198.51.110.1 version 4
-    #  !
-    #  address-family ipv4
-    #   bgp aggregate-timer 10
-    #   no neighbor 198.51.100.1 activate
-    #   no neighbor 198.51.110.1 activate
-    #  exit-address-family
-
-    # Using gathered
-
-    # Before state:
-    # -------------
-    #
-    # vios#sh running-config | section ^router bgp
-    # router bgp 65000
-    #  bgp log-neighbor-changes
-    #  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-    #  snmp context snmp_con community community RO 10
-    #  neighbor 198.51.100.1 remote-as 10
-    #  !
-    #  address-family ipv4
-    #   snmp context snmp_con community community RO 10
+    #  address-family ipv4 multicast vrf blue
     #   bgp aggregate-timer 10
     #   bgp slow-peer detection threshold 150
     #   bgp dampening 1 1 1 1
     #   network 198.51.110.10 mask 255.255.255.255 backdoor
     #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+    #   neighbor 198.51.100.1 remote-as 10
     #   neighbor 198.51.100.1 activate
     #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+    #   neighbor 198.51.100.1 route-server-client
     #   neighbor 198.51.100.1 slow-peer detection threshold 150
+    #   neighbor 198.51.100.1 route-map test-route out
     #  exit-address-family
+
+    # Using Deleted without any config passed
+    #"(NOTE: This will delete all of configured AF BGP)"
+
+    # Before state:
+    # -------------
+    #
+    # vios#sh running-config | section ^router bgp
+    # router bgp 65000
+    #  bgp log-neighbor-changes
+    #  bgp nopeerup-delay cold-boot 20
     #  !
     #  address-family ipv4 multicast
     #   table-map test_tableMap filter
-    #   network 198.51.111.11 mask 255.255.255.255 route-map test
+    #   network 1.1.1.1 mask 255.255.255.255 route-map test
     #   aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
     #   default-metric 12
     #   distance bgp 10 10 100
@@ -9253,87 +7274,177 @@ Examples
     #   bgp dmzlink-bw
     #   bgp soft-reconfig-backup
     #  exit-address-family
+    #  !
+    #  address-family ipv4 multicast vrf blue
+    #   bgp aggregate-timer 10
+    #   bgp slow-peer detection threshold 150
+    #   bgp dampening 1 1 1 1
+    #   network 198.51.110.10 mask 255.255.255.255 backdoor
+    #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+    #   neighbor 198.51.100.1 remote-as 10
+    #   neighbor 198.51.100.1 activate
+    #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+    #   neighbor 198.51.100.1 route-server-client
+    #   neighbor 198.51.100.1 slow-peer detection threshold 150
+    #   neighbor 198.51.100.1 route-map test-route out
+    #  exit-address-family
+
+    - name: 'Delete ALL of configured AF BGP (Note: This WILL delete the all configured
+        AF BGP)'
+      cisco.ios.ios_bgp_address_family:
+        state: deleted
+
+    # Commands fired:
+    # ---------------
+    # "commands": [
+    #       "router bgp 65000",
+    #       "no address-family ipv4 multicast vrf blue",
+    #       "no address-family ipv4 multicast",
+    #       "no address-family ipv4 mdt"
+    #   ]
+
+    # After state:
+    # -------------
+    #
+    # vios#sh running-config | section ^router bgp
+    # router bgp 65000
+    #  bgp log-neighbor-changes
+    #  bgp nopeerup-delay cold-boot 20
+
+    # Using Gathered
+    # Before state:
+    # -------------
+    #
+    # vios#sh running-config | section ^router bgp
 
     - name: Gather listed AF BGP with provided configurations
       cisco.ios.ios_bgp_address_family:
         config:
         state: gathered
 
-    # Task Output:
-    # ------------
+    # Module Execution Result:
+    # ------------------------
     #
-    # gathered:
-    #     address_family:
-    #     - afi: ipv4
-    #       aggregate_addresses:
-    #       - address: 192.0.2.1
-    #         as_confed_set: true
-    #         netmask: 255.255.255.255
-    #       bgp:
-    #         aggregate_timer: 10
-    #         dampening:
-    #           max_suppress: 1
-    #           penalty_half_time: 1
-    #           reuse_route_val: 1
-    #           suppress_route_val: 1
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 150
-    #       neighbors:
-    #       - activate: true
-    #         aigp:
-    #           send:
-    #             cost_community:
-    #               id: 100
-    #               poi:
-    #                 igp_cost: true
-    #                 transitive: true
-    #         neighbor_address: 198.51.100.1
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 150
-    #       networks:
-    #       - address: 198.51.110.10
-    #         backdoor: true
-    #         mask: 255.255.255.255
-    #       snmp:
-    #         context:
-    #           community:
-    #             acl: '10'
-    #             ro: true
-    #             snmp_community: community
-    #           name: snmp_con
-    #     - afi: ipv4
-    #       aggregate_addresses:
-    #       - address: 192.0.3.1
-    #         as_confed_set: true
-    #         netmask: 255.255.255.255
-    #       default_metric: 12
-    #       distance:
-    #         external: 10
-    #         internal: 10
-    #         local: 100
-    #       networks:
-    #       - address: 198.51.111.11
-    #         mask: 255.255.255.255
-    #         route_map: test
-    #       safi: multicast
-    #       table_map:
-    #         filter: true
-    #         name: test_tableMap
-    #     - afi: ipv4
-    #       bgp:
-    #         dampening:
-    #           max_suppress: 5
-    #           penalty_half_time: 1
-    #           reuse_route_val: 10
-    #           suppress_route_val: 100
-    #         dmzlink_bw: true
-    #         soft_reconfig_backup: true
-    #       safi: mdt
-    #     as_number: '65000'
+    # "gathered": {
+    #       "address_family": [
+    #           {
+    #               "afi": "ipv4",
+    #               "aggregate_address": [{
+    #                   "address": "192.0.2.1",
+    #                   "as_confed_set": true,
+    #                   "netmask": "255.255.255.255"
+    #               }],
+    #               "bgp": {
+    #                   "aggregate_timer": 10,
+    #                   "dampening": {
+    #                       "max_suppress": 1,
+    #                       "penalty_half_time": 1,
+    #                       "reuse_route_val": 1,
+    #                       "suppress_route_val": 1
+    #                   },
+    #                   "slow_peer": [
+    #                       {
+    #                           "detection": {
+    #                               "threshold": 150
+    #                           }
+    #                       }
+    #                   ]
+    #               },
+    #               "neighbor": [
+    #                   {
+    #                       "activate": true,
+    #                       "address": "198.51.100.1",
+    #                       "aigp": {
+    #                           "send": {
+    #                               "cost_community": {
+    #                                   "id": 100,
+    #                                   "poi": {
+    #                                       "igp_cost": true,
+    #                                       "transitive": true
+    #                                   }
+    #                               }
+    #                           }
+    #                       },
+    #                       "remote_as": 10,
+    #                       "route_maps": [{
+    #                           "name": "test-route",
+    #                           "out": true
+    #                       }],
+    #                       "route_server_client": true,
+    #                       "slow_peer": [
+    #                           {
+    #                               "detection": {
+    #                                   "threshold": 150
+    #                               }
+    #                           }
+    #                       ]
+    #                   }
+    #               ],
+    #               "network": [
+    #                   {
+    #                       "address": "198.51.110.10",
+    #                       "backdoor": true,
+    #                       "mask": "255.255.255.255"
+    #                   }
+    #               ],
+    #               "safi": "multicast",
+    #               "snmp": {
+    #                   "context": {
+    #                       "community": {
+    #                           "acl": "10",
+    #                           "ro": true,
+    #                           "snmp_community": "community"
+    #                       },
+    #                       "name": "snnmp_con_1"
+    #                   }
+    #               },
+    #               "vrf": "blue"
+    #           },
+    #           {
+    #               "afi": "ipv4",
+    #               "aggregate_address": [{
+    #                   "address": "192.0.3.1",
+    #                   "as_confed_set": true,
+    #                   "netmask": "255.255.255.255"
+    #               }],
+    #               "default_metric": 12,
+    #               "distance": {
+    #                   "external": 10,
+    #                   "internal": 10,
+    #                   "local": 100
+    #               },
+    #               "network": [
+    #                   {
+    #                       "address": "1.1.1.1",
+    #                       "mask": "255.255.255.255",
+    #                       "route_map": "test"
+    #                   }
+    #               ],
+    #               "safi": "multicast",
+    #               "table_map": {
+    #                   "filter": true,
+    #                   "name": "test_tableMap"
+    #               }
+    #           },
+    #           {
+    #               "afi": "ipv4",
+    #               "bgp": {
+    #                   "dampening": {
+    #                       "max_suppress": 5,
+    #                       "penalty_half_time": 1,
+    #                       "reuse_route_val": 10,
+    #                       "suppress_route_val": 100
+    #                   },
+    #                   "dmzlink_bw": true,
+    #                   "soft_reconfig_backup": true
+    #               },
+    #               "safi": "mdt"
+    #           }
+    #       ],
+    #       "as_number": "65000"
+    #   }
 
-    # Using rendered
+    # Using Rendered
 
     - name: Rendered the provided configuration with the existing running configuration
       cisco.ios.ios_bgp_address_family:
@@ -9397,27 +7508,32 @@ Examples
                 soft_reconfig_backup: true
         state: rendered
 
-    # Task Output:
-    # ------------
+    # Module Execution Result:
+    # ------------------------
     #
-    # rendered:
-    # - router bgp 65000
-    # - address-family ipv4 multicast vrf blue
-    # - bgp aggregate-timer 10
-    # - bgp dampening 1 1 1 1
-    # - bgp slow-peer detection threshold 150
-    # - snmp context snmp_con community community ro 10
-    # - neighbor 198.51.100.1 remote-as 10
-    # - neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-    # - neighbor 198.51.100.1 slow-peer detection threshold 150
-    # - network 198.51.110.10 mask 255.255.255.255 backdoor
-    # - aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-    # - address-family ipv4 mdt
-    # - bgp dmzlink-bw
-    # - bgp soft-reconfig-backup
-    # - bgp dampening 1 10 100 5
+    # "rendered": [
+    #     "router bgp 65000",
+    #     "address-family ipv4 multicast vrf blue",
+    #     "bgp aggregate-timer 10",
+    #     "bgp slow-peer detection threshold 150",
+    #     "bgp dampening 1 1 1 1",
+    #     "neighbor 198.51.100.1 remote-as 10",
+    #     "neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive",
+    #     "neighbor 198.51.100.1 route-map test-route out",
+    #     "neighbor 198.51.100.1 route-server-client",
+    #     "neighbor 198.51.100.1 slow-peer detection threshold 150",
+    #     "network 198.51.110.10 mask 255.255.255.255 backdoor",
+    #     "snmp context snnmp_con_1 community community ro 10",
+    #     "aggregate-address 192.0.2.1 255.255.255.255 as-confed-set",
+    #     "exit-address-family",
+    #     "address-family ipv4 mdt",
+    #     "bgp dmzlink-bw",
+    #     "bgp dampening 1 10 100 5",
+    #     "bgp soft-reconfig-backup"
+    #     "exit-address-family",
+    # ]
 
-    # Using parsed
+    # Using Parsed
 
     # File: parsed.cfg
     # ----------------
@@ -9445,79 +7561,54 @@ Examples
         running_config: "{{ lookup('file', 'parsed.cfg') }}"
         state: parsed
 
-    # Task Output:
-    # ------------
+    # Module Execution Result:
+    # ------------------------
     #
-    # parsed:
-    #     address_family:
-    #     - afi: ipv4
-    #       aggregate_addresses:
-    #       - address: 192.0.2.1
-    #         as_confed_set: true
-    #         netmask: 255.255.255.255
-    #       bgp:
-    #         aggregate_timer: 10
-    #         dampening:
-    #           max_suppress: 1
-    #           penalty_half_time: 1
-    #           reuse_route_val: 1
-    #           suppress_route_val: 1
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 150
-    #       neighbors:
-    #       - activate: true
-    #         aigp:
-    #           send:
-    #             cost_community:
-    #               id: 100
-    #               poi:
-    #                 igp_cost: true
-    #                 transitive: true
-    #         neighbor_address: 198.51.100.1
-    #         slow_peer_options:
-    #           detection:
-    #             threshold: 150
-    #       networks:
-    #       - address: 198.51.110.10
-    #         backdoor: true
-    #         mask: 255.255.255.255
-    #       snmp:
-    #         context:
-    #           community:
-    #             acl: '10'
-    #             ro: true
-    #             snmp_community: community
-    #           name: snmp_con
-    #     - afi: ipv4
-    #       aggregate_addresses:
-    #       - address: 192.0.3.1
-    #         as_confed_set: true
-    #         netmask: 255.255.255.255
-    #       default_metric: 12
-    #       distance:
-    #         external: 10
-    #         internal: 10
-    #         local: 100
-    #       networks:
-    #       - address: 198.51.111.11
-    #         mask: 255.255.255.255
-    #         route_map: test
-    #       safi: multicast
-    #       table_map:
-    #         filter: true
-    #         name: test_tableMap
-    #     - afi: ipv4
-    #       bgp:
-    #         dampening:
-    #           max_suppress: 5
-    #           penalty_half_time: 1
-    #           reuse_route_val: 10
-    #           suppress_route_val: 100
-    #         dmzlink_bw: true
-    #         soft_reconfig_backup: true
-    #       safi: mdt
-    #     as_number: '65000'
+    # "parsed": {
+    #       "address_family": [
+    #           {
+    #               "afi": "ipv4",
+    #               "aggregate_address": [{
+    #                   "address": "192.0.3.1",
+    #                   "as_confed_set": true,
+    #                   "netmask": "255.255.255.255"
+    #               }],
+    #               "default_metric": 12,
+    #               "distance": {
+    #                   "external": 10,
+    #                   "internal": 10,
+    #                   "local": 100
+    #               },
+    #               "network": [
+    #                   {
+    #                       "address": "1.1.1.1",
+    #                       "mask": "255.255.255.255",
+    #                       "route_map": "test"
+    #                   }
+    #               ],
+    #               "safi": "multicast",
+    #               "table_map": {
+    #                   "filter": true,
+    #                   "name": "test_tableMap"
+    #               }
+    #           },
+    #           {
+    #               "afi": "ipv4",
+    #               "bgp": {
+    #                   "dampening": {
+    #                       "max_suppress": 5,
+    #                       "penalty_half_time": 1,
+    #                       "reuse_route_val": 10,
+    #                       "suppress_route_val": 100
+    #                   },
+    #                   "dmzlink_bw": true,
+    #                   "soft_reconfig_backup": true
+    #               },
+    #               "safi": "mdt"
+    #           }
+    #       ],
+    #       "as_number": "65000"
+    #   }
 
 
 
@@ -9646,5 +7737,4 @@ Status
 Authors
 ~~~~~~~
 
-- Sagar Paul (@KB-perByte)
 - Sumit Jaiswal (@justjais)

@@ -12,11 +12,11 @@
         config:
           - name: Port-channel11
             members:
-              - member: GigabitEthernet2
+              - member: GigabitEthernet0/1
                 mode: active
           - name: Port-channel22
             members:
-              - member: GigabitEthernet3
+              - member: GigabitEthernet0/2
                 mode: passive
         state: merged
 

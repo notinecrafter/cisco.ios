@@ -95,15 +95,20 @@ class Lag_interfaces(ResourceModule):
             if entry != haveing.pop(key, {}):
                 self.addcmd(entry, "channel", False)
             if len(self.commands) != begin:
-                self.commands.insert(begin, self._tmplt.render(entry, "member", False))
+                self.commands.insert(
+                    begin,
+                    self._tmplt.render(entry, "member", False),
+                )
 
         # remove remaining items in have for replaced
-        for key, entry in haveing.items():
-            if key:
-                begin = len(self.commands)
-                self.addcmd(entry, "channel", True)
-                if len(self.commands) != begin:
-                    self.commands.insert(begin, self._tmplt.render(entry, "member", False))
+        for entry in haveing.values():
+            begin = len(self.commands)
+            self.addcmd(entry, "channel", True)
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin,
+                    self._tmplt.render(entry, "member", False),
+                )
 
     def extract_channel_num(self, channel):
         try:
@@ -116,7 +121,9 @@ class Lag_interfaces(ResourceModule):
         for ethChannels in params:
             tmp = {}
             for member in ethChannels.get("members", {}):
-                member["channel"] = self.extract_channel_num(ethChannels.get("name"))[0]
+                member["channel"] = self.extract_channel_num(
+                    ethChannels.get("name"),
+                )[0]
                 tmp[member.get("member")] = member
             update = self.extract_channel_num(ethChannels.get("name"))[1]
             if update:

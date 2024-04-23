@@ -13,11 +13,11 @@
       register: result
       cisco.ios.ios_lldp_interfaces: &id001
         config:
-          - name: GigabitEthernet1
+          - name: GigabitEthernet0/0
             receive: true
             transmit: true
 
-          - name: GigabitEthernet3
+          - name: GigabitEthernet0/2
             receive: true
         state: overridden
 

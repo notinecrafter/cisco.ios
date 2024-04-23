@@ -406,6 +406,158 @@ Parameters
             <tr>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>provider</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div><b>Deprecated</b></div>
+                        <div>Starting with Ansible 2.5 we recommend using <code>connection: network_cli</code>.</div>
+                        <div>For more information please see the <a href='https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html'>https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html</a>.</div>
+                        <div><hr/></div>
+                        <div>A dict object containing connection details.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>auth_pass</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the password to use if required to enter privileged mode on the remote device.  If <em>authorize</em> is false, then this argument does nothing. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_AUTH_PASS</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>authorize</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Instructs the module to enter privileged mode on the remote device before sending any commands.  If not specified, the device will attempt to execute all commands in non-privileged mode. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_AUTHORIZE</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>host</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the DNS host name or address for connecting to the remote device over the specified transport.  The value of host is used as the destination address for the transport.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the password to use to authenticate the connection to the remote device.   This value is used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_PASSWORD</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the port to use when building the connection to the remote device.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ssh_keyfile</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">path</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the SSH key to use to authenticate the connection to the remote device.   This value is the path to the key used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_SSH_KEYFILE</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>timeout</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the timeout in seconds for communicating with the network device for either connecting or sending commands.  If the timeout is exceeded before the operation is completed, the module will error.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Configures the username to use to authenticate the connection to the remote device.  This value is used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_USERNAME</code> will be used instead.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>purge</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -501,7 +653,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOSXE Version 17.3 on CML.
+   - Tested against IOS 15.6
    - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
    - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
@@ -513,325 +665,81 @@ Examples
 
 .. code-block:: yaml
 
-    # Using state: present
-
-    # Before state:
-    # -------------
-
-    # router-ios#show running-config | section ^username
-    # username testuser privilege 15 password 0 password
-
-    # Present state create a new user play:
-    # -------------------------------------
-
-    - name: Create a new user
+    - name: create a new user
       cisco.ios.ios_user:
         name: ansible
         nopassword: true
         sshkey: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
         state: present
 
-    # Task Output
-    # -----------
-
-    # commands:
-    # - ip ssh pubkey-chain
-    # - username ansible
-    # - key-hash ssh-rsa 2ABB27BBC33ED53EF7D55037952ABB27 test@fedora
-    # - exit
-    # - exit
-    # - username ansible nopassword
-
-    # After state:
-    # ------------
-
-    # router-ios#show running-config | section username
-    # username testuser privilege 15 password 0 password
-    # username ansible nopassword
-    #   username ansible
-    #    key-hash ssh-rsa 2ABB27BBC33ED53EF7D55037952ABB27 test@fedora
-
-    # Using state: present
-
-    # Before state:
-    # -------------
-
-    # router-ios#show running-config | section ^username
-    # username testuser privilege 15 password 0 password
-
-    # Present state create a new user with multiple keys play:
-    # --------------------------------------------------------
-
-    - name: Create a new user with multiple keys
+    - name: create a new user with multiple keys
       cisco.ios.ios_user:
         name: ansible
         sshkey:
-          - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-          - "{{ lookup('file', '~/path/to/public_key') }}"
+        - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        - "{{ lookup('file', '~/path/to/public_key') }}"
         state: present
 
-    # Task Output
-    # -----------
-
-    # commands:
-    # - ip ssh pubkey-chain
-    # - username ansible
-    # - key-hash ssh-rsa 2ABB27BBC33ED53EF7D55037952ABB27 test@fedora
-    # - key-hash ssh-rsa 1985673DCF7FA9A0F374BB97DC2ABB27 test@fedora
-    # - exit
-    # - exit
-
-    # After state:
-    # ------------
-
-    # router-ios#show running-config | section username
-    # username testuser privilege 15 password 0 password
-    #   username ansible
-    #    key-hash ssh-rsa 2ABB27BBC33ED53EF7D55037952ABB27 test@fedora
-    #    key-hash ssh-rsa 1985673DCF7FA9A0F374BB97DC2ABB27 test@fedora
-
-    # Using Purge: true
-
-    # Before state:
-    # -------------
-
-    # router-ios#show running-config | section ^username
-    # username admin privilege 15 password 0 password
-    # username testuser privilege 15 password 0 password
-    # username ansible nopassword
-    #   username ansible
-    #    key-hash ssh-rsa 2ABB27BBC33ED53EF7D55037952ABB27 test@fedora
-
-    # Purge all users except admin play:
-    # ----------------------------------
-
-    - name: Remove all users except admin
+    - name: remove all users except admin
       cisco.ios.ios_user:
-        purge: true
+        purge: yes
 
-    # Task Output
-    # -----------
-
-    # commands:
-    # - no username testuser
-    # - no username ansible
-    # - ip ssh pubkey-chain
-    # - no username ansible
-    # - exit
-
-    # After state:
-    # ------------
-
-    # router-ios#show running-config | section username
-    # username admin privilege 15 password 0 password
-
-    # Using Purge: true
-
-    # Before state:
-    # -------------
-
-    # router-ios#show running-config | section ^username
-    # username admin privilege 15 password 0 password
-    # username testuser privilege 15 password 0 password1
-    # username testuser1 privilege 15 password 0 password2
-    # username ansible nopassword
-
-    # Purge all users except admin and these listed users play:
-    # ---------------------------------------------------------
-
-    - name: Remove all users except admin and these listed users
+    - name: remove all users except admin and these listed users
       cisco.ios.ios_user:
         aggregate:
-          - name: testuser
-          - name: testuser1
-        purge: true
+        - name: testuser1
+        - name: testuser2
+        - name: testuser3
+        purge: yes
 
-    # Task Output
-    # -----------
-
-    # commands:
-    # - no username ansible
-
-    # After state:
-    # ------------
-
-    # router-ios#show running-config | section username
-    # username admin privilege 15 password 0 password
-    # username testuser privilege 15 password 0 password1
-    # username testuser1 privilege 15 password 0 password2
-
-    # Using state: present
-
-    # Before state:
-    # -------------
-
-    # router-ios#show running-config | section ^username
-    # username admin privilege 15 password 0 password
-    # username netop password 0 password1
-    # username netend password 0 password2
-
-    # Present state set multiple users to privilege level 15 play:
-    # ------------------------------------------------------------
-
-    - name: Set multiple users to privilege level 15
+    - name: set multiple users to privilege level 15
       cisco.ios.ios_user:
         aggregate:
-          - name: netop
-          - name: netend
+        - name: netop
+        - name: netend
         privilege: 15
         state: present
 
-    # Task Output
-    # -----------
-
-    # commands:
-    # - username netop privilege 15
-    # - username netend privilege 15
-
-    # After state:
-    # ------------
-
-    # router-ios#show running-config | section username
-    # username admin privilege 15 password 0 password
-    # username netop privilege 15 password 0 password1
-    # username netend privilege 15 password 0 password2
-
-    # Using state: present
-
-    # Before state:
-    # -------------
-
-    # router-ios#show running-config | section ^username
-    # username admin privilege 15 password 0 password
-    # username netop privilege 15 password 0 oldpassword
-
-    # Present state Change Password for User netop play:
-    # --------------------------------------------
+    - name: set user view/role
+      cisco.ios.ios_user:
+        name: netop
+        view: network-operator
+        state: present
 
     - name: Change Password for User netop
       cisco.ios.ios_user:
         name: netop
-        configured_password: "newpassword"
-        password_type: password
+        configured_password: '{{ new_password }}'
         update_password: always
         state: present
 
-    # Task Output
-    # -----------
-
-    # commands:
-    # - username netop password newpassword
-
-    # After state:
-    # ------------
-
-    # router-ios#show running-config | section username
-    # username admin privilege 15 password 0 password
-    # username netop privilege 15 password 0 newpassword
-
-    # Using state: present
-
-    # Before state:
-    # -------------
-
-    # router-ios#show running-config | section ^username
-    # username admin privilege 15 password 0 password
-    # username netop privilege 15 password 0 password
-    # username netend privilege 15 password 0 password
-
-    # Present state set user view/role for users play:
-    # --------------------------------------------
-
-    - name: Set user view/role for users
+    - name: Aggregate of users
       cisco.ios.ios_user:
         aggregate:
-          - name: netop
-          - name: netend
+        - name: ansibletest2
+        - name: ansibletest3
         view: network-admin
-        state: present
 
-    # Task Output
-    # -----------
+    - name: Add a user specifying password type
+      cisco.ios.ios_user:
+        name: ansibletest4
+        configured_password: '{{ new_password }}'
+        password_type: password
 
-    # commands:
-    # - username netop view network-admin
-    # - username netend view network-admin
-
-    # After state:
-    # ------------
-
-    # router-ios#show running-config | section username
-    # username admin privilege 15 password 0 password
-    # username netop privilege 15 view network-admin password 0 password
-    # username netend privilege 15 view network-admin password 0 password
-
-    # Using state: present
-
-    # Before state:
-    # -------------
-
-    # router-ios#show running-config | section ^username
-    # username admin privilege 15 password 0 password
-
-    # Present state create a new user with hashed password play:
-    # --------------------------------------------------------------
-
-    - name: Create a new user with hashed password
+    - name: Add a user with MD5 hashed password
       cisco.ios.ios_user:
         name: ansibletest5
         hashed_password:
-          type: 9
-          value: "thiswillbereplacedwithhashedpassword"
-        state: present
-
-    # Task Output
-    # -----------
-
-    # commands:
-    # - username ansibletest5 secret 9 thiswillbereplacedwithhashedpassword
-
-    # After state:
-    # ------------
-
-    # router-ios#show running-config | section username
-    # username admin privilege 15 password 0 password
-    # username ansibletest5 secret 9 thiswillbereplacedwithhashedpassword
-
-    # Using state: absent
-
-    # Before state:
-    # -------------
-
-    # router-ios#show running-config | section ^username
-    # username admin privilege 15 password 0 password
-    # username ansibletest1 password 0 password
-    # username ansibletest2 secret 9 thiswillbereplacedwithhashedpassword
-    # username ansibletest3 password 5 thistoowillbereplacedwithhashedpassword
-
-    # Absent state remove multiple users play:
-    # ----------------------------------------
+          type: 5
+          value: $3$8JcDilcYgFZi.yz4ApaqkHG2.8/
 
     - name: Delete users with aggregate
       cisco.ios.ios_user:
         aggregate:
-          - name: ansibletest1
-          - name: ansibletest2
-          - name: ansibletest3
+        - name: ansibletest1
+        - name: ansibletest2
+        - name: ansibletest3
         state: absent
-
-    # Task Output
-    # -----------
-
-    # commands:
-    # - no username ansibletest1
-    # - no username ansibletest2
-    # - no username ansibletest3
-
-    # After state:
-    # ------------
-
-    # router-ios#show running-config | section username
-    # username admin privilege 15 password 0 password
 
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright 2022 Red Hat
+# Copyright 2021 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
@@ -18,15 +18,11 @@ module: ios_bgp_address_family
 short_description: Resource module to configure BGP Address family.
 description: This module configures and manages the attributes of bgp address family on Cisco IOS.
 version_added: 1.2.0
-author:
-  - Sagar Paul (@KB-perByte)
-  - Sumit Jaiswal (@justjais)
+author: Sumit Jaiswal (@justjais)
 notes:
-  - Tested against Cisco IOS-XE Version 17.3 on CML.
+  - Tested against Cisco IOSv Version 15.2 on VIRL
   - This module works with connection C(network_cli).
     See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html)
-  - The module examples uses callback plugin (stdout_callback = yaml) to generate task
-    output in yaml format.
 options:
   config:
     description: A list of configurations for bgp address family.
@@ -43,33 +39,18 @@ options:
           afi:
             description: Address Family
             type: str
-            choices:
-              ["ipv4", "ipv6", "l2vpn", "nsap", "rtfilter", "vpnv4", "vpnv6"]
+            choices: ['ipv4', 'ipv6', 'l2vpn', 'nsap', 'rtfilter', 'vpnv4', 'vpnv6']
           safi:
             description: Address Family modifier
             type: str
-            choices: ["flowspec", "mdt", "multicast", "mvpn", "evpn", "unicast"]
+            choices: ['flowspec', 'mdt', 'multicast', 'mvpn', 'evpn', 'unicast']
           vrf:
             description: Specify parameters for a VPN Routing/Forwarding instance
             type: str
-          advertise:
-            description: Configure path advertise/export to other address-family
-            type: dict
-            suboptions:
-              afi:
-                description: Address family for VRF advertise/export
-                type: str
-                choices: ["l2vpn"]
-              safi:
-                description: Advertise/export prefixes to address family
-                type: str
-                choices: ["evpn"]
-          aggregate_addresses:
+          aggregate_address:
             description: Configure BGP aggregate entries
             type: list
             elements: dict
-            aliases:
-              - aggregate_address
             suboptions:
               address:
                 description: Aggregate address(A.B.C.D)
@@ -116,23 +97,14 @@ options:
                       all:
                         description: Select all available paths
                         type: bool
-                      backup:
-                        description: Select backup path
-                        type: bool
                       best:
                         description: Select best N paths (2-3).
                         type: int
-                      best_external:
-                        description: Select best-external path
-                        type: bool
                       group_best:
                         description: Select group-best path
                         type: bool
                   send:
                     description: Send additional paths to neighbors
-                    type: bool
-                  install:
-                    description: Additional paths to install into RIB
                     type: bool
               aggregate_timer:
                 description:
@@ -202,39 +174,9 @@ options:
                   - Please refer vendor documentation for valid values
                 type: int
               slow_peer:
-                description:
-                  - Nexthop triggering
-                  - This option is DEPRECATED and replaced with slow_peer_options,
-                    this attribute will be removed after 2025-01-01.
+                description: Nexthop triggering
                 type: list
                 elements: dict
-                suboptions:
-                  detection:
-                    description: Slow-peer detection
-                    type: dict
-                    suboptions:
-                      enable:
-                        description: Enable slow-peer detection
-                        type: bool
-                      threshold:
-                        description:
-                          - Set the slow-peer detection threshold
-                          - Threshold value (seconds)
-                          - Please refer vendor documentation for valid values
-                        type: int
-                  split_update_group:
-                    description: Configure slow-peer split-update-group
-                    type: dict
-                    suboptions:
-                      dynamic:
-                        description: Dynamically split the slow peer to slow-update group
-                        type: bool
-                      permanent:
-                        description: Keep the slow-peer permanently in slow-update group
-                        type: bool
-              slow_peer_options:
-                description: Nexthop triggering
-                type: dict
                 suboptions:
                   detection:
                     description: Slow-peer detection
@@ -292,39 +234,22 @@ options:
               local:
                 description: Distance for local routes
                 type: int
-          neighbors:
+          neighbor:
             description: Specify a neighbor router
             type: list
             elements: dict
-            aliases:
-              - neighbor
             suboptions:
-              neighbor_address:
-                description:
-                  - Neighbor address (A.B.C.D)
-                  - Neighbor tag
-                  - Neighbor ipv6 address (X:X:X:X::X)
-                type: str
               address:
-                description:
-                  - Neighbor address (A.B.C.D)
-                  - This option is DEPRECATED and replaced with neighbor_address,
-                    this attribute will be removed after 2025-01-01.
+                description: Neighbor address (A.B.C.D)
                 type: str
               tag:
-                description:
-                  - Neighbor tag
-                  - This option is DEPRECATED and replaced with neighbor_address,
-                    this attribute will be removed after 2025-01-01.
+                description: Neighbor tag
                 type: str
-              ipv6_address:
-                description:
-                  - Neighbor ipv6 address (X:X:X:X::X)
-                  - This option is DEPRECATED and replaced with neighbor_address,
-                    this attribute will be removed after 2025-01-01.
+              ipv6_adddress:
+                description: Neighbor ipv6 address (X:X:X:X::X)
                 type: str
                 aliases:
-                  - ipv6_adddress
+                  - ipv6_address
               activate:
                 description: Enable the Address Family for this Neighbor
                 type: bool
@@ -356,36 +281,6 @@ options:
                   group_best:
                     description: Select group-best path
                     type: bool
-              advertises:
-                description: Advertise to this neighbor
-                type: dict
-                suboptions:
-                  additional_paths:
-                    description: Advertise additional paths
-                    type: dict
-                    suboptions:
-                      all:
-                        description: Select all available paths
-                        type: bool
-                      best:
-                        description: Select best N paths (2-3).
-                        type: int
-                      group_best:
-                        description: Select group-best path
-                        type: bool
-                  best_external:
-                    description: Advertise best-external (at RRs best-internal) path
-                    type: bool
-                  diverse_path:
-                    description: Advertise additional paths
-                    type: dict
-                    suboptions:
-                      backup:
-                        description: Diverse path can be backup path
-                        type: bool
-                      mpath:
-                        description: Diverse path can be multipath
-                        type: bool
               advertise_map:
                 description: specify route-map for conditional advertisement
                 type: dict
@@ -431,7 +326,7 @@ options:
                             type: dict
                             suboptions:
                               igp_cost:
-                                description: Point of Insertion After IGP
+                                description:  Point of Insertion After IGP
                                 type: bool
                               pre_bestpath:
                                 description: Point of Insertion At Beginning
@@ -603,7 +498,7 @@ options:
                     description:
                       - AS number used as local AS
                       - Please refer vendor documentation for valid values
-                    type: str
+                    type: int
                   dual_as:
                     description: Accept either real AS or local AS from the ebgp peer
                     type: bool
@@ -647,6 +542,12 @@ options:
                   warning_only:
                     description: Only give warning message when limit is exceeded
                     type: bool
+              next_hop_self:
+                description:
+                  - Disable the next hop calculation for this neighbor
+                  - This option is DEPRECATED and is replaced with nexthop_self which
+                    accepts dict as input this attribute will be removed after 2023-06-01.
+                type: bool
               nexthop_self:
                 description: Disable the next hop calculation for this neighbor
                 type: dict
@@ -658,33 +559,11 @@ options:
                     description: Enable next-hop-self for both eBGP and iBGP received paths
                     type: bool
               next_hop_unchanged:
-                description:
-                  - Propagate next hop unchanged for iBGP paths to this neighbor
-                  - Propagate next hop unchanged for all paths (iBGP and eBGP) to this neighbor
-                type: dict
-                suboptions:
-                  set:
-                    description: Enable next-hop-unchanged
-                    type: bool
-                  allpaths:
-                    description: Propagate next hop unchanged for all paths (iBGP and eBGP) to this neighbor
-                    type: bool
+                description: Propagate next hop unchanged for iBGP paths to this neighbor
+                type: bool
               password:
-                description:
-                  - Set a password
-                  - This option is DEPRECATED and is replaced with password_options which
-                    accepts dict as input, this attribute will be removed after 2024-06-01.
+                description: Set a password
                 type: str
-              password_options:
-                description: Set a password with encryption type
-                type: dict
-                suboptions:
-                  encryption:
-                    description: Encryption type (0 to disable encryption, 7 for proprietary)
-                    type: int
-                  pass_key:
-                    description: The password
-                    type: str
               path_attribute:
                 description: BGP optional attribute filtering
                 type: dict
@@ -744,9 +623,6 @@ options:
               peer_group:
                 description: Member of the peer-group
                 type: bool
-              peer_group_name:
-                description: Member of the peer-group
-                type: str
               prefix_list:
                 description:
                   - Filter updates to/from this neighbor
@@ -781,7 +657,7 @@ options:
                 description:
                   - Specify a BGP neighbor
                   - AS of remote neighbor
-                type: str
+                type: int
               remove_private_as:
                 description: Remove private AS number from outbound updates
                 type: dict
@@ -863,49 +739,9 @@ options:
                       - Please refer vendor documentation for valid values
                     type: int
               slow_peer:
-                description:
-                  - Configure slow-peer
-                  - This option is DEPRECATED and replaced with slow_peer_options,
-                    this attribute will be removed after 2025-01-01.
+                description: Configure slow-peer
                 type: list
                 elements: dict
-                suboptions:
-                  detection:
-                    description: Configure slow-peer
-                    type: dict
-                    suboptions:
-                      enable:
-                        description: Enable slow-peer detection
-                        type: bool
-                      disable:
-                        description: Disable slow-peer detection
-                        type: bool
-                      threshold:
-                        description: Set the slow-peer detection threshold
-                        type: int
-                  split_update_group:
-                    description: Configure slow-peer
-                    type: dict
-                    suboptions:
-                      dynamic:
-                        description: Configure slow-peer
-                        type: dict
-                        suboptions:
-                          enable:
-                            description: Configure slow-peer
-                            type: bool
-                          disable:
-                            description: Configure slow-peer
-                            type: bool
-                          permanent:
-                            description: Configure slow-peer
-                            type: bool
-                      static:
-                        description: Configure slow-peer
-                        type: bool
-              slow_peer_options:
-                description: Configure slow-peer options
-                type: dict
                 suboptions:
                   detection:
                     description: Configure slow-peer
@@ -1006,12 +842,10 @@ options:
               weight:
                 description: Set default weight for routes from this neighbor
                 type: int
-          networks:
+          network:
             description: Specify a network to announce via BGP
             type: list
             elements: dict
-            aliases:
-              - network
             suboptions:
               address:
                 description: Network number (A.B.C.D)
@@ -1022,15 +856,11 @@ options:
               backdoor:
                 description: Specify a BGP backdoor route
                 type: bool
-              evpn:
-                description: Advertise or Export to EVPN address-family
-                type: bool
               route_map:
                 description: Route-map to modify the attributes
                 type: str
           redistribute:
-            description:
-              - Redistribute information from another routing protocol
+            description: Redistribute information from another routing protocol
             type: list
             elements: dict
             suboptions:
@@ -1121,9 +951,6 @@ options:
                 description: Locator ID Separation Protocol (LISP)
                 type: dict
                 suboptions:
-                  set:
-                    description: Set the top level attribute
-                    type: bool
                   metric:
                     description: Metric for redistributed routes
                     type: int
@@ -1134,9 +961,6 @@ options:
                 description: Mobile routes
                 type: dict
                 suboptions:
-                  set:
-                    description: Set the top level attribute
-                    type: bool
                   metric:
                     description: Metric for redistributed routes
                     type: int
@@ -1147,9 +971,6 @@ options:
                 description: On Demand stub Routes
                 type: dict
                 suboptions:
-                  set:
-                    description: Set the top level attribute
-                    type: bool
                   metric:
                     description: Metric for redistributed routes
                     type: int
@@ -1163,60 +984,25 @@ options:
                   process_id:
                     description: Process ID
                     type: int
-                  include_connected:
-                    description: Include connected. Only applicable under IPv6 AFI
-                    type: bool
                   match:
-                    description: Redistribute matched routes
+                    description: On Demand stub Routes
                     type: dict
                     suboptions:
                       external:
-                        description:
-                          - Redistribute OSPF external routes
-                          - This option is DEPRECATED and replaced with externals option,
-                            this attribute will be removed after 2025-01-01.
-                        type: bool
-                      externals:
                         description: Redistribute OSPF external routes
-                        type: dict
-                        suboptions:
-                          type_1:
-                            description: Redistribute OSPF External type 1 routes
-                            type: bool
-                          type_2:
-                            description: Redistribute OSPF External type 1 routes
-                            type: bool
+                        type: bool
                       internal:
                         description: Redistribute OSPF internal routes
                         type: bool
                       nssa_external:
-                        description:
-                          - Redistribute OSPF NSSA external routes
-                          - This option is DEPRECATED and replaced with nssa_externals option,
-                            this attribute will be removed after 2025-01-01.
+                        description: Redistribute OSPF NSSA external routes
                         type: bool
                       type_1:
-                        description:
-                          - Redistribute NSSA external type 1 routes
-                          - This option is DEPRECATED and replaced with nssa_externals.type_1 option,
-                            this attribute will be removed after 2025-01-01.
+                        description: Redistribute NSSA external type 1 routes
                         type: bool
                       type_2:
-                        description:
-                          - Redistribute NSSA external type 2 routes
-                          - This option is DEPRECATED and replaced with nssa_externals.type_2 option,
-                            this attribute will be removed after 2025-01-01.
+                        description: Redistribute NSSA external type 2 routes
                         type: bool
-                      nssa_externals:
-                        description: Redistribute OSPF NSSA external routes
-                        type: dict
-                        suboptions:
-                          type_1:
-                            description: Redistribute NSSA external type 1 routes
-                            type: bool
-                          type_2:
-                            description: Redistribute NSSA external type 2 routes
-                            type: bool
                   metric:
                     description: Metric for redistributed routes
                     type: int
@@ -1234,56 +1020,24 @@ options:
                     description: Process ID
                     type: int
                   match:
-                    description: Redistribute matched routes
+                    description: On Demand stub Routes
                     type: dict
                     suboptions:
                       external:
-                        description:
-                          - Redistribute OSPF external routes
-                          - This option is DEPRECATED and replaced with externals,
-                            this attribute will be removed after 2025-01-01.
-                        type: bool
-                      externals:
                         description: Redistribute OSPF external routes
-                        type: dict
-                        suboptions:
-                          type_1:
-                            description: Redistribute OSPF External type 1 routes
-                            type: bool
-                          type_2:
-                            description: Redistribute OSPF External type 1 routes
-                            type: bool
+                        type: bool
                       internal:
                         description: Redistribute OSPF internal routes
                         type: bool
                       nssa_external:
-                        description:
-                          - Redistribute OSPF internal routes
-                          - This option is DEPRECATED and replaced with nssa_externals,
-                            this attribute will be removed after 2025-01-01.
+                        description: Redistribute OSPF NSSA external routes
                         type: bool
                       type_1:
-                        description:
-                          - Redistribute NSSA external type 1 routes
-                          - This option is DEPRECATED and replaced with nssa_externals.type_1 option,
-                            this attribute will be removed after 2025-01-01.
+                        description: Redistribute NSSA external type 1 routes
                         type: bool
                       type_2:
-                        description:
-                          - Redistribute NSSA external type 2 routes
-                          - This option is DEPRECATED and replaced with nssa_externals.type_2 option,
-                            this attribute will be removed after 2025-01-01.
+                        description: Redistribute NSSA external type 2 routes
                         type: bool
-                      nssa_externals:
-                        description: Redistribute OSPF NSSA external routes
-                        type: dict
-                        suboptions:
-                          type_1:
-                            description: Redistribute NSSA external type 1 routes
-                            type: bool
-                          type_2:
-                            description: Redistribute NSSA external type 2 routes
-                            type: bool
                   metric:
                     description: Metric for redistributed routes
                     type: int
@@ -1294,9 +1048,6 @@ options:
                 description: Routing Information Protocol (RIP)
                 type: dict
                 suboptions:
-                  set:
-                    description: Set the top level attribute
-                    type: bool
                   metric:
                     description: Metric for redistributed routes
                     type: int
@@ -1307,9 +1058,6 @@ options:
                 description: Static routes
                 type: dict
                 suboptions:
-                  set:
-                    description: Set the top level attribute
-                    type: bool
                   clns:
                     description: Redistribution of OSI static routes
                     type: bool
@@ -1409,18 +1157,6 @@ options:
                           des:
                             description: Use 56 bit DES algorithm for encryption
                             type: str
-                          des56:
-                            description: Use 56 bit DES algorithm for encryption
-                            type: str
-                          aes128:
-                            description: Use 128 bit AES algorithm for encryption
-                            type: str
-                          aes192:
-                            description: Use 192 bit 3DES algorithm for encryption
-                            type: str
-                          aes256:
-                            description: Use 256 bit DES algorithm for encryption
-                            type: str
                       credential:
                         description: If the user password is already configured and saved
                         type: bool
@@ -1449,13 +1185,13 @@ options:
     type: str
   state:
     choices:
-      - merged
-      - replaced
-      - overridden
-      - deleted
-      - gathered
-      - rendered
-      - parsed
+    - merged
+    - replaced
+    - overridden
+    - deleted
+    - gathered
+    - rendered
+    - parsed
     default: merged
     description:
       - The state the configuration should be left in
@@ -1570,102 +1306,36 @@ EXAMPLES = """
             filter: true
     state: merged
 
-# Task Output:
-# ------------
-#
-# before: {}
-# commands:
-#   - router bgp 65000
-#   - address-family ipv4 multicast vrf blue
-#   - bgp aggregate-timer 10
-#   - bgp dampening 1 1 1 1
-#   - bgp slow-peer detection threshold 150
-#   - snmp context snmp_con community community ro 10
-#   - neighbor 198.51.100.1 remote-as 10
-#   - neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-#   - neighbor 198.51.100.1 slow-peer detection threshold 150
-#   - network 198.51.110.10 mask 255.255.255.255 backdoor
-#   - aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-#   - address-family ipv4 multicast
-#   - default-metric 12
-#   - distance bgp 10 10 100
-#   - table-map test_tableMap filter
-#   - network 198.51.111.11 mask 255.255.255.255 route-map test
-#   - aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
-#   - address-family ipv4 mdt
-#   - bgp dmzlink-bw
-#   - bgp soft-reconfig-backup
-#   - bgp dampening 1 10 100 5
-# after:
-#   address_family:
-#   - afi: ipv4
-#     aggregate_addresses:
-#     - address: 192.0.2.1
-#       as_confed_set: true
-#       netmask: 255.255.255.255
-#     bgp:
-#       aggregate_timer: 10
-#       dampening:
-#         max_suppress: 1
-#         penalty_half_time: 1
-#         reuse_route_val: 1
-#         suppress_route_val: 1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     neighbors:
-#     - activate: true
-#       aigp:
-#         send:
-#           cost_community:
-#             id: 100
-#             poi:
-#               igp_cost: true
-#               transitive: true
-#       neighbor_address: 198.51.100.1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     networks:
-#     - address: 198.51.110.10
-#       backdoor: true
-#       mask: 255.255.255.255
-#     snmp:
-#       context:
-#         community:
-#           acl: '10'
-#           ro: true
-#           snmp_community: community
-#         name: snmp_con
-#   - afi: ipv4
-#     aggregate_addresses:
-#     - address: 192.0.3.1
-#       as_confed_set: true
-#       netmask: 255.255.255.255
-#     default_metric: 12
-#     distance:
-#       external: 10
-#       internal: 10
-#       local: 100
-#     networks:
-#     - address: 198.51.111.11
-#       mask: 255.255.255.255
-#       route_map: test
-#     safi: multicast
-#     table_map:
-#       filter: true
-#       name: test_tableMap
-#   - afi: ipv4
-#     bgp:
-#       dampening:
-#         max_suppress: 5
-#         penalty_half_time: 1
-#         reuse_route_val: 10
-#         suppress_route_val: 100
-#       dmzlink_bw: true
-#       soft_reconfig_backup: true
-#     safi: mdt
-#   as_number: '65000'
+# Commands fired:
+# ---------------
+# "commands": [
+#     "router bgp 65000",
+#     "address-family ipv4 multicast vrf blue",
+#     "bgp aggregate-timer 10",
+#     "bgp slow-peer detection threshold 150",
+#     "bgp dampening 1 1 1 1",
+#     "neighbor 198.51.100.1 remote-as 10",
+#     "neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive",
+#     "neighbor 198.51.100.1 route-map test-route out",
+#     "neighbor 198.51.100.1 route-server-client",
+#     "neighbor 198.51.100.1 slow-peer detection threshold 150",
+#     "network 198.51.110.10 mask 255.255.255.255 backdoor",
+#     "snmp context snnmp_con_1 community community ro 10",
+#     "aggregate-address 192.0.2.1 255.255.255.255 as-confed-set",
+#     "exit-address-family",
+#     "address-family ipv4 mdt",
+#     "bgp dmzlink-bw",
+#     "bgp dampening 1 10 100 5",
+#     "bgp soft-reconfig-backup",
+#     "exit-address-family",
+#     "address-family ipv4 multicast",
+#     "network 1.1.1.1 mask 255.255.255.255 route-map test",
+#     "aggregate-address 192.0.3.1 255.255.255.255 as-confed-set",
+#     "default-metric 12",
+#     "distance bgp 10 10 100",
+#     "table-map test_tableMap filter"
+#     "exit-address-family",
+# ]
 
 # After state:
 # ------------
@@ -1673,25 +1343,11 @@ EXAMPLES = """
 # vios#sh running-config | section ^router bgp
 # router bgp 65000
 #  bgp log-neighbor-changes
-#  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-#  snmp context snmp_con community community RO 10
-#  neighbor 198.51.100.1 remote-as 10
-#  !
-#  address-family ipv4
-#   snmp context snmp_con community community RO 10
-#   bgp aggregate-timer 10
-#   bgp slow-peer detection threshold 150
-#   bgp dampening 1 1 1 1
-#   network 198.51.110.10 mask 255.255.255.255 backdoor
-#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-#   neighbor 198.51.100.1 activate
-#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-#   neighbor 198.51.100.1 slow-peer detection threshold 150
-#  exit-address-family
+#  bgp nopeerup-delay cold-boot 20
 #  !
 #  address-family ipv4 multicast
 #   table-map test_tableMap filter
-#   network 198.51.111.11 mask 255.255.255.255 route-map test
+#   network 1.1.1.1 mask 255.255.255.255 route-map test
 #   aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
 #   default-metric 12
 #   distance bgp 10 10 100
@@ -1701,6 +1357,20 @@ EXAMPLES = """
 #   bgp dampening 1 10 100 5
 #   bgp dmzlink-bw
 #   bgp soft-reconfig-backup
+#  exit-address-family
+#  !
+#  address-family ipv4 multicast vrf blue
+#   bgp aggregate-timer 10
+#   bgp slow-peer detection threshold 150
+#   bgp dampening 1 1 1 1
+#   network 198.51.110.10 mask 255.255.255.255 backdoor
+#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+#   neighbor 198.51.100.1 remote-as 10
+#   neighbor 198.51.100.1 activate
+#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+#   neighbor 198.51.100.1 route-server-client
+#   neighbor 198.51.100.1 slow-peer detection threshold 150
+#   neighbor 198.51.100.1 route-map test-route out
 #  exit-address-family
 
 # Using replaced
@@ -1711,25 +1381,11 @@ EXAMPLES = """
 # vios#sh running-config | section ^router bgp
 # router bgp 65000
 #  bgp log-neighbor-changes
-#  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-#  snmp context snmp_con community community RO 10
-#  neighbor 198.51.100.1 remote-as 10
-#  !
-#  address-family ipv4
-#   snmp context snmp_con community community RO 10
-#   bgp aggregate-timer 10
-#   bgp slow-peer detection threshold 150
-#   bgp dampening 1 1 1 1
-#   network 198.51.110.10 mask 255.255.255.255 backdoor
-#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-#   neighbor 198.51.100.1 activate
-#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-#   neighbor 198.51.100.1 slow-peer detection threshold 150
-#  exit-address-family
+#  bgp nopeerup-delay cold-boot 20
 #  !
 #  address-family ipv4 multicast
 #   table-map test_tableMap filter
-#   network 198.51.111.11 mask 255.255.255.255 route-map test
+#   network 1.1.1.1 mask 255.255.255.255 route-map test
 #   aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
 #   default-metric 12
 #   distance bgp 10 10 100
@@ -1739,6 +1395,20 @@ EXAMPLES = """
 #   bgp dampening 1 10 100 5
 #   bgp dmzlink-bw
 #   bgp soft-reconfig-backup
+#  exit-address-family
+#  !
+#  address-family ipv4 multicast vrf blue
+#   bgp aggregate-timer 10
+#   bgp slow-peer detection threshold 150
+#   bgp dampening 1 1 1 1
+#   network 198.51.110.10 mask 255.255.255.255 backdoor
+#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+#   neighbor 198.51.100.1 remote-as 10
+#   neighbor 198.51.100.1 activate
+#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+#   neighbor 198.51.100.1 route-server-client
+#   neighbor 198.51.100.1 slow-peer detection threshold 150
+#   neighbor 198.51.100.1 route-map test-route out
 #  exit-address-family
 
 - name: Replaces device configuration of listed AF BGP with provided configuration
@@ -1777,6 +1447,10 @@ EXAMPLES = """
                 - detection:
                     threshold: 150
               remote_as: 10
+              route_maps:
+                - name: test-replaced-route
+                  out: true
+              route_server_client: true
           network:
             - address: 198.51.110.10
               mask: 255.255.255.255
@@ -1799,180 +1473,36 @@ EXAMPLES = """
               route_map: test
     state: replaced
 
-# Task Output:
-# ------------
-# before:
-#     address_family:
-#     - afi: ipv4
-#       aggregate_addresses:
-#       - address: 192.0.2.1
-#         as_confed_set: true
-#         netmask: 255.255.255.255
-#       bgp:
-#         aggregate_timer: 10
-#         dampening:
-#           max_suppress: 1
-#           penalty_half_time: 1
-#           reuse_route_val: 1
-#           suppress_route_val: 1
-#         slow_peer_options:
-#           detection:
-#             threshold: 150
-#       neighbors:
-#       - activate: true
-#         aigp:
-#           send:
-#             cost_community:
-#               id: 100
-#               poi:
-#                 igp_cost: true
-#                 transitive: true
-#         neighbor_address: 198.51.100.1
-#         slow_peer_options:
-#           detection:
-#             threshold: 150
-#       networks:
-#       - address: 198.51.110.10
-#         backdoor: true
-#         mask: 255.255.255.255
-#       snmp:
-#         context:
-#           community:
-#             acl: '10'
-#             ro: true
-#             snmp_community: community
-#           name: snmp_con
-#     - afi: ipv4
-#       aggregate_addresses:
-#       - address: 192.0.3.1
-#         as_confed_set: true
-#         netmask: 255.255.255.255
-#       default_metric: 12
-#       distance:
-#         external: 10
-#         internal: 10
-#         local: 100
-#       networks:
-#       - address: 198.51.111.11
-#         mask: 255.255.255.255
-#         route_map: test
-#       safi: multicast
-#       table_map:
-#         filter: true
-#         name: test_tableMap
-#     - afi: ipv4
-#       bgp:
-#         dampening:
-#           max_suppress: 5
-#           penalty_half_time: 1
-#           reuse_route_val: 10
-#           suppress_route_val: 100
-#         dmzlink_bw: true
-#         soft_reconfig_backup: true
-#       safi: mdt
-#     as_number: '65000'
-# commands:
-# - router bgp 65000
-# - address-family ipv4 multicast vrf blue
-# - bgp aggregate-timer 10
-# - bgp dampening 1 1 1 1
-# - bgp slow-peer detection threshold 150
-# - neighbor 198.51.110.1 remote-as 10
-# - neighbor 198.51.110.1 activate
-# - neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-# - neighbor 198.51.110.1 slow-peer detection threshold 150
-# - network 198.51.110.10 mask 255.255.255.255 backdoor
-# - aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-# - address-family ipv4 multicast
-# - no default-metric 12
-# - no distance bgp 10 10 100
-# - no table-map test_tableMap filter
-# - bgp aggregate-timer 10
-# - bgp dampening 10 10 10 10
-# - bgp slow-peer detection threshold 200
-# - network 192.0.2.1 mask 255.255.255.255 route-map test
-# - no network 198.51.111.11 mask 255.255.255.255 route-map test
-# - no aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
-# after:
-#   address_family:
-#   - afi: ipv4
-#     aggregate_addresses:
-#     - address: 192.0.2.1
-#       as_confed_set: true
-#       netmask: 255.255.255.255
-#     bgp:
-#       aggregate_timer: 10
-#       dampening:
-#         max_suppress: 1
-#         penalty_half_time: 1
-#         reuse_route_val: 1
-#         suppress_route_val: 1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     neighbors:
-#     - activate: true
-#       aigp:
-#         send:
-#           cost_community:
-#             id: 100
-#             poi:
-#               igp_cost: true
-#               transitive: true
-#       neighbor_address: 198.51.100.1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     - activate: true
-#       aigp:
-#         send:
-#           cost_community:
-#             id: 200
-#             poi:
-#               igp_cost: true
-#               transitive: true
-#       neighbor_address: 198.51.110.1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     networks:
-#     - address: 198.51.110.10
-#       backdoor: true
-#       mask: 255.255.255.255
-#     snmp:
-#       context:
-#         community:
-#           acl: '10'
-#           ro: true
-#           snmp_community: community
-#         name: snmp_con
-#   - afi: ipv4
-#     bgp:
-#       aggregate_timer: 10
-#       dampening:
-#         max_suppress: 10
-#         penalty_half_time: 10
-#         reuse_route_val: 10
-#         suppress_route_val: 10
-#       slow_peer_options:
-#         detection:
-#           threshold: 200
-#     networks:
-#     - address: 192.0.2.1
-#       mask: 255.255.255.255
-#       route_map: test
-#     safi: multicast
-#   - afi: ipv4
-#     bgp:
-#       dampening:
-#         max_suppress: 5
-#         penalty_half_time: 1
-#         reuse_route_val: 10
-#         suppress_route_val: 100
-#       dmzlink_bw: true
-#       soft_reconfig_backup: true
-#     safi: mdt
-#   as_number: '65000'
+# Commands fired:
+# ---------------
+# "commands": [
+#         "router bgp 65000",
+#         "address-family ipv4 multicast vrf blue",
+#         "neighbor 198.51.110.1 remote-as 10",
+#         "neighbor 198.51.110.1 activate",
+#         "neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive",
+#         "neighbor 198.51.110.1 route-map test-replaced-route out",
+#         "neighbor 198.51.110.1 route-server-client",
+#         "neighbor 198.51.110.1 slow-peer detection threshold 150",
+#         "no neighbor 198.51.100.1 remote-as 10",
+#         "no neighbor 198.51.100.1 activate",
+#         "no neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive",
+#         "no neighbor 198.51.100.1 route-map test-route out",
+#         "no neighbor 198.51.100.1 route-server-client",
+#         "no neighbor 198.51.100.1 slow-peer detection threshold 150",
+#         "exit-address-family",
+#         "address-family ipv4 multicast",
+#         "bgp aggregate-timer 10",
+#         "bgp slow-peer detection threshold 200",
+#         "bgp dampening 10 10 10 10",
+#         "network 192.0.2.1 mask 255.255.255.255 route-map test",
+#         "no network 1.1.1.1 mask 255.255.255.255 route-map test",
+#         "no aggregate-address 192.0.3.1 255.255.255.255 as-confed-set",
+#         "no default-metric 12",
+#         "no distance bgp 10 10 100",
+#         "no table-map test_tableMap filter"
+#         "exit-address-family",
+#     ]
 
 # After state:
 # -------------
@@ -1980,25 +1510,7 @@ EXAMPLES = """
 # vios#sh running-config | section ^router bgp
 # router bgp 65000
 #  bgp log-neighbor-changes
-#  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-#  snmp context snmp_con community community RO 10
-#  neighbor 198.51.100.1 remote-as 10
-#  neighbor 198.51.110.1 remote-as 10
-#  !
-#  address-family ipv4
-#   snmp context snmp_con community community RO 10
-#   bgp aggregate-timer 10
-#   bgp slow-peer detection threshold 150
-#   bgp dampening 1 1 1 1
-#   network 198.51.110.10 mask 255.255.255.255 backdoor
-#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-#   neighbor 198.51.100.1 activate
-#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-#   neighbor 198.51.100.1 slow-peer detection threshold 150
-#   neighbor 198.51.110.1 activate
-#   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-#   neighbor 198.51.110.1 slow-peer detection threshold 150
-#  exit-address-family
+#  bgp nopeerup-delay cold-boot 20
 #  !
 #  address-family ipv4 multicast
 #   bgp aggregate-timer 10
@@ -2011,6 +1523,20 @@ EXAMPLES = """
 #   bgp dampening 1 10 100 5
 #   bgp dmzlink-bw
 #   bgp soft-reconfig-backup
+#  exit-address-family
+#  !
+#  address-family ipv4 multicast vrf blue
+#   bgp aggregate-timer 10
+#   bgp slow-peer detection threshold 150
+#   bgp dampening 1 1 1 1
+#   network 198.51.110.10 mask 255.255.255.255 backdoor
+#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+#   neighbor 198.51.110.1 remote-as 10
+#   neighbor 198.51.110.1 activate
+#   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
+#   neighbor 198.51.110.1 route-server-client
+#   neighbor 198.51.110.1 slow-peer detection threshold 150
+#   neighbor 198.51.110.1 route-map test-replaced-route out
 #  exit-address-family
 
 # Using overridden
@@ -2021,37 +1547,34 @@ EXAMPLES = """
 # vios#sh running-config | section ^router bgp
 # router bgp 65000
 #  bgp log-neighbor-changes
-#  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-#  snmp context snmp_con community community RO 10
-#  neighbor 198.51.100.1 remote-as 10
-#  neighbor 198.51.110.1 remote-as 10
-#  !
-#  address-family ipv4
-#   snmp context snmp_con community community RO 10
-#   bgp aggregate-timer 10
-#   bgp slow-peer detection threshold 150
-#   bgp dampening 1 1 1 1
-#   network 198.51.110.10 mask 255.255.255.255 backdoor
-#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-#   neighbor 198.51.100.1 activate
-#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-#   neighbor 198.51.100.1 slow-peer detection threshold 150
-#   neighbor 198.51.110.1 activate
-#   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-#   neighbor 198.51.110.1 slow-peer detection threshold 150
-#  exit-address-family
+#  bgp nopeerup-delay cold-boot 20
 #  !
 #  address-family ipv4 multicast
-#   bgp aggregate-timer 10
-#   bgp slow-peer detection threshold 200
-#   bgp dampening 10 10 10 10
-#   network 192.0.2.1 mask 255.255.255.255 route-map test
+#   table-map test_tableMap filter
+#   network 1.1.1.1 mask 255.255.255.255 route-map test
+#   aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
+#   default-metric 12
+#   distance bgp 10 10 100
 #  exit-address-family
 #  !
 #  address-family ipv4 mdt
 #   bgp dampening 1 10 100 5
 #   bgp dmzlink-bw
 #   bgp soft-reconfig-backup
+#  exit-address-family
+#  !
+#  address-family ipv4 multicast vrf blue
+#   bgp aggregate-timer 10
+#   bgp slow-peer detection threshold 150
+#   bgp dampening 1 1 1 1
+#   network 198.51.110.10 mask 255.255.255.255 backdoor
+#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+#   neighbor 198.51.100.1 remote-as 10
+#   neighbor 198.51.100.1 activate
+#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+#   neighbor 198.51.100.1 route-server-client
+#   neighbor 198.51.100.1 slow-peer detection threshold 150
+#   neighbor 198.51.100.1 route-map test-route out
 #  exit-address-family
 
 - name: Override device configuration of all AF BGP with provided configuration
@@ -2089,6 +1612,10 @@ EXAMPLES = """
                 - detection:
                     threshold: 150
               remote_as: 100
+              route_maps:
+                - name: test-override-route
+                  out: true
+              route_server_client: true
               version: 4
           network:
             - address: 198.51.110.10
@@ -2112,153 +1639,34 @@ EXAMPLES = """
               route_map: test_ipv6
     state: overridden
 
-# Task Output:
-# ------------
-#
-# before:
-#     address_family:
-#     - afi: ipv4
-#       aggregate_addresses:
-#       - address: 192.0.2.1
-#         as_confed_set: true
-#         netmask: 255.255.255.255
-#       bgp:
-#         aggregate_timer: 10
-#         dampening:
-#           max_suppress: 10
-#           penalty_half_time: 10
-#           reuse_route_val: 10
-#           suppress_route_val: 10
-#         slow_peer_options:
-#           detection:
-#             threshold: 200
-#       default_information: true
-#       neighbors:
-#       - activate: true
-#         aigp:
-#           send:
-#             cost_community:
-#               id: 100
-#               poi:
-#                 igp_cost: true
-#                 transitive: true
-#         neighbor_address: 198.51.100.1
-#         slow_peer_options:
-#           detection:
-#             threshold: 150
-#       - activate: true
-#         aigp:
-#           send:
-#             cost_community:
-#               id: 200
-#               poi:
-#                 igp_cost: true
-#                 transitive: true
-#         maximum_prefix:
-#           number: 1
-#           restart: 100
-#           threshold_value: 10
-#         neighbor_address: 198.51.110.1
-#         slow_peer_options:
-#           detection:
-#             threshold: 150
-#       networks:
-#       - address: 198.51.110.10
-#         backdoor: true
-#         mask: 255.255.255.255
-#     - afi: ipv4
-#       safi: multicast
-#     - afi: ipv4
-#       safi: mdt
-#     - afi: ipv6
-#       safi: multicast
-#     as_number: '65000'
-# commands:
-# - router bgp 65000
-# - address-family ipv4
-# - no default-information originate
-# - no bgp aggregate-timer 10
-# - no bgp dampening 10 10 10 10
-# - no bgp slow-peer detection threshold 200
-# - no neighbor 198.51.100.1
-# - no neighbor 198.51.110.1
-# - no network 198.51.110.10 mask 255.255.255.255 backdoor
-# - no aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-# - address-family ipv4 multicast vrf blue
-# - bgp aggregate-timer 10
-# - bgp dampening 10 10 100 50
-# - bgp slow-peer detection threshold 150
-# - neighbor 198.51.110.1 remote-as 100
-# - neighbor 198.51.110.1 activate
-# - neighbor 198.51.110.1 disable
-# - neighbor 198.51.110.1 maximum-prefix 1 10 restart 100
-# - neighbor 198.51.110.1 slow-peer detection threshold 150
-# - neighbor 198.51.110.1 version 4
-# - network 198.51.110.10 mask 255.255.255.255 backdoor
-# - aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-# - address-family ipv6 multicast
-# - default-information originate
-# - bgp aggregate-timer 10
-# - bgp dampening 10 10 10 10
-# - bgp slow-peer detection threshold 200
-# after:
-#   address_family:
-#   - afi: ipv4
-#     aggregate_addresses:
-#     - address: 192.0.2.1
-#       as_confed_set: true
-#       netmask: 255.255.255.255
-#     bgp:
-#       aggregate_timer: 10
-#       dampening:
-#         max_suppress: 10
-#         penalty_half_time: 10
-#         reuse_route_val: 10
-#         suppress_route_val: 10
-#       slow_peer_options:
-#         detection:
-#           threshold: 200
-#     default_information: true
-#     neighbors:
-#     - activate: true
-#       aigp:
-#         send:
-#           cost_community:
-#             id: 100
-#             poi:
-#               igp_cost: true
-#               transitive: true
-#       neighbor_address: 198.51.100.1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     - activate: true
-#       aigp:
-#         send:
-#           cost_community:
-#             id: 200
-#             poi:
-#               igp_cost: true
-#               transitive: true
-#       maximum_prefix:
-#         number: 1
-#         restart: 100
-#         threshold_value: 10
-#       neighbor_address: 198.51.110.1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     networks:
-#     - address: 198.51.110.10
-#       backdoor: true
-#       mask: 255.255.255.255
-#   - afi: ipv4
-#     safi: multicast
-#   - afi: ipv4
-#     safi: mdt
-#   - afi: ipv6
-#     safi: multicast
-#   as_number: '65000'
+# Commands fired:
+# ---------------
+# "commands": [
+#       "router bgp 65000",
+#       "no address-family ipv4 multicast",
+#       "no address-family ipv4 mdt",
+#       "address-family ipv4 multicast vrf blue",
+#       "bgp aggregate-timer 10",
+#       "bgp slow-peer detection threshold 150",
+#       "bgp dampening 10 10 100 50",
+#       "neighbor 198.51.110.1 remote-as 100",
+#       "neighbor 198.51.110.1 activate",
+#       "neighbor 198.51.110.1 log-neighbor-changes disable",
+#       "neighbor 198.51.110.1 maximum-prefix 1 10 restart 100",
+#       "neighbor 198.51.110.1 route-map test-override-route out",
+#       "neighbor 198.51.110.1 route-server-client",
+#       "neighbor 198.51.110.1 version 4",
+#       "neighbor 198.51.110.1 slow-peer detection threshold 150",
+#       "network 198.51.110.10 mask 255.255.255.255 backdoor",
+#       "aggregate-address 192.0.2.1 255.255.255.255 as-confed-set",
+#       "exit-address-family",
+#       "address-family ipv6 multicast",
+#       "bgp aggregate-timer 10",
+#       "bgp slow-peer detection threshold 200",
+#       "bgp dampening 10 10 10 10",
+#       "network 2001:DB8:0:3::/64 route-map test_ipv6"
+#       "exit-address-family",
+#   ]
 
 # After state:
 # -------------
@@ -2266,38 +1674,38 @@ EXAMPLES = """
 # vios#sh running-config | section ^router bgp
 # router bgp 65000
 #  bgp log-neighbor-changes
-#  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
+#  bgp nopeerup-delay cold-boot 20
+#  bgp nopeerup-delay post-boot 10
+#  bgp bestpath med confed
+#  snmp context snnmp_con_1 community community RO 10
+#  neighbor 192.0.2.1 remote-as 100
+#  neighbor 192.0.2.1 description replace neighbor
 #  neighbor 198.51.100.1 remote-as 10
-#  neighbor 198.51.110.1 remote-as 100
-#  neighbor 198.51.110.1 disable-connected-check
-#  neighbor 198.51.110.1 version 4
 #  !
-#  address-family ipv4
+#  address-family ipv6 multicast
 #   bgp aggregate-timer 10
 #   bgp slow-peer detection threshold 200
 #   bgp dampening 10 10 10 10
+#   network 2001:DB8:0:3::/64 route-map test_ipv6
+#  exit-address-family
+#  !
+#  address-family ipv4 multicast vrf blue
+#   bgp aggregate-timer 10
+#   bgp slow-peer detection threshold 150
+#   bgp dampening 10 10 100 50
 #   network 198.51.110.10 mask 255.255.255.255 backdoor
 #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-#   neighbor 198.51.100.1 activate
-#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-#   neighbor 198.51.100.1 slow-peer detection threshold 150
+#   neighbor 198.51.110.1 remote-as 100
+#   neighbor 198.51.110.1 log-neighbor-changes disable
+#   neighbor 198.51.110.1 version 4
 #   neighbor 198.51.110.1 activate
-#   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
+#   neighbor 198.51.110.1 route-server-client
 #   neighbor 198.51.110.1 slow-peer detection threshold 150
+#   neighbor 198.51.110.1 route-map test-override-route out
 #   neighbor 198.51.110.1 maximum-prefix 1 10 restart 100
-#   default-information originate
-#  exit-address-family
-#  !
-#  address-family ipv4 multicast
-#  exit-address-family
-#  !
-#  address-family ipv4 mdt
-#  exit-address-family
-#  !
-#  address-family ipv6 multicast
 #  exit-address-family
 
-# Using deleted
+# Using Deleted
 
 # Before state:
 # -------------
@@ -2305,35 +1713,34 @@ EXAMPLES = """
 # vios#sh running-config | section ^router bgp
 # router bgp 65000
 #  bgp log-neighbor-changes
-#  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-#  neighbor 198.51.100.1 remote-as 10
-#  neighbor 198.51.110.1 remote-as 100
-#  neighbor 198.51.110.1 disable-connected-check
-#  neighbor 198.51.110.1 version 4
-#  !
-#  address-family ipv4
-#   bgp aggregate-timer 10
-#   bgp slow-peer detection threshold 200
-#   bgp dampening 10 10 10 10
-#   network 198.51.110.10 mask 255.255.255.255 backdoor
-#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-#   neighbor 198.51.100.1 activate
-#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-#   neighbor 198.51.100.1 slow-peer detection threshold 150
-#   neighbor 198.51.110.1 activate
-#   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-#   neighbor 198.51.110.1 slow-peer detection threshold 150
-#   neighbor 198.51.110.1 maximum-prefix 1 10 restart 100
-#   default-information originate
-#  exit-address-family
+#  bgp nopeerup-delay cold-boot 20
 #  !
 #  address-family ipv4 multicast
+#   table-map test_tableMap filter
+#   network 1.1.1.1 mask 255.255.255.255 route-map test
+#   aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
+#   default-metric 12
+#   distance bgp 10 10 100
 #  exit-address-family
 #  !
 #  address-family ipv4 mdt
+#   bgp dampening 1 10 100 5
+#   bgp dmzlink-bw
+#   bgp soft-reconfig-backup
 #  exit-address-family
 #  !
-#  address-family ipv6 multicast
+#  address-family ipv4 multicast vrf blue
+#   bgp aggregate-timer 10
+#   bgp slow-peer detection threshold 150
+#   bgp dampening 1 1 1 1
+#   network 198.51.110.10 mask 255.255.255.255 backdoor
+#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+#   neighbor 198.51.100.1 remote-as 10
+#   neighbor 198.51.100.1 activate
+#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+#   neighbor 198.51.100.1 route-server-client
+#   neighbor 198.51.100.1 slow-peer detection threshold 150
+#   neighbor 198.51.100.1 route-map test-route out
 #  exit-address-family
 
 - name: "Delete AF BGP (Note: This won't delete the all configured AF BGP)"
@@ -2347,309 +1754,50 @@ EXAMPLES = """
           safi: mdt
     state: deleted
 
-# Task Output:
-# ------------
-#
-# before:
-#     address_family:
-#     - afi: ipv4
-#       aggregate_addresses:
-#       - address: 192.0.2.1
-#         as_confed_set: true
-#         netmask: 255.255.255.255
-#       bgp:
-#         aggregate_timer: 10
-#         dampening:
-#           max_suppress: 10
-#           penalty_half_time: 10
-#           reuse_route_val: 10
-#           suppress_route_val: 10
-#         slow_peer_options:
-#           detection:
-#             threshold: 200
-#       default_information: true
-#       neighbors:
-#       - activate: true
-#         aigp:
-#           send:
-#             cost_community:
-#               id: 100
-#               poi:
-#                 igp_cost: true
-#                 transitive: true
-#         neighbor_address: 198.51.100.1
-#         slow_peer_options:
-#           detection:
-#             threshold: 150
-#       - activate: true
-#         aigp:
-#           send:
-#             cost_community:
-#               id: 200
-#               poi:
-#                 igp_cost: true
-#                 transitive: true
-#         maximum_prefix:
-#           number: 1
-#           restart: 100
-#           threshold_value: 10
-#         neighbor_address: 198.51.110.1
-#         slow_peer_options:
-#           detection:
-#             threshold: 150
-#       networks:
-#       - address: 198.51.110.10
-#         backdoor: true
-#         mask: 255.255.255.255
-#     - afi: ipv4
-#       safi: multicast
-#     - afi: ipv4
-#       safi: mdt
-#     - afi: ipv6
-#       safi: multicast
-#     as_number: '65000'
-# commands:
-# - router bgp 65000
-# - no address-family ipv4 multicast
-# - no address-family ipv4 mdt
-# after:
-#   address_family:
-#   - afi: ipv4
-#     aggregate_addresses:
-#     - address: 192.0.2.1
-#       as_confed_set: true
-#       netmask: 255.255.255.255
-#     bgp:
-#       aggregate_timer: 10
-#       dampening:
-#         max_suppress: 10
-#         penalty_half_time: 10
-#         reuse_route_val: 10
-#         suppress_route_val: 10
-#       slow_peer_options:
-#         detection:
-#           threshold: 200
-#     default_information: true
-#     neighbors:
-#     - activate: true
-#       aigp:
-#         send:
-#           cost_community:
-#             id: 100
-#             poi:
-#               igp_cost: true
-#               transitive: true
-#       neighbor_address: 198.51.100.1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     - activate: true
-#       aigp:
-#         send:
-#           cost_community:
-#             id: 200
-#             poi:
-#               igp_cost: true
-#               transitive: true
-#       maximum_prefix:
-#         number: 1
-#         restart: 100
-#         threshold_value: 10
-#       neighbor_address: 198.51.110.1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     networks:
-#     - address: 198.51.110.10
-#       backdoor: true
-#       mask: 255.255.255.255
-#   - afi: ipv6
-#     safi: multicast
-#   as_number: '65000'
+# Commands fired:
+# ---------------
+# "commands": [
+#       "router bgp 65000",
+#       "no address-family ipv4 multicast",
+#       "no address-family ipv4 mdt"
+#   ]
 
 # After state:
 # -------------
 #
 # vios#sh running-config | section ^router bg
-# hostname#show running-config | section ^router bgp
 # router bgp 65000
 #  bgp log-neighbor-changes
-#  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-#  neighbor 198.51.100.1 remote-as 10
-#  neighbor 198.51.110.1 remote-as 100
-#  neighbor 198.51.110.1 disable-connected-check
-#  neighbor 198.51.110.1 version 4
+#  bgp nopeerup-delay cold-boot 20
 #  !
-#  address-family ipv4
-#   bgp aggregate-timer 10
-#   bgp slow-peer detection threshold 200
-#   bgp dampening 10 10 10 10
-#   network 198.51.110.10 mask 255.255.255.255 backdoor
-#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-#   neighbor 198.51.100.1 activate
-#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-#   neighbor 198.51.100.1 slow-peer detection threshold 150
-#   neighbor 198.51.110.1 activate
-#   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-#   neighbor 198.51.110.1 slow-peer detection threshold 150
-#   neighbor 198.51.110.1 maximum-prefix 1 10 restart 100
-#   default-information originate
-#  exit-address-family
-#  !
-#  address-family ipv6 multicast
-#  exit-address-family
-
-# Using Deleted without any config passed (delete all)
-
-# Before state:
-# -------------
-#
-# vios#sh running-config | section ^router bg
-# hostname#show running-config | section ^router bgp
-# router bgp 65000
-#  bgp log-neighbor-changes
-#  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-#  neighbor 198.51.100.1 remote-as 10
-#  neighbor 198.51.110.1 remote-as 100
-#  neighbor 198.51.110.1 disable-connected-check
-#  neighbor 198.51.110.1 version 4
-#  !
-#  address-family ipv4
-#   bgp aggregate-timer 10
-#   bgp slow-peer detection threshold 200
-#   bgp dampening 10 10 10 10
-#   network 198.51.110.10 mask 255.255.255.255 backdoor
-#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-#   neighbor 198.51.100.1 activate
-#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-#   neighbor 198.51.100.1 slow-peer detection threshold 150
-#   neighbor 198.51.110.1 activate
-#   neighbor 198.51.110.1 aigp send cost-community 200 poi igp-cost transitive
-#   neighbor 198.51.110.1 slow-peer detection threshold 150
-#   neighbor 198.51.110.1 maximum-prefix 1 10 restart 100
-#   default-information originate
-#  exit-address-family
-#  !
-#  address-family ipv6 multicast
-#  exit-address-family
-
-- name: "Delete ALL of configured AF BGP"
-  cisco.ios.ios_bgp_address_family:
-    state: deleted
-
-# Task Output:
-# ------------
-#
-# before:
-#   address_family:
-#   - afi: ipv4
-#     aggregate_addresses:
-#     - address: 192.0.2.1
-#       as_confed_set: true
-#       netmask: 255.255.255.255
-#     bgp:
-#       aggregate_timer: 10
-#       dampening:
-#         max_suppress: 10
-#         penalty_half_time: 10
-#         reuse_route_val: 10
-#         suppress_route_val: 10
-#       slow_peer_options:
-#         detection:
-#           threshold: 200
-#     default_information: true
-#     neighbors:
-#     - activate: true
-#       aigp:
-#         send:
-#           cost_community:
-#             id: 100
-#             poi:
-#               igp_cost: true
-#               transitive: true
-#       neighbor_address: 198.51.100.1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     - activate: true
-#       aigp:
-#         send:
-#           cost_community:
-#             id: 200
-#             poi:
-#               igp_cost: true
-#               transitive: true
-#       maximum_prefix:
-#         number: 1
-#         restart: 100
-#         threshold_value: 10
-#       neighbor_address: 198.51.110.1
-#       slow_peer_options:
-#         detection:
-#           threshold: 150
-#     networks:
-#     - address: 198.51.110.10
-#       backdoor: true
-#       mask: 255.255.255.255
-#   - afi: ipv6
-#     safi: multicast
-#   as_number: '65000'
-# commands:
-# - router bgp 65000
-# - no address-family ipv4
-# - no address-family ipv6 multicast
-# after:
-#   address_family:
-#   - afi: ipv4
-#     bgp:
-#       aggregate_timer: 10
-#   as_number: '65000'
-
-# After state:
-# -------------
-#
-# vios#sh running-config | section ^router bgp
-# router bgp 65000
-#  bgp log-neighbor-changes
-#  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-#  neighbor 198.51.100.1 remote-as 10
-#  neighbor 198.51.110.1 remote-as 100
-#  neighbor 198.51.110.1 disable-connected-check
-#  neighbor 198.51.110.1 version 4
-#  !
-#  address-family ipv4
-#   bgp aggregate-timer 10
-#   no neighbor 198.51.100.1 activate
-#   no neighbor 198.51.110.1 activate
-#  exit-address-family
-
-# Using gathered
-
-# Before state:
-# -------------
-#
-# vios#sh running-config | section ^router bgp
-# router bgp 65000
-#  bgp log-neighbor-changes
-#  bgp graceful-shutdown all neighbors 50 local-preference 100 community 100
-#  snmp context snmp_con community community RO 10
-#  neighbor 198.51.100.1 remote-as 10
-#  !
-#  address-family ipv4
-#   snmp context snmp_con community community RO 10
+#  address-family ipv4 multicast vrf blue
 #   bgp aggregate-timer 10
 #   bgp slow-peer detection threshold 150
 #   bgp dampening 1 1 1 1
 #   network 198.51.110.10 mask 255.255.255.255 backdoor
 #   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+#   neighbor 198.51.100.1 remote-as 10
 #   neighbor 198.51.100.1 activate
 #   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+#   neighbor 198.51.100.1 route-server-client
 #   neighbor 198.51.100.1 slow-peer detection threshold 150
+#   neighbor 198.51.100.1 route-map test-route out
 #  exit-address-family
+
+# Using Deleted without any config passed
+#"(NOTE: This will delete all of configured AF BGP)"
+
+# Before state:
+# -------------
+#
+# vios#sh running-config | section ^router bgp
+# router bgp 65000
+#  bgp log-neighbor-changes
+#  bgp nopeerup-delay cold-boot 20
 #  !
 #  address-family ipv4 multicast
 #   table-map test_tableMap filter
-#   network 198.51.111.11 mask 255.255.255.255 route-map test
+#   network 1.1.1.1 mask 255.255.255.255 route-map test
 #   aggregate-address 192.0.3.1 255.255.255.255 as-confed-set
 #   default-metric 12
 #   distance bgp 10 10 100
@@ -2660,87 +1808,177 @@ EXAMPLES = """
 #   bgp dmzlink-bw
 #   bgp soft-reconfig-backup
 #  exit-address-family
+#  !
+#  address-family ipv4 multicast vrf blue
+#   bgp aggregate-timer 10
+#   bgp slow-peer detection threshold 150
+#   bgp dampening 1 1 1 1
+#   network 198.51.110.10 mask 255.255.255.255 backdoor
+#   aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
+#   neighbor 198.51.100.1 remote-as 10
+#   neighbor 198.51.100.1 activate
+#   neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
+#   neighbor 198.51.100.1 route-server-client
+#   neighbor 198.51.100.1 slow-peer detection threshold 150
+#   neighbor 198.51.100.1 route-map test-route out
+#  exit-address-family
+
+- name: 'Delete ALL of configured AF BGP (Note: This WILL delete the all configured
+    AF BGP)'
+  cisco.ios.ios_bgp_address_family:
+    state: deleted
+
+# Commands fired:
+# ---------------
+# "commands": [
+#       "router bgp 65000",
+#       "no address-family ipv4 multicast vrf blue",
+#       "no address-family ipv4 multicast",
+#       "no address-family ipv4 mdt"
+#   ]
+
+# After state:
+# -------------
+#
+# vios#sh running-config | section ^router bgp
+# router bgp 65000
+#  bgp log-neighbor-changes
+#  bgp nopeerup-delay cold-boot 20
+
+# Using Gathered
+# Before state:
+# -------------
+#
+# vios#sh running-config | section ^router bgp
 
 - name: Gather listed AF BGP with provided configurations
   cisco.ios.ios_bgp_address_family:
     config:
     state: gathered
 
-# Task Output:
-# ------------
+# Module Execution Result:
+# ------------------------
 #
-# gathered:
-#     address_family:
-#     - afi: ipv4
-#       aggregate_addresses:
-#       - address: 192.0.2.1
-#         as_confed_set: true
-#         netmask: 255.255.255.255
-#       bgp:
-#         aggregate_timer: 10
-#         dampening:
-#           max_suppress: 1
-#           penalty_half_time: 1
-#           reuse_route_val: 1
-#           suppress_route_val: 1
-#         slow_peer_options:
-#           detection:
-#             threshold: 150
-#       neighbors:
-#       - activate: true
-#         aigp:
-#           send:
-#             cost_community:
-#               id: 100
-#               poi:
-#                 igp_cost: true
-#                 transitive: true
-#         neighbor_address: 198.51.100.1
-#         slow_peer_options:
-#           detection:
-#             threshold: 150
-#       networks:
-#       - address: 198.51.110.10
-#         backdoor: true
-#         mask: 255.255.255.255
-#       snmp:
-#         context:
-#           community:
-#             acl: '10'
-#             ro: true
-#             snmp_community: community
-#           name: snmp_con
-#     - afi: ipv4
-#       aggregate_addresses:
-#       - address: 192.0.3.1
-#         as_confed_set: true
-#         netmask: 255.255.255.255
-#       default_metric: 12
-#       distance:
-#         external: 10
-#         internal: 10
-#         local: 100
-#       networks:
-#       - address: 198.51.111.11
-#         mask: 255.255.255.255
-#         route_map: test
-#       safi: multicast
-#       table_map:
-#         filter: true
-#         name: test_tableMap
-#     - afi: ipv4
-#       bgp:
-#         dampening:
-#           max_suppress: 5
-#           penalty_half_time: 1
-#           reuse_route_val: 10
-#           suppress_route_val: 100
-#         dmzlink_bw: true
-#         soft_reconfig_backup: true
-#       safi: mdt
-#     as_number: '65000'
+# "gathered": {
+#       "address_family": [
+#           {
+#               "afi": "ipv4",
+#               "aggregate_address": [{
+#                   "address": "192.0.2.1",
+#                   "as_confed_set": true,
+#                   "netmask": "255.255.255.255"
+#               }],
+#               "bgp": {
+#                   "aggregate_timer": 10,
+#                   "dampening": {
+#                       "max_suppress": 1,
+#                       "penalty_half_time": 1,
+#                       "reuse_route_val": 1,
+#                       "suppress_route_val": 1
+#                   },
+#                   "slow_peer": [
+#                       {
+#                           "detection": {
+#                               "threshold": 150
+#                           }
+#                       }
+#                   ]
+#               },
+#               "neighbor": [
+#                   {
+#                       "activate": true,
+#                       "address": "198.51.100.1",
+#                       "aigp": {
+#                           "send": {
+#                               "cost_community": {
+#                                   "id": 100,
+#                                   "poi": {
+#                                       "igp_cost": true,
+#                                       "transitive": true
+#                                   }
+#                               }
+#                           }
+#                       },
+#                       "remote_as": 10,
+#                       "route_maps": [{
+#                           "name": "test-route",
+#                           "out": true
+#                       }],
+#                       "route_server_client": true,
+#                       "slow_peer": [
+#                           {
+#                               "detection": {
+#                                   "threshold": 150
+#                               }
+#                           }
+#                       ]
+#                   }
+#               ],
+#               "network": [
+#                   {
+#                       "address": "198.51.110.10",
+#                       "backdoor": true,
+#                       "mask": "255.255.255.255"
+#                   }
+#               ],
+#               "safi": "multicast",
+#               "snmp": {
+#                   "context": {
+#                       "community": {
+#                           "acl": "10",
+#                           "ro": true,
+#                           "snmp_community": "community"
+#                       },
+#                       "name": "snnmp_con_1"
+#                   }
+#               },
+#               "vrf": "blue"
+#           },
+#           {
+#               "afi": "ipv4",
+#               "aggregate_address": [{
+#                   "address": "192.0.3.1",
+#                   "as_confed_set": true,
+#                   "netmask": "255.255.255.255"
+#               }],
+#               "default_metric": 12,
+#               "distance": {
+#                   "external": 10,
+#                   "internal": 10,
+#                   "local": 100
+#               },
+#               "network": [
+#                   {
+#                       "address": "1.1.1.1",
+#                       "mask": "255.255.255.255",
+#                       "route_map": "test"
+#                   }
+#               ],
+#               "safi": "multicast",
+#               "table_map": {
+#                   "filter": true,
+#                   "name": "test_tableMap"
+#               }
+#           },
+#           {
+#               "afi": "ipv4",
+#               "bgp": {
+#                   "dampening": {
+#                       "max_suppress": 5,
+#                       "penalty_half_time": 1,
+#                       "reuse_route_val": 10,
+#                       "suppress_route_val": 100
+#                   },
+#                   "dmzlink_bw": true,
+#                   "soft_reconfig_backup": true
+#               },
+#               "safi": "mdt"
+#           }
+#       ],
+#       "as_number": "65000"
+#   }
 
-# Using rendered
+# Using Rendered
 
 - name: Rendered the provided configuration with the existing running configuration
   cisco.ios.ios_bgp_address_family:
@@ -2804,27 +2042,32 @@ EXAMPLES = """
             soft_reconfig_backup: true
     state: rendered
 
-# Task Output:
-# ------------
+# Module Execution Result:
+# ------------------------
 #
-# rendered:
-# - router bgp 65000
-# - address-family ipv4 multicast vrf blue
-# - bgp aggregate-timer 10
-# - bgp dampening 1 1 1 1
-# - bgp slow-peer detection threshold 150
-# - snmp context snmp_con community community ro 10
-# - neighbor 198.51.100.1 remote-as 10
-# - neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive
-# - neighbor 198.51.100.1 slow-peer detection threshold 150
-# - network 198.51.110.10 mask 255.255.255.255 backdoor
-# - aggregate-address 192.0.2.1 255.255.255.255 as-confed-set
-# - address-family ipv4 mdt
-# - bgp dmzlink-bw
-# - bgp soft-reconfig-backup
-# - bgp dampening 1 10 100 5
+# "rendered": [
+#     "router bgp 65000",
+#     "address-family ipv4 multicast vrf blue",
+#     "bgp aggregate-timer 10",
+#     "bgp slow-peer detection threshold 150",
+#     "bgp dampening 1 1 1 1",
+#     "neighbor 198.51.100.1 remote-as 10",
+#     "neighbor 198.51.100.1 aigp send cost-community 100 poi igp-cost transitive",
+#     "neighbor 198.51.100.1 route-map test-route out",
+#     "neighbor 198.51.100.1 route-server-client",
+#     "neighbor 198.51.100.1 slow-peer detection threshold 150",
+#     "network 198.51.110.10 mask 255.255.255.255 backdoor",
+#     "snmp context snnmp_con_1 community community ro 10",
+#     "aggregate-address 192.0.2.1 255.255.255.255 as-confed-set",
+#     "exit-address-family",
+#     "address-family ipv4 mdt",
+#     "bgp dmzlink-bw",
+#     "bgp dampening 1 10 100 5",
+#     "bgp soft-reconfig-backup"
+#     "exit-address-family",
+# ]
 
-# Using parsed
+# Using Parsed
 
 # File: parsed.cfg
 # ----------------
@@ -2852,81 +2095,57 @@ EXAMPLES = """
     running_config: "{{ lookup('file', 'parsed.cfg') }}"
     state: parsed
 
-# Task Output:
-# ------------
+# Module Execution Result:
+# ------------------------
 #
-# parsed:
-#     address_family:
-#     - afi: ipv4
-#       aggregate_addresses:
-#       - address: 192.0.2.1
-#         as_confed_set: true
-#         netmask: 255.255.255.255
-#       bgp:
-#         aggregate_timer: 10
-#         dampening:
-#           max_suppress: 1
-#           penalty_half_time: 1
-#           reuse_route_val: 1
-#           suppress_route_val: 1
-#         slow_peer_options:
-#           detection:
-#             threshold: 150
-#       neighbors:
-#       - activate: true
-#         aigp:
-#           send:
-#             cost_community:
-#               id: 100
-#               poi:
-#                 igp_cost: true
-#                 transitive: true
-#         neighbor_address: 198.51.100.1
-#         slow_peer_options:
-#           detection:
-#             threshold: 150
-#       networks:
-#       - address: 198.51.110.10
-#         backdoor: true
-#         mask: 255.255.255.255
-#       snmp:
-#         context:
-#           community:
-#             acl: '10'
-#             ro: true
-#             snmp_community: community
-#           name: snmp_con
-#     - afi: ipv4
-#       aggregate_addresses:
-#       - address: 192.0.3.1
-#         as_confed_set: true
-#         netmask: 255.255.255.255
-#       default_metric: 12
-#       distance:
-#         external: 10
-#         internal: 10
-#         local: 100
-#       networks:
-#       - address: 198.51.111.11
-#         mask: 255.255.255.255
-#         route_map: test
-#       safi: multicast
-#       table_map:
-#         filter: true
-#         name: test_tableMap
-#     - afi: ipv4
-#       bgp:
-#         dampening:
-#           max_suppress: 5
-#           penalty_half_time: 1
-#           reuse_route_val: 10
-#           suppress_route_val: 100
-#         dmzlink_bw: true
-#         soft_reconfig_backup: true
-#       safi: mdt
-#     as_number: '65000'
-"""
+# "parsed": {
+#       "address_family": [
+#           {
+#               "afi": "ipv4",
+#               "aggregate_address": [{
+#                   "address": "192.0.3.1",
+#                   "as_confed_set": true,
+#                   "netmask": "255.255.255.255"
+#               }],
+#               "default_metric": 12,
+#               "distance": {
+#                   "external": 10,
+#                   "internal": 10,
+#                   "local": 100
+#               },
+#               "network": [
+#                   {
+#                       "address": "1.1.1.1",
+#                       "mask": "255.255.255.255",
+#                       "route_map": "test"
+#                   }
+#               ],
+#               "safi": "multicast",
+#               "table_map": {
+#                   "filter": true,
+#                   "name": "test_tableMap"
+#               }
+#           },
+#           {
+#               "afi": "ipv4",
+#               "bgp": {
+#                   "dampening": {
+#                       "max_suppress": 5,
+#                       "penalty_half_time": 1,
+#                       "reuse_route_val": 10,
+#                       "suppress_route_val": 100
+#                   },
+#                   "dmzlink_bw": true,
+#                   "soft_reconfig_backup": true
+#               },
+#               "safi": "mdt"
+#           }
+#       ],
+#       "as_number": "65000"
+#   }
 
+
+"""
 
 RETURN = """
 before:

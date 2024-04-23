@@ -11,7 +11,7 @@
       register: result
       cisco.ios.ios_acl_interfaces:
         config:
-          - name: GigabitEthernet2
+          - name: GigabitEthernet0/1
         state: deleted
 
     - ansible.builtin.assert:
@@ -24,7 +24,7 @@
       register: result
       cisco.ios.ios_acl_interfaces:
         config:
-          - name: GigabitEthernet2
+          - name: GigabitEthernet0/1
         state: deleted
 
     - ansible.builtin.assert:

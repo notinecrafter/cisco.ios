@@ -29,12 +29,6 @@ from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.bgp_ad
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.bgp_global.bgp_global import (
     Bgp_globalFacts,
 )
-from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.evpn_evi.evpn_evi import (
-    Evpn_eviFacts,
-)
-from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.evpn_global.evpn_global import (
-    Evpn_globalFacts,
-)
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.hostname.hostname import (
     HostnameFacts,
 )
@@ -42,7 +36,7 @@ from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.interf
     InterfacesFacts,
 )
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.l2_interfaces.l2_interfaces import (
-    L2_interfacesFacts,
+    L2_InterfacesFacts,
 )
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.l3_interfaces.l3_interfaces import (
     L3_InterfacesFacts,
@@ -73,7 +67,7 @@ from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.ntp_gl
     Ntp_globalFacts,
 )
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.ospf_interfaces.ospf_interfaces import (
-    Ospf_interfacesFacts,
+    Ospf_InterfacesFacts,
 )
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.ospfv2.ospfv2 import (
     Ospfv2Facts,
@@ -87,20 +81,14 @@ from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.prefix
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.route_maps.route_maps import (
     Route_mapsFacts,
 )
-from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.service.service import (
-    ServiceFacts,
-)
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.snmp_server.snmp_server import (
     Snmp_serverFacts,
 )
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.static_routes.static_routes import (
-    Static_routesFacts,
+    Static_RoutesFacts,
 )
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.vlans.vlans import (
     VlansFacts,
-)
-from ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.vxlan_vtep.vxlan_vtep import (
-    Vxlan_vtepFacts,
 )
 
 
@@ -113,7 +101,7 @@ FACT_LEGACY_SUBSETS = dict(
 
 FACT_RESOURCE_SUBSETS = dict(
     interfaces=InterfacesFacts,
-    l2_interfaces=L2_interfacesFacts,
+    l2_interfaces=L2_InterfacesFacts,
     vlans=VlansFacts,
     lag_interfaces=Lag_interfacesFacts,
     lacp=LacpFacts,
@@ -122,23 +110,19 @@ FACT_RESOURCE_SUBSETS = dict(
     lldp_interfaces=Lldp_InterfacesFacts,
     l3_interfaces=L3_InterfacesFacts,
     acl_interfaces=Acl_interfacesFacts,
-    static_routes=Static_routesFacts,
+    static_routes=Static_RoutesFacts,
     acls=AclsFacts,
     ospfv2=Ospfv2Facts,
     ospfv3=Ospfv3Facts,
-    ospf_interfaces=Ospf_interfacesFacts,
+    ospf_interfaces=Ospf_InterfacesFacts,
     bgp_global=Bgp_globalFacts,
     bgp_address_family=Bgp_address_familyFacts,
     logging_global=Logging_globalFacts,
     route_maps=Route_mapsFacts,
     prefix_lists=Prefix_listsFacts,
     ntp_global=Ntp_globalFacts,
-    service=ServiceFacts,
     snmp_server=Snmp_serverFacts,
     hostname=HostnameFacts,
-    vxlan_vtep=Vxlan_vtepFacts,
-    evpn_global=Evpn_globalFacts,
-    evpn_evi=Evpn_eviFacts,
 )
 
 
@@ -151,7 +135,12 @@ class Facts(FactsBase):
     def __init__(self, module):
         super(Facts, self).__init__(module)
 
-    def get_facts(self, legacy_facts_type=None, resource_facts_type=None, data=None):
+    def get_facts(
+        self,
+        legacy_facts_type=None,
+        resource_facts_type=None,
+        data=None,
+    ):
         """Collect the facts for ios
         :param legacy_facts_type: List of legacy facts types
         :param resource_facts_type: List of resource fact types
@@ -167,6 +156,9 @@ class Facts(FactsBase):
             )
 
         if self.VALID_LEGACY_GATHER_SUBSETS:
-            self.get_network_legacy_facts(FACT_LEGACY_SUBSETS, legacy_facts_type)
+            self.get_network_legacy_facts(
+                FACT_LEGACY_SUBSETS,
+                legacy_facts_type,
+            )
 
         return self.ansible_facts, self._warnings

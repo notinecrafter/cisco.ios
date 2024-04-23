@@ -19,14 +19,12 @@ short_description: Resource module to configure interfaces.
 description: This module manages the interface attributes of Cisco IOS network devices.
 version_added: 1.0.0
 author:
-  - Sumit Jaiswal (@justjais)
-  - Sagar Paul (@KB-perByte)
+- Sumit Jaiswal (@justjais)
+- Sagar Paul (@KB-perByte)
 notes:
-  - Tested against Cisco IOSXE Version 17.3 on CML.
+  - Tested against Cisco IOSv Version 15.2 on VIRL
   - This module works with connection C(network_cli).
     See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html)
-  - The module examples uses callback plugin (stdout_callback = yaml) to generate task
-    output in yaml format.
 options:
   config:
     description: A dictionary of interface options
@@ -35,53 +33,39 @@ options:
     suboptions:
       name:
         description:
-          - Full name of interface, e.g. GigabitEthernet0/2, loopback999.
+        - Full name of interface, e.g. GigabitEthernet0/2, loopback999.
         type: str
         required: true
       description:
         description:
-          - Interface description.
+        - Interface description.
         type: str
       enabled:
         description:
-          - Administrative state of the interface.
-          - Set the value to C(true) to administratively enable the interface or C(false)
-            to disable it.
+        - Administrative state of the interface.
+        - Set the value to C(true) to administratively enable the interface or C(false)
+          to disable it.
         type: bool
         default: true
       speed:
         description:
-          - Interface link speed. Applicable for Ethernet interfaces only.
+        - Interface link speed. Applicable for Ethernet interfaces only.
         type: str
       mtu:
         description:
-          - MTU for a specific interface. Applicable for Ethernet interfaces only.
-          - Refer to vendor documentation for valid values.
+        - MTU for a specific interface. Applicable for Ethernet interfaces only.
+        - Refer to vendor documentation for valid values.
         type: int
-      mode:
-        description:
-          - Manage Layer2 or Layer3 state of the interface.
-          - For a Layer 2 appliance mode Layer2 adds switchport command ( default impacts idempotency).
-          - For a Layer 2 appliance mode Layer3 adds no switchport command.
-          - For a Layer 3 appliance mode Layer3/2 has no impact rather command fails on apply.
-        choices:
-          - layer2
-          - layer3
-        type: str
       duplex:
         description:
-          - Interface link status. Applicable for Ethernet interfaces only, either in
-            half duplex, full duplex or in automatic state which negotiates the duplex
-            automatically.
+        - Interface link status. Applicable for Ethernet interfaces only, either in
+          half duplex, full duplex or in automatic state which negotiates the duplex
+          automatically.
         type: str
         choices:
-          - full
-          - half
-          - auto
-      template:
-        description:
-          - IOS template name.
-        type: str
+        - full
+        - half
+        - auto
   running_config:
     description:
       - This option is used only with state I(parsed).
@@ -93,14 +77,14 @@ options:
     type: str
   state:
     choices:
-      - merged
-      - replaced
-      - overridden
-      - deleted
-      - rendered
-      - gathered
-      - purged
-      - parsed
+    - merged
+    - replaced
+    - overridden
+    - deleted
+    - rendered
+    - gathered
+    - purged
+    - parsed
     default: merged
     description:
       - The state the configuration should be left in
@@ -130,180 +114,71 @@ EXAMPLES = """
 # Before state:
 # -------------
 #
-# Router#sh running-config | section interface
-# interface Loopback888
-#  no ip address
-# interface Loopback999
-#  no ip address
-# interface GigabitEthernet1
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  description Configured and Merged by Ansible Network
-#  ip address dhcp
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  no ip address
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
-
-- name: Merge provided configuration with device configuration
-  cisco.ios.ios_interfaces:
-    config:
-      - name: GigabitEthernet2
-        description: Configured and Merged by Ansible Network
-        enabled: true
-      - name: GigabitEthernet3
-        description: Configured and Merged by Ansible Network
-        mtu: 3800
-        enabled: false
-        speed: 100
-        duplex: full
-    state: merged
-
-# Task Output
-# -----------
-#
-# before:
-# - enabled: true
-#   name: GigabitEthernet1
-# - description: Configured and Merged by Ansible Network
-#   enabled: true
-#   name: GigabitEthernet2
-#   speed: '1000'
-# - description: Configured and Merged by Ansible Network
-#   enabled: false
-#   mtu: 3800
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: true
-#   name: Loopback888
-# - enabled: true
-#   name: Loopback999
-# commands:
-# - interface GigabitEthernet3
-# - description Configured and Merged by Ansible Network
-# - speed 100
-# - mtu 3800
-# - duplex full
-# - shutdown
-# after:
-# - enabled: true
-#   name: GigabitEthernet1
-# - description: Configured and Merged by Ansible Network
-#   enabled: true
-#   name: GigabitEthernet2
-#   speed: '1000'
-# - description: Configured and Merged by Ansible Network
-#   enabled: true
-#   mtu: 2800
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: true
-#   name: Loopback888
-# - enabled: true
-#   name: Loopback999
-
-# After state:
-# ------------
-#
-# Router#show running-config | section ^interface
-# interface Loopback888
-#  no ip address
-# interface Loopback999
-#  no ip address
-# interface GigabitEthernet1
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  description Configured and Merged by Ansible Network
-#  ip address dhcp
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Merged by Ansible Network
-#  mtu 3800
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
-
-# Using merged - with mode attribute
-
-# Before state:
-# -------------
-#
 # vios#show running-config | section ^interface
-# interface GigabitEthernet1
+# interface GigabitEthernet0/1
 #  description Configured by Ansible
-# interface GigabitEthernet2
+#  no ip address
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
 #  description This is test
-# interface GigabitEthernet3
-#  description This is test
-#  no switchport
+#  no ip address
+#  duplex auto
+#  speed 1000
+# interface GigabitEthernet0/3
+#  no ip address
+#  duplex auto
+#  speed auto
 
 - name: Merge provided configuration with device configuration
   cisco.ios.ios_interfaces:
     config:
-      - name: GigabitEthernet2
-        description: Configured and Merged by Ansible Network
-        enabled: true
-        mode: layer2
-      - name: GigabitEthernet3
-        description: Configured and Merged by Ansible Network
-        mode: layer3
+    - name: GigabitEthernet0/2
+      description: Configured and Merged by Ansible Network
+      enabled: true
+    - name: GigabitEthernet0/3
+      description: Configured and Merged by Ansible Network
+      mtu: 2800
+      enabled: false
+      speed: 100
+      duplex: full
     state: merged
 
-# Task Output
-# -----------
-#
-# before:
-# - enabled: true
-#   name: GigabitEthernet1
-# - description: Configured and Merged by Ansible Network
-#   name: GigabitEthernet2
-# - description: Configured and Merged by Ansible Network
-#   name: GigabitEthernet3
-# commands:
-# - interface GigabitEthernet2
-# - description Configured and Merged by Ansible Network
-# - switchport
-# - interface GigabitEthernet3
-# - description Configured and Merged by Ansible Network
-# after:
-# - enabled: true
-#   name: GigabitEthernet1
-# - description: Configured and Merged by Ansible Network
-#   enabled: true
-#   name: GigabitEthernet2
-# - description: Configured and Merged by Ansible Network
-#   name: GigabitEthernet3
-#   mode: layer3
+# Commands Fired:
+# ---------------
+
+# "commands": [
+#       "interface GigabitEthernet0/2",
+#       "description Configured and Merged by Ansible Network",
+#       "no shutdown",
+#       "interface GigabitEthernet0/3",
+#       "description Configured and Merged by Ansible Network",
+#       "mtu 2800",
+#       "duplex full",
+#       "shutdown",
+#     ],
 
 # After state:
 # ------------
 #
 # vios#show running-config | section ^interface
-# interface GigabitEthernet1
+# interface GigabitEthernet0/1
 #  description Configured by Ansible
-# interface GigabitEthernet2
+#  no ip address
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
 #  description Configured and Merged by Ansible Network
-# interface GigabitEthernet3
+#  no ip address
+#  duplex auto
+#  speed 1000
+# interface GigabitEthernet0/3
 #  description Configured and Merged by Ansible Network
-#  no switchport
+#  mtu 2800
+#  no ip address
+#  shutdown
+#  duplex full
+#  speed 100
 
 # Using replaced
 
@@ -311,245 +186,134 @@ EXAMPLES = """
 # -------------
 #
 # vios#show running-config | section ^interface
-# interface Loopback888
+# interface GigabitEthernet0/1
 #  no ip address
-# interface Loopback999
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description Configured by Ansible Network
 #  no ip address
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address dhcp
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  no ip address
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
+# interface GigabitEthernet0/3
+#  mtu 2000
 #  no ip address
 #  shutdown
-#  negotiation auto
-# interface Vlan50
-#  ip address dhcp hostname testHostname
+#  duplex full
+#  speed 100
 
 - name: Replaces device configuration of listed interfaces with provided configuration
   cisco.ios.ios_interfaces:
     config:
-      - name: GigabitEthernet3
-        description: Configured and Replaced by Ansible Network
-        enabled: false
-        speed: 1000
+    - name: GigabitEthernet0/3
+      description: Configured and Replaced by Ansible Network
+      enabled: false
+      duplex: auto
+      mtu: 2500
+      speed: 1000
     state: replaced
 
-# Task Output
-# -----------
-#
-# before:
-# - description: Management interface do not change
-#   enabled: true
-#   name: GigabitEthernet1
-# - enabled: true
-#   name: GigabitEthernet2
-#   speed: '1000'
-# - enabled: true
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: true
-#   name: Loopback888
-# - enabled: true
-#   name: Loopback999
-# - enabled: true
-#   name: Vlan50
-# commands:
-# - interface GigabitEthernet3
-# - description Configured and Replaced by Ansible Network
-# - shutdown
-# after:
-# - description: Management interface do not change
-#   enabled: true
-#   name: GigabitEthernet1
-# - enabled: true
-#   name: GigabitEthernet2
-#   speed: '1000'
-# - description: Configured and Replaced by Ansible Network
-#   enabled: false
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: true
-#   name: Loopback888
-# - enabled: true
-#   name: Loopback999
-# - enabled: true
-#   name: Vlan50
+# Commands Fired:
+# ---------------
+
+# "commands": [
+#       "interface GigabitEthernet0/3",
+#       "description Configured and Replaced by Ansible Network",
+#       "mtu 2500",
+#       "duplex auto",
+#       "speed 1000",
+#     ],
 
 # After state:
 # -------------
 #
 # vios#show running-config | section ^interface
-# interface Loopback888
+# interface GigabitEthernet0/1
 #  no ip address
-# interface Loopback999
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description Configured by Ansible Network
 #  no ip address
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address dhcp
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
+# interface GigabitEthernet0/3
 #  description Configured and Replaced by Ansible Network
+#  mtu 2500
 #  no ip address
 #  shutdown
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
-# interface Vlan50
-#  ip address dhcp hostname testHostname
 
 # Using overridden
 
 # Before state:
 # -------------
 #
-# vios#show running-config | section ^interface
-# interface Loopback888
+# vios#show running-config | section ^interface#
+# interface GigabitEthernet0/1
+#  description Configured by Ansible
 #  no ip address
-# interface Loopback999
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description This is test
 #  no ip address
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address dhcp
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Replaced by Ansible Network
+# interface GigabitEthernet0/3
+#  description Configured by Ansible
+#  mtu 2800
 #  no ip address
 #  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
-# interface Vlan50
-#  ip address dhcp hostname testHostname
+#  duplex full
+#  speed 100
 
 - name: Override device configuration of all interfaces with provided configuration
   cisco.ios.ios_interfaces:
     config:
-      - description: Management interface do not change
-        enabled: true
-        name: GigabitEthernet1
-      - name: GigabitEthernet2
-        description: Configured and Overridden by Ansible Network
-        speed: 10000
-      - name: GigabitEthernet3
-        description: Configured and Overridden by Ansible Network
-        enabled: false
+    - name: GigabitEthernet0/2
+      description: Configured and Overridden by Ansible Network
+      speed: 1000
+    - name: GigabitEthernet0/3
+      description: Configured and Overridden by Ansible Network
+      enabled: false
+      duplex: full
+      mtu: 2000
     state: overridden
 
-# Task Output
-# -----------
-#
-# before:
-# - description: Management interface do not change
-#   enabled: true
-#   name: GigabitEthernet1
-# - enabled: true
-#   name: GigabitEthernet2
-#   speed: '1000'
-# - description: Configured and Replaced by Ansible Network
-#   enabled: false
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: true
-#   name: Loopback888
-# - enabled: true
-#   name: Loopback999
-# - enabled: true
-#   name: Vlan50
-# commands:
-# - interface loopback888
-# - shutdown
-# - interface loopback999
-# - shutdown
-# - interface Vlan50
-# - shutdown
-# - interface GigabitEthernet2
-# - description Configured and Overridden by Ansible Network
-# - speed 10000
-# - interface GigabitEthernet3
-# - description Configured and Overridden by Ansible Network
-# - no speed 1000
-# after:
-# - description: Management interface do not change
-#   enabled: true
-#   name: GigabitEthernet1
-# - description: Configured and Overridden by Ansible Network
-#   enabled: true
-#   name: GigabitEthernet2
-#   speed: '10000'
-# - description: Configured and Overridden by Ansible Network
-#   enabled: false
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: false
-#   name: Loopback888
-# - enabled: false
-#   name: Loopback999
-# - enabled: false
-#   name: Vlan50
+# "commands": [
+#       "interface GigabitEthernet0/1",
+#       "no description description Configured by Ansible",
+#       "no duplex auto",
+#       "no speed auto",
+#       "interface GigabitEthernet0/2",
+#       "description Configured and Overridden by Ansible Network",
+#       "interface GigabitEthernet0/3",
+#       "description Configured and Overridden by Ansible Network",
+#       "mtu 2000",
+#     ],
 
 # After state:
 # -------------
 #
 # vios#show running-config | section ^interface
-# interface Loopback888
+# interface GigabitEthernet0/1
 #  no ip address
-#  shutdown
-# interface Loopback999
-#  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  description Configured and Overridden by Ansible Network
-#  ip address dhcp
-#  speed 10000
-#  no negotiation auto
-# interface GigabitEthernet3
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
 #  description Configured and Overridden by Ansible Network
 #  no ip address
-#  shutdown
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
+# interface GigabitEthernet0/3
+#  description Configured and Overridden by Ansible Network
+#  mtu 2000
 #  no ip address
 #  shutdown
-#  negotiation auto
-# interface Vlan50
-#  ip address dhcp hostname testHostname
-#  shutdown
+#  duplex full
+#  speed auto
 
 # Using Deleted
 
@@ -557,121 +321,55 @@ EXAMPLES = """
 # -------------
 #
 # vios#show running-config | section ^interface
-# interface Loopback888
+# interface GigabitEthernet0/1
 #  no ip address
-#  shutdown
-# interface Loopback999
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description Configured by Ansible Network
 #  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  description Configured and Overridden by Ansible Network
-#  ip address dhcp
-#  speed 10000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+#  mtu 2500
 #  no ip address
 #  shutdown
-#  negotiation auto
-# interface Vlan50
-#  ip address dhcp hostname testHostname
-#  shutdown
+#  duplex full
+#  speed 1000
 
-- name: "Delete interface attributes (Note: This won't delete the interface itself)"
+- name: "Delete module attributes of given interfaces (Note: This won't delete the interface itself)"
   cisco.ios.ios_interfaces:
     config:
-      - name: GigabitEthernet2
+    - name: GigabitEthernet0/2
     state: deleted
 
-# Task Output
-# -----------
-#
-# before:
-# - description: Management interface do not change
-#   enabled: true
-#   name: GigabitEthernet1
-# - description: Configured and Overridden by Ansible Network
-#   enabled: true
-#   name: GigabitEthernet2
-#   speed: '10000'
-# - description: Configured and Overridden by Ansible Network
-#   enabled: false
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: false
-#   name: Loopback888
-# - enabled: false
-#   name: Loopback999
-# - enabled: false
-#   name: Vlan50
-# commands:
-# - interface GigabitEthernet2
-# - no description Configured and Overridden by Ansible Network
-# - no speed 10000
-# - shutdown
-# after:
-# - description: Management interface do not change
-#   enabled: true
-#   name: GigabitEthernet1
-# - enabled: false
-#   name: GigabitEthernet2
-#   speed: '1000'
-# - description: Configured and Overridden by Ansible Network
-#   enabled: false
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: false
-#   name: Loopback888
-# - enabled: false
-#   name: Loopback999
-# - enabled: false
-#   name: Vlan50
+# "commands": [
+#       "interface GigabitEthernet0/2",
+#       "no description description Configured by Ansible Network",
+#       "no duplex auto",
+#       "no speed 1000",
+#     ],
 
 # After state:
 # -------------
 #
 # vios#show running-config | section ^interface
-# interface Loopback888
+# interface GigabitEthernet0/1
+#  no ip address
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  no ip address
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+#  mtu 2500
 #  no ip address
 #  shutdown
-# interface Loopback999
-#  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address dhcp
-#  shutdown
+#  duplex full
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
-# interface Vlan50
-#  ip address dhcp hostname testHostname
-#  shutdown
 
 # Using Purged
 
@@ -680,247 +378,196 @@ EXAMPLES = """
 #
 # vios#show running-config | section ^interface
 # interface Loopback888
+# interface Port-channel10
+# interface GigabitEthernet0/1
 #  no ip address
-#  shutdown
-# interface Loopback999
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description Configured by Ansible Network
 #  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address dhcp
-#  shutdown
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+#  mtu 2500
 #  no ip address
 #  shutdown
+#  duplex full
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
-# interface Vlan50
-#  ip address dhcp hostname testHostname
-#  shutdown
 
 - name: "Purge given interfaces (Note: This will delete the interface itself)"
   cisco.ios.ios_interfaces:
     config:
-      - name: Loopback888
-      - name: Vlan50
+    - name: Loopback888
+    - name: Port-channel10
     state: purged
 
-# Task Output
-# -----------
-#
-# before:
-# - description: Management interface do not change
-#   enabled: true
-#   name: GigabitEthernet1
-# - enabled: false
-#   name: GigabitEthernet2
-#   speed: '1000'
-# - description: Configured and Overridden by Ansible Network
-#   enabled: false
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: false
-#   name: Loopback888
-# - enabled: false
-#   name: Loopback999
-# - enabled: false
-#   name: Vlan50
-# commands:
-# - no interface loopback888
-# - no interface Vlan50
-# after:
-# - description: Management interface do not change
-#   enabled: true
-#   name: GigabitEthernet1
-# - enabled: false
-#   name: GigabitEthernet2
-#   speed: '1000'
-# - description: Configured and Overridden by Ansible Network
-#   enabled: false
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: false
-#   name: Loopback999
+# "commands": [
+#       "no interface Loopback888",
+#       "no interface Port-channel10",
+#     ],
 
 # After state:
 # -------------
 #
 # vios#show running-config | section ^interface
-# interface Loopback999
+# interface GigabitEthernet0/1
 #  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address dhcp
-#  shutdown
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description Configured by Ansible Network
+#  no ip address
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+#  mtu 2500
 #  no ip address
 #  shutdown
+#  duplex full
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
 
-# Using gathered
+
+# Using Gathered
 
 # Before state:
 # -------------
 #
 # vios#sh running-config | section ^interface
-# interface Loopback999
-#  no ip address
+# interface GigabitEthernet0/1
+#  description this is interface1
+#  mtu 65
+#  duplex auto
+#  speed 10
+# interface GigabitEthernet0/2
+#  description this is interface2
+#  mtu 110
 #  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address dhcp
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
+#  duplex auto
+#  speed 100
 
-- name: Gather facts of interfaces
+- name: Gather listed interfaces with provided configurations
   cisco.ios.ios_interfaces:
     config:
     state: gathered
 
-# Task Output
-# -----------
+# Module Execution Result:
+# ------------------------
 #
-# gathered:
-# - description: Management interface do not change
-#   enabled: true
-#   name: GigabitEthernet1
-# - enabled: false
-#   name: GigabitEthernet2
-#   speed: '1000'
-# - description: Configured and Overridden by Ansible Network
-#   enabled: false
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: false
-#   name: Loopback999
+# "gathered": [
+#         {
+#             "description": "this is interface1",
+#             "duplex": "auto",
+#             "enabled": true,
+#             "mtu": 65,
+#             "name": "GigabitEthernet0/1",
+#             "speed": "10"
+#         },
+#         {
+#             "description": "this is interface2",
+#             "duplex": "auto",
+#             "enabled": false,
+#             "mtu": 110,
+#             "name": "GigabitEthernet0/2",
+#             "speed": "100"
+#         }
+#     ]
 
-# Using rendered
+# After state:
+# ------------
+#
+# vios#sh running-config | section ^interface
+# interface GigabitEthernet0/1
+#  description this is interface1
+#  mtu 65
+#  duplex auto
+#  speed 10
+# interface GigabitEthernet0/2
+#  description this is interface2
+#  mtu 110
+#  shutdown
+#  duplex auto
+#  speed 100
 
-- name: Render the commands for provided configuration
+# Using Rendered
+
+- name: Render the commands for provided  configuration
   cisco.ios.ios_interfaces:
     config:
-      - name: GigabitEthernet1
-        description: Configured by Ansible-Network
-        mtu: 110
-        enabled: true
-        duplex: half
-      - name: GigabitEthernet2
-        description: Configured by Ansible-Network
-        mtu: 2800
-        enabled: false
-        speed: 100
-        duplex: full
+    - name: GigabitEthernet0/1
+      description: Configured by Ansible-Network
+      mtu: 110
+      enabled: true
+      duplex: half
+    - name: GigabitEthernet0/2
+      description: Configured by Ansible-Network
+      mtu: 2800
+      enabled: false
+      speed: 100
+      duplex: full
     state: rendered
 
-# Task Output
-# -----------
+# Module Execution Result:
+# ------------------------
 #
-# rendered:
-# - interface GigabitEthernet1
-# - description Configured by Ansible-Network
-# - mtu 110
-# - duplex half
-# - no shutdown
-# - interface GigabitEthernet2
-# - description Configured by Ansible-Network
-# - speed 100
-# - mtu 2800
-# - duplex full
-# - shutdown
+# "rendered": [
+#         "interface GigabitEthernet0/1",
+#         "description Configured by Ansible-Network",
+#         "mtu 110",
+#         "duplex half",
+#         "no shutdown",
+#         "interface GigabitEthernet0/2",
+#         "description Configured by Ansible-Network",
+#         "mtu 2800",
+#         "speed 100",
+#         "duplex full",
+#         "shutdown"
+#         ]
 
-# Using parsed
+# Using Parsed
 
 # File: parsed.cfg
 # ----------------
 #
-# interface Loopback999
-#  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address dhcp
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
+# interface GigabitEthernet0/1
+# description interfaces 0/1
+# mtu 110
+# duplex half
+# no shutdown
+# interface GigabitEthernet0/2
+# description interfaces 0/2
+# mtu 2800
+# speed 100
+# duplex full
+# shutdown
 
-- name: Parse the provided configuration
+- name: Parse the commands for provided configuration
   cisco.ios.ios_interfaces:
     running_config: "{{ lookup('file', 'parsed.cfg') }}"
     state: parsed
 
-# Task Output
-# -----------
+# Module Execution Result:
+# ------------------------
 #
-# parsed:
-# - description: Management interface do not change
-#   enabled: true
-#   name: GigabitEthernet1
-# - enabled: false
-#   name: GigabitEthernet2
-#   speed: '1000'
-# - description: Configured and Overridden by Ansible Network
-#   enabled: false
-#   name: GigabitEthernet3
-#   speed: '1000'
-# - enabled: false
-#   name: GigabitEthernet4
-# - enabled: false
-#   name: Loopback999
+# "parsed": [
+#         {
+#             "description": "interfaces 0/1",
+#             "duplex": "half",
+#             "enabled": true,
+#             "mtu": 110,
+#             "name": "GigabitEthernet0/1"
+#         },
+#         {
+#             "description": "interfaces 0/2",
+#             "duplex": "full",
+#             "enabled": true,
+#             "mtu": 2800,
+#             "name": "GigabitEthernet0/2",
+#             "speed": "100"
+#         }
+#     ]
 """
 
 RETURN = """
@@ -968,7 +615,6 @@ parsed:
   sample: >
     This output will always be in the same format as the
     module argspec.
-
 """
 
 from ansible.module_utils.basic import AnsibleModule

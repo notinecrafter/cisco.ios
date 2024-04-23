@@ -12,32 +12,21 @@
           - name: Loopback999
             ipv4:
               - address: 192.0.2.1/24
-          - name: GigabitEthernet2
+          - name: GigabitEthernet0/1
+            ipv4:
+              - dhcp:
+                  client_id: GigabitEthernet0/0
+                  hostname: test.com
             ipv6:
               - autoconfig:
                   enable: true
-          - name: GigabitEthernet3
+          - name: GigabitEthernet0/2
             ipv4:
               - address: 198.51.100.1/24
                 secondary: true
               - address: 198.51.100.2/24
             ipv6:
               - address: 2001:db8:0:3::/64
-          - name: Vlan101
-            ipv4:
-              - address: 198.51.100.2/24
-            mac_address: dead:beef:abcd
-          - name: Vlan901
-            autostate: false
-            ipv4:
-              - source_interface:
-                  name: Loopback1
-            ipv6:
-              - enable: true
-          - name: Vlan902
-            autostate: true
-            ipv6:
-              - enable: true
         state: merged
 
     - name: L3_interface merged - assert that correct set of commands were generated

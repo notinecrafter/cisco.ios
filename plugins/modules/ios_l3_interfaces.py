@@ -17,18 +17,16 @@ DOCUMENTATION = """
 module: ios_l3_interfaces
 short_description: Resource module to configure L3 interfaces.
 description:
-  - This module provides declarative management of Layer-3 interface on Cisco IOS devices.
+- This module provides declarative management of Layer-3 interface on Cisco IOS devices.
 version_added: 1.0.0
 author:
-  - Sagar Paul (@KB-perByte)
-  - Sumit Jaiswal (@justjais)
+- Sagar Paul (@KB-perByte)
+- Sumit Jaiswal (@justjais)
 notes:
-  - Tested against Cisco IOSXE Version 17.3 on CML.
+  - Tested against Cisco IOSv Version 15.6.
   - Using deleted state without config will delete all l3 attributes from all the interfaces.
   - This module works with connection C(network_cli).
     See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html)
-  - The module examples uses callback plugin (stdout_callback = yaml) to generate task
-    output in yaml format.
 options:
   config:
     description: A dictionary of Layer-3 interface options
@@ -37,47 +35,39 @@ options:
     suboptions:
       name:
         description:
-          - Full name of the interface excluding any logical unit number, i.e. GigabitEthernet0/1.
+        - Full name of the interface excluding any logical unit number, i.e. GigabitEthernet0/1.
         type: str
         required: true
-      autostate:
-        description:
-          - Enable autostate determination for VLAN.
-        type: bool
-      mac_address:
-        description:
-          - Manually set interface MAC address.
-        type: str
       ipv4:
         description:
-          - IPv4 address to be set for the Layer-3 interface mentioned in I(name) option.
-            The address format is <ipv4 address>/<mask>, the mask is number in range
-            0-32 eg. 192.168.0.1/24.
+        - IPv4 address to be set for the Layer-3 interface mentioned in I(name) option.
+          The address format is <ipv4 address>/<mask>, the mask is number in range
+          0-32 eg. 192.168.0.1/24.
         type: list
         elements: dict
         suboptions:
           address:
             description:
-              - Configures the IPv4 address for Interface.
+            - Configures the IPv4 address for Interface.
             type: str
           secondary:
             description:
-              - Configures the IP address as a secondary address.
+            - Configures the IP address as a secondary address.
             type: bool
           dhcp_client:
             description:
-              - Configures and specifies client-id to use over DHCP ip. Note, This option
-                shall work only when dhcp is configured as IP.
-              - GigabitEthernet interface number
-              - This option is DEPRECATED and is replaced with dhcp which
-                accepts dict as input this attribute will be removed after 2023-08-01.
+            - Configures and specifies client-id to use over DHCP ip. Note, This option
+              shall work only when dhcp is configured as IP.
+            - GigabitEthernet interface number
+            - This option is DEPRECATED and is replaced with dhcp which
+              accepts dict as input this attribute will be removed after 2023-08-01.
             type: str
           dhcp_hostname:
             description:
-              - Configures and specifies value for hostname option over DHCP ip. Note,
-                This option shall work only when dhcp is configured as IP.
-              - This option is DEPRECATED and is replaced with dhcp which
-                accepts dict as input this attribute will be removed after 2023-08-01.
+            - Configures and specifies value for hostname option over DHCP ip. Note,
+              This option shall work only when dhcp is configured as IP.
+            - This option is DEPRECATED and is replaced with dhcp which
+              accepts dict as input this attribute will be removed after 2023-08-01.
             type: str
           dhcp:
             description: IP Address negotiated via DHCP.
@@ -95,30 +85,17 @@ options:
           pool:
             description: IP Address auto-configured from a local DHCP pool.
             type: str
-          source_interface:
-            description: Enable IP processing without an explicit address
-            type: dict
-            suboptions:
-              name:
-                description: Interface name
-                type: str
-              poll:
-                description: Enable IP connected host polling
-                type: bool
-              point_to_point:
-                description: Enable point-to-point connection
-                type: bool
       ipv6:
         description:
-          - IPv6 address to be set for the Layer-3 interface mentioned in I(name) option.
-          - The address format is <ipv6 address>/<mask>, the mask is number in range
-            0-128 eg. fd5d:12c9:2201:1::1/64
+        - IPv6 address to be set for the Layer-3 interface mentioned in I(name) option.
+        - The address format is <ipv6 address>/<mask>, the mask is number in range
+          0-128 eg. fd5d:12c9:2201:1::1/64
         type: list
         elements: dict
         suboptions:
           address:
             description:
-              - Configures the IPv6 address for Interface.
+            - Configures the IPv6 address for Interface.
             type: str
           autoconfig:
             description: Obtain address using auto-configuration.
@@ -140,9 +117,6 @@ options:
               rapid_commit:
                 description: Enable Rapid-Commit.
                 type: bool
-          enable:
-            description: Enable IPv6 on interface
-            type: bool
           anycast:
             description: Configure as an anycast
             type: bool
@@ -179,13 +153,13 @@ options:
     type: str
   state:
     choices:
-      - merged
-      - replaced
-      - overridden
-      - deleted
-      - rendered
-      - gathered
-      - parsed
+    - merged
+    - replaced
+    - overridden
+    - deleted
+    - rendered
+    - gathered
+    - parsed
     default: merged
     description:
       - The state the configuration should be left in
@@ -208,640 +182,443 @@ options:
 """
 
 EXAMPLES = """
-# Using merged
+# Using state merged
 
 # Before state:
 # -------------
-#
-# Router#show running-config | section ^interface
-# interface Loopback999
+
+# router-ios#show running-config | section ^interface
+# interface GigabitEthernet0/1
+#  description Configured by Ansible
+#  ip address 10.1.1.1 255.255.255.0
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description This is test
 #  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address dhcp
-#  shutdown
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
 #  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
+# interface GigabitEthernet0/3.100
+#  encapsulation dot1Q 20
 
 - name: Merge provided configuration with device configuration
   cisco.ios.ios_l3_interfaces:
     config:
-      - name: GigabitEthernet0/1
-        ipv4:
-          - address: 192.168.0.1/24
-            secondary: true
-      - name: GigabitEthernet2
-        ipv4:
-          - address: 192.168.0.2/24
-      - name: GigabitEthernet3
-        ipv6:
-          - address: fd5d:12c9:2201:1::1/64
-      - name: GigabitEthernet3.100
-        ipv4:
-          - address: 192.168.0.3/24
-      - name: Vlan901
-        autostate: false
-        ipv4:
-          - source_interface:
-              name: Loopback1
-        ipv6:
-          - enable: true
+    - name: GigabitEthernet0/1
+      ipv4:
+      - address: 192.168.0.1/24
+        secondary: true
+    - name: GigabitEthernet0/2
+      ipv4:
+      - address: 192.168.0.2/24
+    - name: GigabitEthernet0/3
+      ipv6:
+      - address: fd5d:12c9:2201:1::1/64
+    - name: GigabitEthernet0/3.100
+      ipv4:
+      - address: 192.168.0.3/24
     state: merged
 
-# Task Output
-# -----------
-#
-# before:
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet1
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet2
-# - name: GigabitEthernet3
-# - name: GigabitEthernet4
-# - name: Loopback999
-# commands:
-# - interface GigabitEthernet2
-# - ip address 192.168.0.2 255.255.255.0
-# - interface GigabitEthernet3
-# - ipv6 address fd5d:12c9:2201:1::1/64
-# - interface GigabitEthernet3.100
-# - ip address 192.168.0.3 255.255.255.0
-# - interface Vlan901
-# - ip unnumbered Loopback1
-# - ipv6 enable
-# - no autostate
-# after:
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet1
-# - ipv4:
-#   - address: 192.168.0.2/24
-#   name: GigabitEthernet2
-# - ipv6:
-#   - address: FD5D:12C9:2201:1::1/64
-#   name: GigabitEthernet3
-# - name: GigabitEthernet3.100
-#   ipv4:
-#   - address: 192.168.0.3/24
-# - name: GigabitEthernet4
-# - name: Loopback999
-#   ipv4:
-#   - source_interface:
-#       name: Loopback1
-#   ipv6:
-#   - enable: true
-#   autostate: false
-# - name: Vlan901
+# Commands Fired:
+# ---------------
+
+# "commands": [
+#       "interface GigabitEthernet0/1",
+#       "ip address 192.168.0.1 255.255.255.0 secondary",
+#       "interface GigabitEthernet0/2",
+#       "ip address 192.168.0.2 255.255.255.0",
+#       "interface GigabitEthernet0/3",
+#       "ipv6 address fd5d:12c9:2201:1::1/64",
+#       "GigabitEthernet0/3.100",
+#       "ip address 192.168.0.3 255.255.255.0",
+#     ],
 
 # After state:
 # ------------
-#
-# Router#show running-config | section ^interface
-# interface Loopback999
-#  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
+
+# router-ios#show running-config | section ^interface
+# interface GigabitEthernet0/1
+#  description Configured by Ansible
+#  ip address 10.1.1.1 255.255.255.0
+#  ip address 192.168.0.1 255.255.255.0 secondary
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description This is test
 #  ip address 192.168.0.2 255.255.255.0
-#  shutdown
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
 #  ipv6 address FD5D:12C9:2201:1::1/64
-# interface GigabitEthernet3.100
+# interface GigabitEthernet0/3.100
+#  encapsulation dot1Q 20
 #  ip address 192.168.0.3 255.255.255.0
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
-# interface Vlan901
-#  ip unnumbered Loopback1
-#  ipv6 enable
-#  no autostate
 
-
-# Using replaced
+# Using state replaced
 
 # Before state:
 # -------------
-#
-# Router#show running-config | section ^interface
-# interface Loopback999
+
+# router-ios#show running-config | section ^interface
+# interface GigabitEthernet0/1
+#  description Configured by Ansible
+#  ip address 10.1.1.1 255.255.255.0
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description This is test
 #  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
+#  duplex auto
+#  speed 1000
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+#  ip address 192.168.2.0 255.255.255.0
+# interface GigabitEthernet0/3.100
+#  encapsulation dot1Q 20
 #  ip address 192.168.0.2 255.255.255.0
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-#  ipv6 address FD5D:12C9:2201:1::1/64
-# interface GigabitEthernet3.100
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
 
 - name: Replaces device configuration of listed interfaces with provided configuration
   cisco.ios.ios_l3_interfaces:
     config:
-      - name: GigabitEthernet2
-        ipv4:
-          - address: 192.168.2.0/24
-      - name: GigabitEthernet3
-        ipv4:
-          - dhcp:
-              client_id: GigabitEthernet2
-              hostname: test.com
+    - name: GigabitEthernet0/2
+      ipv4:
+      - address: 192.168.2.0/24
+    - name: GigabitEthernet0/3
+      ipv4:
+      - dhcp:
+          client_id: GigabitEthernet0/2
+          hostname: test.com
+    - name: GigabitEthernet0/3.100
+      ipv4:
+      - address: 192.168.0.3/24
+        secondary: true
     state: replaced
 
-# Task Output
-# -----------
-#
-# before:
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet1
-# - ipv4:
-#   - address: 192.168.0.2/24
-#   name: GigabitEthernet2
-# - ipv6:
-#   - address: FD5D:12C9:2201:1::1/64
-#   name: GigabitEthernet3
-# - name: GigabitEthernet3.100
-# - name: GigabitEthernet4
-# - name: Loopback999
-# commands:
-# - interface GigabitEthernet2
-# - ip address 192.168.0.3 255.255.255.0
-# - no ip address 192.168.0.2 255.255.255.0
-# - interface GigabitEthernet3
-# - ip address dhcp client-id GigabitEthernet2 hostname test.com
-# - no ipv6 address fd5d:12c9:2201:1::1/64
-# after:
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet1
-# - ipv4:
-#   - address: 192.168.0.3/24
-#   name: GigabitEthernet2
-# - ipv4:
-#   - dhcp:
-#       client_id: GigabitEthernet2
-#       enable: true
-#       hostname: test.com
-#   name: GigabitEthernet3
-# - name: GigabitEthernet3.100
-# - name: GigabitEthernet4
-# - name: Loopback999
+# Commands Fired:
+# ---------------
+
+# "commands": [
+#       "interface GigabitEthernet0/1",
+#       "ip address 192.168.0.1 255.255.255.0 secondary",
+#       "interface GigabitEthernet0/2",
+#       "ip address 192.168.0.2 255.255.255.0",
+#       "interface GigabitEthernet0/3",
+#       "no ip address 192.168.2.0 255.255.255.0",
+#       "ip address dhcp client-id GigabitEthernet0/2 hostname test.com",
+#       "GigabitEthernet0/3.100",
+#       "no ip address 192.168.0.2 255.255.255.0",
+#       "ip address 192.168.0.3 255.255.255.0 secondary",
+#     ],
 
 # After state:
 # ------------
-#
-# router-ios#show running-config | section ^interface
-# interface Loopback999
-#  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address 192.168.0.3 255.255.255.0
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  ip address dhcp client-id GigabitEthernet2 hostname test.com
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3.100
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
 
-# Using overridden
+# router-ios#show running-config | section ^interface
+# interface GigabitEthernet0/1
+#  description Configured by Ansible
+#  ip address 10.1.1.1 255.255.255.0
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description This is test
+#  ip address 192.168.2.1 255.255.255.0
+#  duplex auto
+#  speed 1000
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+#  ip address dhcp client-id GigabitEthernet0/2 hostname test.com
+# interface GigabitEthernet0/3.100
+#  encapsulation dot1Q 20
+#  ip address 192.168.0.3 255.255.255.0 secondary
+
+# Using state overridden
 
 # Before state:
 # -------------
-#
+
 # router-ios#show running-config | section ^interface
-# interface Loopback999
-#  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address 192.168.0.3 255.255.255.0
-#  shutdown
+# interface GigabitEthernet0/1
+#  description Configured by Ansible
+#  ip address 10.1.1.1 255.255.255.0
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description This is test
+#  ip address 192.168.2.1 255.255.255.0
+#  duplex auto
 #  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  ip address dhcp client-id GigabitEthernet2 hostname test.com
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3.100
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+#  ipv6 address FD5D:12C9:2201:1::1/64
+# interface GigabitEthernet0/3.100
+#  encapsulation dot1Q 20
+#  ip address 192.168.0.2 255.255.255.0
 
 - name: Override device configuration of all interfaces with provided configuration
   cisco.ios.ios_l3_interfaces:
     config:
-      - ipv4:
-          - dhcp:
-              enable: true
-        name: GigabitEthernet1
-      - name: GigabitEthernet2
-        ipv4:
-          - address: 192.168.0.1/24
-      - name: GigabitEthernet3
+    - name: GigabitEthernet0/2
+      ipv4:
+      - address: 192.168.0.1/24
+    - name: GigabitEthernet0/3.100
+      ipv6:
+      - autoconfig: true
     state: overridden
 
-# Task Output
-# -----------
-# before:
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet1
-# - ipv4:
-#   - address: 192.168.0.3/24
-#   name: GigabitEthernet2
-# - ipv4:
-#   - dhcp:
-#       client_id: GigabitEthernet2
-#       enable: true
-#       hostname: test.com
-#   name: GigabitEthernet3
-# - name: GigabitEthernet3.100
-# - name: GigabitEthernet4
-# - name: Loopback999
-# commands:
-# - interface GigabitEthernet2
-# - ip address 192.168.0.1 255.255.255.0
-# - no ip address 192.168.0.3 255.255.255.0
-# - interface GigabitEthernet3
-# - no ip address dhcp client-id GigabitEthernet2 hostname test.com
-# after:
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet1
-# - ipv4:
-#   - address: 192.168.0.1/24
-#   name: GigabitEthernet2
-# - name: GigabitEthernet3
-# - name: GigabitEthernet3.100
-# - name: GigabitEthernet4
-# - name: Loopback999
+# Commands Fired:
+# ---------------
+
+# "commands": [
+#       "interface GigabitEthernet0/1",
+#       "no ip address 10.1.1.1 255.255.255.0",
+#       "interface GigabitEthernet0/2",
+#       "no ip address 192.168.2.1 255.255.255.0",
+#       "ip address 192.168.0.1 255.255.255.0",
+#       "interface GigabitEthernet0/3",
+#       "no ipv6 address FD5D:12C9:2201:1::1/64",
+#       "GigabitEthernet0/3.100",
+#       "no ip address 192.168.0.2 255.255.255.0",
+#       "ipv6 address autoconfig",
+#     ],
 
 # After state:
 # ------------
-#
-# router-ios#show running-config | section ^interface
-# interface Loopback999
-#  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address 192.168.0.1 255.255.255.0
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3.100
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
 
-# Using deleted
+# router-ios#show running-config | section ^interface
+# interface GigabitEthernet0/1
+#  description Configured by Ansible
+#  no ip address
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description This is test
+#  ip address 192.168.0.1 255.255.255.0
+#  duplex auto
+#  speed 1000
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+# interface GigabitEthernet0/3.100
+#  encapsulation dot1Q 20
+#  ipv6 address autoconfig
+
+# Using state Deleted
 
 # Before state:
 # -------------
-#
+
 # router-ios#show running-config | section ^interface
-# interface Loopback999
-#  no ip address
+# interface GigabitEthernet0/1
+#  ip address 192.0.2.10 255.255.255.0
 #  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description Configured by Ansible Network
+#  ip address 192.168.1.0 255.255.255.0
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
 #  ip address 192.168.0.1 255.255.255.0
 #  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3.100
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
+#  duplex full
+#  speed 10
+#  ipv6 address FD5D:12C9:2201:1::1/64
+# interface GigabitEthernet0/3.100
+#  encapsulation dot1Q 20
+#  ip address 192.168.0.2 255.255.255.0
 
-- name: "Delete attributes of given interfaces (NOTE: This won't delete the interfaces)"
+- name: "Delete attributes of given interfaces (NOTE: This won't delete the interfaces itself)"
   cisco.ios.ios_l3_interfaces:
     config:
-      - name: GigabitEthernet2
-      - name: GigabitEthernet3.100
+    - name: GigabitEthernet0/2
+    - name: GigabitEthernet0/3.100
     state: deleted
 
-# Task Output
-# -----------
-#
-# before:
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet1
-# - ipv4:
-#   - address: 192.168.0.1/24
-#   name: GigabitEthernet2
-# - name: GigabitEthernet3
-# - name: GigabitEthernet3.100
-# - name: GigabitEthernet4
-# - name: Loopback999
-# commands:
-# - interface GigabitEthernet2
-# - no ip address 192.168.0.1 255.255.255.0
-# after:
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet1
-# - name: GigabitEthernet2
-# - name: GigabitEthernet3
-# - name: GigabitEthernet3.100
-# - name: GigabitEthernet4
-# - name: Loopback999
+# "commands": [
+#       "interface GigabitEthernet0/2",
+#       "no ip address 192.168.1.0 255.255.255.0",
+#       "GigabitEthernet0/3.100",
+#       "no ip address 192.168.0.2 255.255.255.0",
+#     ],
 
 # After state:
 # -------------
-#
-# router-ios#show running-config | section ^interface
-# interface Loopback999
-#  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3.100
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
 
-# Using deleted without config passed, only interface's configuration will be negated
+# router-ios#show running-config | section ^interface
+# interface GigabitEthernet0/1
+#  ip address 192.0.2.10 255.255.255.0
+#  shutdown
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description Configured by Ansible Network
+#  no ip address
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+#  ip address 192.168.0.1 255.255.255.0
+#  shutdown
+#  duplex full
+#  speed 10
+#  ipv6 address FD5D:12C9:2201:1::1/64
+# interface GigabitEthernet0/3.100
+#  encapsulation dot1Q 20
+
+# Using state Deleted without any config passed
+#"(NOTE: This will delete all of configured L3 resource module attributes from each configured interface)"
 
 # Before state:
 # -------------
 
 # router-ios#show running-config | section ^interface
-# interface Loopback999
-#  no ip address
+# interface GigabitEthernet0/1
+#  ip address 192.0.2.10 255.255.255.0
 #  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address 192.168.0.2 255.255.255.0
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description Configured by Ansible Network
+#  ip address 192.168.1.0 255.255.255.0
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+#  ip address 192.168.0.1 255.255.255.0
 #  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
+#  duplex full
+#  speed 10
 #  ipv6 address FD5D:12C9:2201:1::1/64
-# interface GigabitEthernet3.100
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
+# interface GigabitEthernet0/3.100
+#  encapsulation dot1Q 20
+#  ip address 192.168.0.2 255.255.255.0
 
-- name: "Delete L3 config of all interfaces"
+- name: "Delete L3 attributes of ALL interfaces together (NOTE: This won't delete the interface itself)"
   cisco.ios.ios_l3_interfaces:
     state: deleted
 
-# Task Output
-# -----------
-#
-# before:
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet1
-# - ipv4:
-#   - address: 192.168.0.2/24
-#   name: GigabitEthernet2
-# - ipv6:
-#   - address: FD5D:12C9:2201:1::1/64
-#   name: GigabitEthernet3
-# - name: GigabitEthernet3.100
-# - name: GigabitEthernet4
-# - name: Loopback999
-# commands:
-# - interface GigabitEthernet1
-# - no ip address dhcp
-# - interface GigabitEthernet2
-# - no ip address 192.168.0.2 255.255.255.0
-# - interface GigabitEthernet3
-# - no ipv6 address fd5d:12c9:2201:1::1/64
-# after:
-# - name: GigabitEthernet1
-# - name: GigabitEthernet2
-# - name: GigabitEthernet3
-# - name: GigabitEthernet3.100
-# - name: GigabitEthernet4
-# - name: Loopback999
+# "commands": [
+#       "interface GigabitEthernet0/1",
+#       "no ip address 192.0.2.10 255.255.255.0",
+#       "interface GigabitEthernet0/2",
+#       "no ip address 192.168.1.0 255.255.255.0",
+#       "interface GigabitEthernet0/3",
+#       "no ip address 192.168.0.1 255.255.255.0",
+#       "no ipv6 address FD5D:12C9:2201:1::1/64",
+#       "GigabitEthernet0/3.100",
+#       "no ip address 192.168.0.2 255.255.255.0",
+#     ],
 
 # After state:
 # -------------
-#
-# interface Loopback999
-#  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  negotiation auto
-# interface GigabitEthernet2
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  no ip address
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3.100
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
 
-# Using gathered
+# router-ios#show running-config | section ^interface
+# interface GigabitEthernet0/1
+#  no ip address
+#  shutdown
+#  duplex auto
+#  speed auto
+# interface GigabitEthernet0/2
+#  description Configured by Ansible Network
+#  no ip address
+# interface GigabitEthernet0/3
+#  description Configured by Ansible Network
+#  shutdown
+#  duplex full
+#  speed 10
+# interface GigabitEthernet0/3.100
+#  encapsulation dot1Q 20
+
+# Using state Gathered
 
 # Before state:
 # -------------
-#
-# Router#show running-config | section ^interface
-# interface Loopback999
-#  no ip address
-#  shutdown
-# interface GigabitEthernet1
-#  description Management interface do not change
-#  ip address dhcp
-#  negotiation auto
-# interface GigabitEthernet2
-#  ip address 192.168.0.3 255.255.255.0
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3
-#  description Configured and Overridden by Ansible Network
-#  ip address dhcp client-id GigabitEthernet2 hostname test.com
-#  shutdown
-#  speed 1000
-#  no negotiation auto
-# interface GigabitEthernet3.100
-# interface GigabitEthernet4
-#  no ip address
-#  shutdown
-#  negotiation auto
 
-- name: Gather facts for l3 interfaces
+# router-ios#sh running-config | section ^interface
+# interface GigabitEthernet0/1
+#  ip address 203.0.113.27 255.255.255.0
+# interface GigabitEthernet0/2
+#  ip address 192.0.2.1 255.255.255.0 secondary
+#  ip address 192.0.2.2 255.255.255.0
+#  ipv6 address 2001:DB8:0:3::/64
+
+- name: Gather listed l3 interfaces with provided configurations
   cisco.ios.ios_l3_interfaces:
     state: gathered
 
-# Task Output
-# -----------
-#
-# gathered:
-# - ipv4:
-#   - dhcp:
-#       enable: true
-#   name: GigabitEthernet1
-# - ipv4:
-#   - address: 192.168.0.3/24
-#   name: GigabitEthernet2
-# - ipv4:
-#   - dhcp:
-#       client_id: GigabitEthernet2
-#       enable: true
-#       hostname: test.com
-#   name: GigabitEthernet3
-# - name: GigabitEthernet3.100
-# - name: GigabitEthernet4
-# - name: Loopback999
+# Module Execution Result:
+# ------------------------
 
-# Using rendered
+# "gathered": [
+#         {
+#             "ipv4": [
+#                 {
+#                     "address": "203.0.113.27 255.255.255.0"
+#                 }
+#             ],
+#             "name": "GigabitEthernet0/1"
+#         },
+#         {
+#             "ipv4": [
+#                 {
+#                     "address": "192.0.2.1 255.255.255.0",
+#                     "secondary": true
+#                 },
+#                 {
+#                     "address": "192.0.2.2 255.255.255.0"
+#                 }
+#             ],
+#             "ipv6": [
+#                 {
+#                     "address": "2001:db8:0:3::/64"
+#                 }
+#             ],
+#             "name": "GigabitEthernet0/2"
+#         }
+#     ]
+
+# After state:
+# ------------
+
+# router-ios#sh running-config | section ^interface
+# interface GigabitEthernet0/1
+#  ip address 203.0.113.27 255.255.255.0
+# interface GigabitEthernet0/2
+#  ip address 192.0.2.1 255.255.255.0 secondary
+#  ip address 192.0.2.2 255.255.255.0
+#  ipv6 address 2001:DB8:0:3::/64
+
+# Using state Rendered
 
 - name: Render the commands for provided configuration
   cisco.ios.ios_l3_interfaces:
     config:
-      - name: GigabitEthernet1
-        ipv4:
-          - dhcp:
-              client_id: GigabitEthernet0/0
-              hostname: test.com
-      - name: GigabitEthernet2
-        ipv4:
-          - address: 198.51.100.1/24
-            secondary: true
-          - address: 198.51.100.2/24
-        ipv6:
-          - address: 2001:db8:0:3::/64
+    - name: GigabitEthernet0/1
+      ipv4:
+      - dhcp:
+          client_id: GigabitEthernet0/0
+          hostname: test.com
+    - name: GigabitEthernet0/2
+      ipv4:
+      - address: 198.51.100.1/24
+        secondary: true
+      - address: 198.51.100.2/24
+      ipv6:
+      - address: 2001:db8:0:3::/64
     state: rendered
 
-# Task Output
-# -----------
-#
-# rendered:
-# - interface GigabitEthernet1
-# - ip address dhcp client-id GigabitEthernet0/0 hostname test.com
-# - interface GigabitEthernet2
-# - ip address 198.51.100.1 255.255.255.0 secondary
-# - ip address 198.51.100.2 255.255.255.0
-# - ipv6 address 2001:db8:0:3::/64
+# Module Execution Result:
+# ------------------------
 
-# Using parsed
+# "rendered": [
+#         "interface GigabitEthernet0/1",
+#         "ip address dhcp client-id GigabitEthernet 0/0 hostname test.com",
+#         "interface GigabitEthernet0/2",
+#         "ip address 198.51.100.1 255.255.255.0 secondary",
+#         "ip address 198.51.100.2 255.255.255.0",
+#         "ipv6 address 2001:db8:0:3::/64"
+#     ]
+
+# Using state Parsed
 
 # File: parsed.cfg
 # ----------------
@@ -853,27 +630,45 @@ EXAMPLES = """
 #  ip address 198.51.100.2 255.255.255.0 secondary
 #  ipv6 address 2001:db8:0:3::/64
 
-- name: Parse the provided configuration
+- name: Parse the commands for provided configuration
   cisco.ios.ios_l3_interfaces:
     running_config: "{{ lookup('file', 'parsed.cfg') }}"
     state: parsed
 
-# Task Output
-# -----------
-#
-# parsed:
-# - ipv4:
-#   - dhcp:
-#       client_id: GigabitEthernet0/0
-#       hostname: test.com
-#   name: GigabitEthernet0/1
-# - ipv4:
-#   - address: 198.51.100.1/24
-#     secondary: true
-#   - address: 198.51.100.2/24
-#   ipv6:
-#   - address: 2001:db8:0:3::/64
-#   name: GigabitEthernet0/2
+# Module Execution Result:
+# ------------------------
+
+# "parsed": [
+#         {
+#             "ipv4": [
+#                 {
+#                     "dhcp": {
+#                         "client_id": GigabitEthernet0/0,
+#                         "hostname": "test.com"
+#                     }
+#                 }
+#             ],
+#             "name": "GigabitEthernet0/1"
+#         },
+#         {
+#             "ipv4": [
+#                 {
+#                     "address": "198.51.100.1/24",
+#                     "secondary": true
+#                 },
+#                 {
+#                     "address": "198.51.100.2/24"
+#                 }
+#             ],
+#             "ipv6": [
+#                 {
+#                     "address": "2001:db8:0:3::/64"
+#                 }
+#             ],
+#             "name": "GigabitEthernet0/2"
+#         }
+#     ]
+
 """
 
 RETURN = """

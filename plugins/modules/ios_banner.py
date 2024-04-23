@@ -24,49 +24,48 @@ module: ios_banner
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
 short_description: Module to configure multiline banners.
 description:
-  - This will configure both login and motd banners on remote devices running Cisco
-    IOS. It allows playbooks to add or remote banner text from the active running configuration.
+- This will configure both login and motd banners on remote devices running Cisco
+  IOS. It allows playbooks to add or remote banner text from the active running configuration.
 version_added: 1.0.0
 extends_documentation_fragment:
-  - cisco.ios.ios
+- cisco.ios.ios
 notes:
-  - Tested against Cisco IOSXE Version 17.3 on CML.
+  - Tested against IOS 15.6
   - This module works with connection C(network_cli).
     See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html)
 options:
   banner:
     description:
-      - Specifies which banner should be configured on the remote device. In Ansible
-        2.4 and earlier only I(login) and I(motd) were supported.
+    - Specifies which banner should be configured on the remote device. In Ansible
+      2.4 and earlier only I(login) and I(motd) were supported.
     required: true
     choices:
-      - login
-      - motd
-      - exec
-      - incoming
-      - slip-ppp
+    - login
+    - motd
+    - exec
+    - incoming
+    - slip-ppp
     type: str
   multiline_delimiter:
     description:
-      - Specify the delimiting character than will be used for configuration.
-    default: "@"
+    - Specify the delimiting character than will be used for configuration.
+    default: '@'
     type: str
   text:
     description:
-      - The banner text that should be present in the remote device running configuration.  This
-        argument accepts a multiline string, with no empty lines. Requires I(state=present).
+    - The banner text that should be present in the remote device running configuration.  This
+      argument accepts a multiline string, with no empty lines. Requires I(state=present).
     type: str
   state:
     description:
-      - Specifies whether or not the configuration is present in the current devices
-        active running configuration.
+    - Specifies whether or not the configuration is present in the current devices
+      active running configuration.
     default: present
     type: str
     choices:
-      - present
-      - absent
+    - present
+    - absent
 """
-
 EXAMPLES = """
 - name: Configure the login banner
   cisco.ios.ios_banner:
@@ -85,7 +84,7 @@ EXAMPLES = """
 - name: Configure banner from file
   cisco.ios.ios_banner:
     banner: motd
-    text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"  # Use unix formatted text files (LF not CRLF) to avoid idempotency issues.
+    text: "{{ lookup('file', './config_partial/raw_banner.cfg') }}"
     state: present
 
 - name: Configure the login banner using delimiter
@@ -95,7 +94,6 @@ EXAMPLES = """
     text: this is my login banner
     state: present
 """
-
 RETURN = """
 commands:
   description: The list of configuration mode commands to send to the device
@@ -113,6 +111,7 @@ from ansible.module_utils.basic import AnsibleModule
 
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.ios import (
     get_config,
+    ios_argument_spec,
     load_config,
 )
 
@@ -145,9 +144,16 @@ def map_config_to_obj(module):
     :param module:
     :return: banner config dict object.
     """
-    out = get_config(module, flags="| begin banner %s" % module.params["banner"])
+    out = get_config(
+        module,
+        flags="| begin banner %s" % module.params["banner"],
+    )
     if out:
-        regex = search("banner " + module.params["banner"] + " \\^C{1,}\n", out, M)
+        regex = search(
+            "banner " + module.params["banner"] + " \\^C{1,}\n",
+            out,
+            M,
+        )
         if regex:
             regex = regex.group()
             output = str((out.split(regex))[1].split("^C\n")[0])
@@ -175,11 +181,15 @@ def map_params_to_obj(module):
 def main():
     """main entry point for module execution"""
     argument_spec = dict(
-        banner=dict(required=True, choices=["login", "motd", "exec", "incoming", "slip-ppp"]),
+        banner=dict(
+            required=True,
+            choices=["login", "motd", "exec", "incoming", "slip-ppp"],
+        ),
         multiline_delimiter=dict(default="@"),
         text=dict(),
         state=dict(default="present", choices=["present", "absent"]),
     )
+    argument_spec.update(ios_argument_spec)
     required_if = [("state", "present", ("text",))]
     module = AnsibleModule(
         argument_spec=argument_spec,

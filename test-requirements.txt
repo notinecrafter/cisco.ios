@@ -1,9 +1,8 @@
-# For ansible-tox-linters
-black==23.3.0
+black==22.3.0 ; python_version > '3.5'
 flake8
-yamllint
-
-# Unit test runner
-pytest-ansible
+mock ; python_version < '3.5'
+pexpect
 pytest-xdist
-pytest-cov
+yamllint
+coverage==4.5.4
+git+https://github.com/ansible-community/pytest-ansible-units.git

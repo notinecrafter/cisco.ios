@@ -7,10 +7,11 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
+
 from textwrap import dedent
-from unittest.mock import patch
 
 from ansible_collections.cisco.ios.plugins.modules import ios_acl_interfaces
+from ansible_collections.cisco.ios.tests.unit.compat.mock import patch
 from ansible_collections.cisco.ios.tests.unit.modules.utils import set_module_args
 
 from .ios_module import TestIosModule
@@ -22,11 +23,32 @@ class TestIosAclInterfacesModule(TestIosModule):
     def setUp(self):
         super(TestIosAclInterfacesModule, self).setUp()
 
+        self.mock_get_config = patch(
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
+        )
+        self.get_config = self.mock_get_config.start()
+
+        self.mock_load_config = patch(
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
+        )
+        self.load_config = self.mock_load_config.start()
+
+        self.mock_get_resource_connection_config = patch(
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base."
+            "get_resource_connection",
+        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
+
         self.mock_get_resource_connection_facts = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
             "get_resource_connection",
         )
         self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
+
+        self.mock_edit_config = patch(
+            "ansible_collections.cisco.ios.plugins.module_utils.network.ios.providers.providers.CliProvider.edit_config",
+        )
+        self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
             "ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.acl_interfaces.acl_interfaces."
@@ -36,8 +58,18 @@ class TestIosAclInterfacesModule(TestIosModule):
 
     def tearDown(self):
         super(TestIosAclInterfacesModule, self).tearDown()
+        self.mock_get_resource_connection_config.stop()
         self.mock_get_resource_connection_facts.stop()
+        self.mock_edit_config.stop()
+        self.mock_get_config.stop()
+        self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
+
+    # def load_fixtures(self, commands=None):
+    #     def load_from_file(*args, **kwargs):
+    #         return load_fixture("ios_acl_interfaces.cfg")
+
+    #     self.execute_show_command.side_effect = load_from_file
 
     def test_ios_acl_interfaces_merged(self):
         self.execute_show_command.return_value = dedent(
@@ -69,7 +101,10 @@ class TestIosAclInterfacesModule(TestIosModule):
                                 afi="ipv6",
                                 acls=[
                                     dict(name="merge_temp_v6", direction="in"),
-                                    dict(name="merge_test_v6", direction="out"),
+                                    dict(
+                                        name="merge_test_v6",
+                                        direction="out",
+                                    ),
                                 ],
                             ),
                         ],
@@ -349,7 +384,9 @@ class TestIosAclInterfacesModule(TestIosModule):
              ip access-group 123 out
             """,
         )
-        set_module_args(dict(config=[dict(name="GigabitEthernet0/1")], state="deleted"))
+        set_module_args(
+            dict(config=[dict(name="GigabitEthernet0/1")], state="deleted"),
+        )
         commands = [
             "interface GigabitEthernet0/1",
             "no ip access-group 110 in",
@@ -372,7 +409,9 @@ class TestIosAclInterfacesModule(TestIosModule):
              ip access-group 123 out
             """,
         )
-        set_module_args(dict(config=[dict(name="GigabitEthernet0/1")], state="deleted"))
+        set_module_args(
+            dict(config=[dict(name="GigabitEthernet0/1")], state="deleted"),
+        )
         commands = [
             "interface GigabitEthernet0/1",
             "no ip access-group 110 in",
@@ -394,8 +433,14 @@ class TestIosAclInterfacesModule(TestIosModule):
             {
                 "name": "GigabitEthernet0/1",
                 "access_groups": [
-                    {"afi": "ipv4", "acls": [{"name": 110, "direction": "in"}]},
-                    {"afi": "ipv6", "acls": [{"name": "test_v6", "direction": "out"}]},
+                    {
+                        "afi": "ipv4",
+                        "acls": [{"name": 110, "direction": "in"}],
+                    },
+                    {
+                        "afi": "ipv6",
+                        "acls": [{"name": "test_v6", "direction": "out"}],
+                    },
                 ],
             },
         ]

@@ -42,9 +42,6 @@ class LacpFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
-    def get_lacp_data(self, connection):
-        return connection.get("show lacp sys-id")
-
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for lacp
         :param connection: the device connection
@@ -53,9 +50,11 @@ class LacpFacts(object):
         :rtype: dictionary
         :returns: facts
         """
+        if connection:
+            pass
 
         if not data:
-            data = self.get_lacp_data(connection)
+            data = connection.get("show lacp sys-id")
 
         obj = {}
         if data:

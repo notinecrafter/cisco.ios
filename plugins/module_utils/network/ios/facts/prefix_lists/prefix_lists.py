@@ -15,6 +15,9 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
+from copy import copy
+
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.argspec.prefix_lists.prefix_lists import (
@@ -33,7 +36,9 @@ class Prefix_listsFacts(object):
         self.argument_spec = Prefix_listsArgs.argument_spec
 
     def get_prefix_list_data(self, connection):
-        return connection.get("show running-config | section ^ip prefix-list|^ipv6 prefix-list")
+        return connection.get(
+            "show running-config | section ^ip prefix-list|^ipv6 prefix-list",
+        )
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for Prefix_lists network resource
@@ -56,26 +61,70 @@ class Prefix_listsFacts(object):
         objs = prefix_lists_parser.parse()
 
         final_objs = []
-
-        _prefix_list = {"ipv4": [], "ipv6": []}
+        temp = {}
+        temp["afi"] = None
+        temp["prefix_lists"] = []
         if objs:
-            for prefixes in list(objs.values()):
-                _afi = prefixes.pop("afi")
-                _prefix_list[_afi].append(
-                    prefixes,
+            for k, v in iteritems(objs):
+                temp_prefix_list = {}
+                temp_prefix_list["entries"] = []
+                if not temp["afi"] or v["afi"] != temp["afi"]:
+                    if temp and temp["afi"]:
+                        temp["prefix_lists"] = sorted(
+                            temp["prefix_lists"],
+                            key=lambda k, sk="name": str(k[sk]),
+                        )
+                        # additional check for py3.5
+                        if len(final_objs) == 2:
+                            for each in final_objs:
+                                if v["afi"] == each["afi"]:
+                                    each["prefix_lists"].extend(
+                                        temp["prefix_lists"],
+                                    )
+                        else:
+                            final_objs.append(copy(temp))
+                            temp["prefix_lists"] = []
+                    temp["afi"] = v["afi"]
+                for each in v["prefix_lists"]:
+                    if not temp_prefix_list.get("name"):
+                        temp_prefix_list["name"] = each["name"]
+                    if not temp_prefix_list.get("description") and each.get(
+                        "description",
+                    ):
+                        temp_prefix_list["description"] = each["description"]
+                    if each["entries"] and not each["entries"].get(
+                        "description",
+                    ):
+                        temp_prefix_list["entries"].append(each["entries"])
+                temp["prefix_lists"].append(temp_prefix_list)
+            if temp and temp["afi"]:
+                temp["prefix_lists"] = sorted(
+                    temp["prefix_lists"],
+                    key=lambda k, sk="name": str(k[sk]),
                 )
-            if _prefix_list.get("ipv4"):
-                final_objs.append({"afi": "ipv4", "prefix_lists": _prefix_list.pop("ipv4")})
-            if _prefix_list.get("ipv6"):
-                final_objs.append({"afi": "ipv6", "prefix_lists": _prefix_list.pop("ipv6")})
+                # additional check for py3.5
+                if len(final_objs) == 2:
+                    for each in final_objs:
+                        if v["afi"] == each["afi"]:
+                            each["prefix_lists"].extend(temp["prefix_lists"])
+                else:
+                    final_objs.append(copy(temp))
 
-            ansible_facts["ansible_network_resources"].pop("prefix_lists", None)
+            final_objs = sorted(final_objs, key=lambda k, sk="afi": k[sk])
 
-        params = utils.remove_empties(
-            utils.validate_config(self.argument_spec, {"config": final_objs}),
-        )
+            ansible_facts["ansible_network_resources"].pop(
+                "prefix_lists",
+                None,
+            )
 
-        facts["prefix_lists"] = params.get("config", [])
-        ansible_facts["ansible_network_resources"].update(facts)
+            params = utils.remove_empties(
+                utils.validate_config(
+                    self.argument_spec,
+                    {"config": final_objs},
+                ),
+            )
+
+            facts["prefix_lists"] = params["config"]
+            ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

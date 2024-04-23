@@ -11,4 +11,4 @@
 - ansible.builtin.assert:
     that:
       - result.changed == false
-      - "{{ parsed['config'] | symmetric_difference(result['parsed']) |length == 0 }}"
+      - "{{ merged['after'] | symmetric_difference(result['parsed']) |length == 0 }}"

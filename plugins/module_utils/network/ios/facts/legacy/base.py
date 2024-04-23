@@ -31,6 +31,7 @@ from ansible_collections.cisco.ios.plugins.module_utils.network.ios.ios import (
 
 
 class FactsBase(object):
+
     COMMANDS = list()
 
     def __init__(self, module):
@@ -40,13 +41,18 @@ class FactsBase(object):
         self.responses = None
 
     def populate(self):
-        self.responses = run_commands(self.module, commands=self.COMMANDS, check_rc=False)
+        self.responses = run_commands(
+            self.module,
+            commands=self.COMMANDS,
+            check_rc=False,
+        )
 
     def run(self, cmd):
         return run_commands(self.module, commands=cmd, check_rc=False)
 
 
 class Default(FactsBase):
+
     COMMANDS = ["show version", "show switch virtual", "show inventory"]
 
     def populate(self):
@@ -55,7 +61,6 @@ class Default(FactsBase):
         data = self.responses[0]
         if data:
             self.facts["iostype"] = self.parse_iostype(data)
-            self.facts["operatingmode"] = self.parse_operatingmode(data, self.facts["iostype"])
             self.facts["serialnum"] = self.parse_serialnum(data)
             self.parse_stacks(data)
         data = self.responses[1] + self.responses[2]
@@ -70,14 +75,6 @@ class Default(FactsBase):
         else:
             return "IOS"
 
-    def parse_operatingmode(self, data, iostype):
-        # for older ios versions default being autonomous where operating mode classification not present
-        match = re.search(r"Router\soperating\smode: (\S+)", data)
-        if (match and "autonomous" in match.group(1).lower()) or iostype == "IOS":
-            return "autonomous"
-        else:
-            return "controller"
-
     def parse_serialnum(self, data):
         match = re.search(r"board ID (\S+)", data)
         if match:
@@ -88,7 +85,11 @@ class Default(FactsBase):
         if match:
             self.facts["stacked_models"] = match
 
-        match = re.findall(r"^System [Ss]erial [Nn]umber\s+: (\S+)", data, re.M)
+        match = re.findall(
+            r"^System [Ss]erial [Nn]umber\s+: (\S+)",
+            data,
+            re.M,
+        )
         if match:
             self.facts["stacked_serialnums"] = match
 
@@ -96,7 +97,11 @@ class Default(FactsBase):
             self.facts["virtual_switch"] = "STACK"
 
     def parse_virtual_switch(self, data):
-        match = re.search(r"^Virtual switch domain number : ([0-9]+)", data, re.M)
+        match = re.search(
+            r"^Virtual switch domain number : ([0-9]+)",
+            data,
+            re.M,
+        )
         if match:
             self.facts["virtual_switch"] = "VSS"
             self.facts["virtual_switch_domain"] = match.group(1)
@@ -125,31 +130,27 @@ class Default(FactsBase):
 
 
 class Hardware(FactsBase):
-    COMMANDS = ["dir", "show memory statistics", "show processes cpu | include CPU utilization"]
+
+    COMMANDS = ["dir", "show memory statistics"]
 
     def populate(self):
         warnings = list()
         super(Hardware, self).populate()
-
         data = self.responses[0]
         if data:
             self.facts["filesystems"] = self.parse_filesystems(data)
             self.facts["filesystems_info"] = self.parse_filesystems_info(data)
-        self.facts["cpu_utilization"] = self.parse_cpu_utilization(self.responses[2])
 
         data = self.responses[1]
         if data:
             if "Invalid input detected" in data:
                 warnings.append("Unable to gather memory statistics")
             else:
-                for line in data.splitlines():
-                    match = re.match(
-                        r"Processor\s+(\S+|\d+)\s+(?P<total>\d+)\s+\d+\s+(?P<free>\d+)",
-                        line,
-                    )
-                    if match:
-                        self.facts["memtotal_mb"] = int(match.group("total")) / 1048576
-                        self.facts["memfree_mb"] = int(match.group("free")) / 1048576
+                processor_line = [line for line in data.splitlines() if "Processor" in line].pop()
+                match = re.findall(r"\s(\d+)\s", processor_line)
+                if match:
+                    self.facts["memtotal_mb"] = int(match[0]) / 1024
+                    self.facts["memfree_mb"] = int(match[3]) / 1024
 
     def parse_filesystems(self, data):
         return re.findall(r"^Directory of (\S+)/", data, re.M)
@@ -169,39 +170,9 @@ class Hardware(FactsBase):
                 facts[fs]["spacefree_kb"] = int(match.group(2)) / 1024
         return facts
 
-    def parse_cpu_utilization(self, data):
-        facts = {}
-        regex_cpu_utilization = re.compile(
-            r"""
-            (^Core\s(?P<core>\d+)?:)?
-            (^|\s)CPU\sutilization\sfor\sfive\sseconds:
-            (\s(?P<f_sec>\d+)?%)?
-            (\s(?P<f_se_nom>\d+)%/(?P<f_s_denom>\d+)%\)?)?
-            ;\sone\sminute:\s(?P<a_min>\d+)?%
-            ;\sfive\sminutes:\s(?P<f_min>\d+)?%
-            """,
-            re.VERBOSE,
-        )
-        for line in data.split("\n"):
-            match_cpu_utilization = regex_cpu_utilization.match(line)
-            if match_cpu_utilization:
-                _core = "core"
-                if match_cpu_utilization.group("core"):
-                    _core = "core_" + str(match_cpu_utilization.group("core"))
-                facts[_core] = {}
-                facts[_core]["five_seconds"] = int(
-                    match_cpu_utilization.group("f_se_nom") or match_cpu_utilization.group("f_sec"),
-                )
-                facts[_core]["one_minute"] = int(match_cpu_utilization.group("a_min"))
-                facts[_core]["five_minutes"] = int(match_cpu_utilization.group("f_min"))
-                if match_cpu_utilization.group("f_s_denom"):
-                    facts[_core]["five_seconds_interrupt"] = int(
-                        match_cpu_utilization.group("f_s_denom"),
-                    )
-        return facts
-
 
 class Config(FactsBase):
+
     COMMANDS = ["show running-config"]
 
     def populate(self):
@@ -219,6 +190,7 @@ class Config(FactsBase):
 
 
 class Interfaces(FactsBase):
+
     COMMANDS = [
         "show interfaces",
         "show ip interface",
@@ -255,7 +227,9 @@ class Interfaces(FactsBase):
         if data and not any(err in data for err in lldp_errs):
             neighbors = self.run(["show lldp neighbors detail"])
             if neighbors:
-                self.facts["neighbors"].update(self.parse_neighbors(neighbors[0]))
+                self.facts["neighbors"].update(
+                    self.parse_neighbors(neighbors[0]),
+                )
 
         data = self.responses[4]
         cdp_errs = ["CDP is not enabled"]
@@ -263,7 +237,9 @@ class Interfaces(FactsBase):
         if data and not any(err in data for err in cdp_errs):
             cdp_neighbors = self.run(["show cdp neighbors detail"])
             if cdp_neighbors:
-                self.facts["neighbors"].update(self.parse_cdp_neighbors(cdp_neighbors[0]))
+                self.facts["neighbors"].update(
+                    self.parse_cdp_neighbors(cdp_neighbors[0]),
+                )
 
     def populate_interfaces(self, interfaces):
         facts = dict()
@@ -287,7 +263,11 @@ class Interfaces(FactsBase):
         for key, value in data.items():
             self.facts["interfaces"][key]["ipv4"] = list()
             primary_address = addresses = []
-            primary_address = re.findall(r"Internet address is (.+)$", value, re.M)
+            primary_address = re.findall(
+                r"Internet address is (.+)$",
+                value,
+                re.M,
+            )
             addresses = re.findall(r"Secondary address (.+)$", value, re.M)
             if len(primary_address) == 0:
                 continue
@@ -320,7 +300,9 @@ class Interfaces(FactsBase):
 
     def parse_neighbors(self, neighbors):
         facts = dict()
-        for entry in neighbors.split("------------------------------------------------"):
+        for entry in neighbors.split(
+            "------------------------------------------------",
+        ):
             if entry == "":
                 continue
             intf = self.parse_lldp_intf(entry)
@@ -332,7 +314,6 @@ class Interfaces(FactsBase):
             fact = dict()
             fact["host"] = self.parse_lldp_host(entry)
             fact["port"] = self.parse_lldp_port(entry)
-            fact["ip"] = self.parse_lldp_ip(entry)
             facts[intf].append(fact)
         return facts
 
@@ -351,7 +332,6 @@ class Interfaces(FactsBase):
             fact["host"] = self.parse_cdp_host(entry)
             fact["platform"] = self.parse_cdp_platform(entry)
             fact["port"] = port
-            fact["ip"] = self.parse_cdp_ip(entry)
             facts[intf].append(fact)
         return facts
 
@@ -419,7 +399,7 @@ class Interfaces(FactsBase):
     def parse_operstatus(self, data):
         match = re.search(r"^(?:.+) is (.+),", data, re.M)
         if match:
-            return (match.group(1)).lstrip()
+            return match.group(1)
 
     def parse_lldp_intf(self, data):
         match = re.search(r"^Local Intf: (.+)$", data, re.M)
@@ -436,13 +416,12 @@ class Interfaces(FactsBase):
         if match:
             return match.group(1)
 
-    def parse_lldp_ip(self, data):
-        match = re.search(r"^    IP: (.+)$", data, re.M)
-        if match:
-            return match.group(1)
-
     def parse_cdp_intf_port(self, data):
-        match = re.search(r"^Interface: (.+),  Port ID \(outgoing port\): (.+)$", data, re.M)
+        match = re.search(
+            r"^Interface: (.+),  Port ID \(outgoing port\): (.+)$",
+            data,
+            re.M,
+        )
         if match:
             return match.group(1), match.group(2)
 
@@ -453,10 +432,5 @@ class Interfaces(FactsBase):
 
     def parse_cdp_platform(self, data):
         match = re.search(r"^Platform: (.+),", data, re.M)
-        if match:
-            return match.group(1)
-
-    def parse_cdp_ip(self, data):
-        match = re.search(r"^  IP address: (.+)$", data, re.M)
         if match:
             return match.group(1)

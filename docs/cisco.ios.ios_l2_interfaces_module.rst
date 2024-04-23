@@ -5,7 +5,7 @@
 cisco.ios.ios_l2_interfaces
 ***************************
 
-**Resource module to configure L2 interfaces.**
+**Resource Module to configure L2 interfaces.**
 
 
 Version added: 1.0.0
@@ -114,13 +114,6 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>access</li>
                                     <li>trunk</li>
-                                    <li>dot1q_tunnel</li>
-                                    <li>dynamic</li>
-                                    <li>dynamic_auto</li>
-                                    <li>dynamic_desirable</li>
-                                    <li>private_vlan_host</li>
-                                    <li>private_vlan_promiscuous</li>
-                                    <li>private_vlan_trunk</li>
                         </ul>
                 </td>
                 <td>
@@ -142,7 +135,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Full name of the interface excluding any logical unit number, i.e GigabitEthernet0/1.</div>
+                        <div>Full name of the interface excluding any logical unit number, i.e. GigabitEthernet0/1.</div>
                 </td>
             </tr>
             <tr>
@@ -364,9 +357,8 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOSv Version 15.2 on CML.
+   - Tested against Cisco IOSv Version 15.2 on VIRL.
    - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html
-   - The module examples uses callback plugin (stdout_callback = yaml) to generate task output in yaml format.
 
 
 
@@ -393,58 +385,20 @@ Examples
     - name: Merge provided configuration with device configuration
       cisco.ios.ios_l2_interfaces:
         config:
-          - name: GigabitEthernet0/1
-            mode: access
-            access:
-              vlan: 10
-            voice:
-              vlan: 40
-          - name: GigabitEthernet0/2
-            mode: trunk
-            trunk:
-              allowed_vlans: 10-20,40
-              native_vlan: 20
-              pruning_vlans: 10,20
-              encapsulation: dot1q
+        - name: GigabitEthernet0/1
+          mode: access
+          access:
+            vlan: 10
+          voice:
+            vlan: 40
+        - name: GigabitEthernet0/2
+          mode: trunk
+          trunk:
+            allowed_vlans: 10-20,40
+            native_vlan: 20
+            pruning_vlans: 10,20
+            encapsulation: dot1q
         state: merged
-
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - name: GigabitEthernet0/1
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/2
-    # commands:
-    # - interface GigabitEthernet0/1
-    # - switchport access vlan 10
-    # - switchport voice vlan 40
-    # - switchport mode access
-    # - interface GigabitEthernet0/2
-    # - switchport mode trunk
-    # - switchport trunk encapsulation dot1q
-    # - switchport trunk native vlan 20
-    # - switchport trunk allowed vlan 10-20,40
-    # - switchport trunk pruning vlan 10,20
-    # after:
-    # - access:
-    #     vlan: 10
-    #   mode: access
-    #   name: GigabitEthernet0/1
-    #   voice:
-    #     vlan: 40
-    # - mode: trunk
-    #   name: GigabitEthernet0/2
-    #   trunk:
-    #     allowed_vlans:
-    #     - 10-20
-    #     - '40'
-    #     encapsulation: dot1q
-    #     native_vlan: 20
-    #     pruning_vlans:
-    #     - '10'
-    #     - '20'
 
     # After state:
     # ------------
@@ -482,45 +436,16 @@ Examples
     #  media-type rj45
     #  negotiation auto
 
-    - name: Replaces device configuration with provided configuration
+    - name: Replaces device configuration of listed l2 interfaces with provided configuration
       cisco.ios.ios_l2_interfaces:
         config:
-          - name: GigabitEthernet0/2
-            trunk:
-              allowed_vlans: 20-25,40
-              native_vlan: 20
-              pruning_vlans: 10
-              encapsulation: isl
+        - name: GigabitEthernet0/2
+          trunk:
+            allowed_vlans: 20-25,40
+            native_vlan: 20
+            pruning_vlans: 10
+            encapsulation: isl
         state: replaced
-
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - name: GigabitEthernet0/1
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/2
-    # commands:
-    # - interface GigabitEthernet0/2
-    # - no switchport access vlan
-    # - switchport trunk encapsulation isl
-    # - switchport trunk native vlan 20
-    # - switchport trunk allowed vlan 20-25,40
-    # - switchport trunk pruning vlan 10
-    # after:
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/1
-    # - name: GigabitEthernet0/2
-    #   trunk:
-    #     allowed_vlans:
-    #     - 20-25
-    #     - '40'
-    #     encapsulation: isl
-    #     native_vlan: 20
-    #     pruning_vlans:
-    #     - '10'
 
     # After state:
     # -------------
@@ -561,42 +486,12 @@ Examples
     - name: Override device configuration of all l2 interfaces with provided configuration
       cisco.ios.ios_l2_interfaces:
         config:
-          - name: GigabitEthernet0/2
-            access:
-              vlan: 20
-            voice:
-              vlan: 40
+        - name: GigabitEthernet0/2
+          access:
+            vlan: 20
+          voice:
+            vlan: 40
         state: overridden
-
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - name: GigabitEthernet0/1
-    #   trunk:
-    #     encapsulation: dot1q
-    #     native_vlan: 20
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/2
-    #   trunk:
-    #     encapsulation: dot1q
-    #     native_vlan: 20
-    # commands:
-    # - interface GigabitEthernet0/1
-    # - no switchport trunk encapsulation
-    # - no switchport trunk native vlan
-    # - interface GigabitEthernet0/2
-    # - switchport voice vlan 40
-    # - no switchport trunk encapsulation
-    # - no switchport trunk native vlan
-    # after:
-    # - name: GigabitEthernet0/1
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/2
-    #   voice:
-    #     vlan: 40
 
     # After state:
     # -------------
@@ -612,7 +507,7 @@ Examples
     #  media-type rj45
     #  negotiation auto
 
-    # Using deleted
+    # Using Deleted
 
     # Before state:
     # -------------
@@ -635,45 +530,8 @@ Examples
     - name: Delete IOS L2 interfaces as in given arguments
       cisco.ios.ios_l2_interfaces:
         config:
-          - name: GigabitEthernet0/1
+        - name: GigabitEthernet0/1
         state: deleted
-
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/1
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/2
-    #   trunk:
-    #     allowed_vlans:
-    #     - 20-40
-    #     - '60'
-    #     - '80'
-    #     encapsulation: dot1q
-    #     native_vlan: 10
-    #     pruning_vlans:
-    #     - '10'
-    # commands:
-    # - interface GigabitEthernet0/1
-    # - no switchport access vlan
-    # after:
-    # - name: GigabitEthernet0/1
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/2
-    #   trunk:
-    #     allowed_vlans:
-    #     - 20-40
-    #     - '60'
-    #     - '80'
-    #     encapsulation: dot1q
-    #     native_vlan: 10
-    #     pruning_vlans:
-    #     - '10'
 
     # After state:
     # -------------
@@ -692,7 +550,9 @@ Examples
     #  media-type rj45
     #  negotiation auto
 
-    # Using deleted without config - delete all configuration
+
+    # Using Deleted without any config passed
+    #"(NOTE: This will delete all of configured resource module attributes from each configured interface)"
 
     # Before state:
     # -------------
@@ -716,38 +576,6 @@ Examples
       cisco.ios.ios_l2_interfaces:
         state: deleted
 
-    # Task Output
-    # -----------
-    #
-    # before:
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/1
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/2
-    #   trunk:
-    #     allowed_vlans:
-    #     - 20-40
-    #     - '60'
-    #     - '80'
-    #     encapsulation: dot1q
-    #     native_vlan: 10
-    #     pruning_vlans:
-    #     - '10'
-    # commands:
-    # - interface GigabitEthernet0/1
-    # - no switchport access vlan
-    # - interface GigabitEthernet0/2
-    # - no switchport access vlan
-    # - no switchport trunk encapsulation
-    # - no switchport trunk native vlan
-    # - no switchport trunk allowed vlan
-    # - no switchport trunk pruning vlan
-    # after:
-    # - name: GigabitEthernet0/1
-    # - name: GigabitEthernet0/2
-
     # After state:
     # -------------
     #
@@ -760,78 +588,98 @@ Examples
     #  media-type rj45
     #  negotiation auto
 
-    # Using gathered
+    # Using Gathered
 
     # Before state:
     # -------------
     #
     # vios#sh running-config | section ^interface
     # interface GigabitEthernet0/1
-    #  description Configured by Ansible
-    #  switchport access vlan 20
-    #  negotiation auto
+    #  switchport access vlan 10
     # interface GigabitEthernet0/2
-    #  description This is test
-    #  switchport access vlan 20
-    #  switchport trunk allowed vlan 20-40,60,80
+    #  switchport trunk allowed vlan 10-20,40
     #  switchport trunk encapsulation dot1q
     #  switchport trunk native vlan 10
-    #  switchport trunk pruning vlan 10
-    #  media-type rj45
-    #  negotiation auto
+    #  switchport trunk pruning vlan 10,20
+    #  switchport mode trunk
 
-    - name: Gather facts for l2 interfaces
+    - name: Gather listed l2 interfaces with provided configurations
       cisco.ios.ios_l2_interfaces:
         config:
         state: gathered
 
-    # Task Output
-    # -----------
+    # Module Execution Result:
+    # ------------------------
     #
-    # gathered:
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/1
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/2
-    #   trunk:
-    #     allowed_vlans:
-    #     - 20-40
-    #     - '60'
-    #     - '80'
-    #     encapsulation: dot1q
-    #     native_vlan: 10
-    #     pruning_vlans:
-    #     - '10'
+    # "gathered": [
+    #         {
+    #             "name": "GigabitEthernet0/0"
+    #         },
+    #         {
+    #             "access": {
+    #                 "vlan": 10
+    #             },
+    #             "name": "GigabitEthernet0/1"
+    #         },
+    #         {
+    #             "mode": "trunk",
+    #             "name": "GigabitEthernet0/2",
+    #             "trunk": {
+    #                 "allowed_vlans": [
+    #                     "10-20",
+    #                     "40"
+    #                 ],
+    #                 "encapsulation": "dot1q",
+    #                 "native_vlan": 10,
+    #                 "pruning_vlans": [
+    #                     "10",
+    #                     "20"
+    #                 ]
+    #             }
+    #         }
+    #     ]
 
-    # Using rendered
+    # After state:
+    # ------------
+    #
+    # vios#sh running-config | section ^interface
+    # interface GigabitEthernet0/1
+    #  switchport access vlan 10
+    # interface GigabitEthernet0/2
+    #  switchport trunk allowed vlan 10-20,40
+    #  switchport trunk encapsulation dot1q
+    #  switchport trunk native vlan 10
+    #  switchport trunk pruning vlan 10,20
+    #  switchport mode trunk
+
+    # Using Rendered
 
     - name: Render the commands for provided  configuration
       cisco.ios.ios_l2_interfaces:
         config:
-          - name: GigabitEthernet0/1
-            access:
-              vlan: 30
-          - name: GigabitEthernet0/2
-            trunk:
-              allowed_vlans: 10-20,40
-              native_vlan: 20
-              pruning_vlans: 10,20
-              encapsulation: dot1q
+        - name: GigabitEthernet0/1
+          access:
+            vlan: 30
+        - name: GigabitEthernet0/2
+          trunk:
+            allowed_vlans: 10-20,40
+            native_vlan: 20
+            pruning_vlans: 10,20
+            encapsulation: dot1q
         state: rendered
 
-    # Task Output
-    # -----------
+    # Module Execution Result:
+    # ------------------------
     #
-    # rendered:
-    # - interface GigabitEthernet0/1
-    # - switchport access vlan 30
-    # - interface GigabitEthernet0/2
-    # - switchport trunk encapsulation dot1q
-    # - switchport trunk native vlan 20
-    # - switchport trunk allowed vlan 10-20,40
-    # - switchport trunk pruning vlan 10,20
+    # "rendered": [
+    #         "interface GigabitEthernet0/1",
+    #         "switchport access vlan 30",
+    #         "interface GigabitEthernet0/2",
+    #         "switchport trunk encapsulation dot1q",
+    #         "switchport trunk native vlan 20",
+    #         "switchport trunk allowed vlan 10-20,40",
+    #         "switchport trunk pruning vlan 10,20"
+    #     ]
 
     # Using Parsed
 
@@ -839,43 +687,46 @@ Examples
     # ----------------
     #
     # interface GigabitEthernet0/1
-    #  description Configured by Ansible
-    #  switchport access vlan 20
-    #  negotiation auto
+    # switchport mode access
+    # switchport access vlan 30
     # interface GigabitEthernet0/2
-    #  description This is test
-    #  switchport access vlan 20
-    #  switchport trunk allowed vlan 20-40,60,80
-    #  switchport trunk encapsulation dot1q
-    #  switchport trunk native vlan 10
-    #  switchport trunk pruning vlan 10
-    #  media-type rj45
-    #  negotiation auto
+    # switchport trunk allowed vlan 15-20,40
+    # switchport trunk encapsulation dot1q
+    # switchport trunk native vlan 20
+    # switchport trunk pruning vlan 10,20
 
     - name: Parse the commands for provided configuration
       cisco.ios.ios_l2_interfaces:
         running_config: "{{ lookup('file', 'parsed.cfg') }}"
         state: parsed
 
-    # Task Output
-    # -----------
+    # Module Execution Result:
+    # ------------------------
     #
-    # parsed:
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/1
-    # - access:
-    #     vlan: 20
-    #   name: GigabitEthernet0/2
-    #   trunk:
-    #     allowed_vlans:
-    #     - 20-40
-    #     - '60'
-    #     - '80'
-    #     encapsulation: dot1q
-    #     native_vlan: 10
-    #     pruning_vlans:
-    #     - '10'
+    # "parsed": [
+    #         {
+    #             "access": {
+    #                 "vlan": 30
+    #             },
+    #             "mode": "access",
+    #             "name": "GigabitEthernet0/1"
+    #         },
+    #         {
+    #             "name": "GigabitEthernet0/2",
+    #             "trunk": {
+    #                 "allowed_vlans": [
+    #                     "15-20",
+    #                     "40"
+    #                 ],
+    #                 "encapsulation": "dot1q",
+    #                 "native_vlan": 20,
+    #                 "pruning_vlans": [
+    #                     "10",
+    #                     "20"
+    #                 ]
+    #             }
+    #         }
+    #     ]
 
 
 
@@ -897,15 +748,15 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <b>after</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
+                      <span style="color: purple">list</span>
                     </div>
                 </td>
                 <td>when changed</td>
                 <td>
-                            <div>The resulting configuration after module execution.</div>
+                            <div>The configuration as structured data after module completion.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">The configuration returned will always be in the same format of the parameters above.</div>
                 </td>
             </tr>
             <tr>
@@ -914,15 +765,15 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <b>before</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
+                      <span style="color: purple">list</span>
                     </div>
                 </td>
-                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>always</td>
                 <td>
-                            <div>The configuration prior to the module execution.</div>
+                            <div>The configuration as structured data prior to module invocation.</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">The configuration returned will always be in the same format of the parameters above.</div>
                 </td>
             </tr>
             <tr>
@@ -934,63 +785,12 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">list</span>
                     </div>
                 </td>
-                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>always</td>
                 <td>
-                            <div>The set of commands pushed to the remote device.</div>
+                            <div>The set of commands pushed to the remote device</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;interface GigabitEthernet0/2&#x27;, &#x27;switchport trunk allowed vlan 15-20,40&#x27;, &#x27;switchport trunk encapsulation dot1q&#x27;]</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>gathered</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                    </div>
-                </td>
-                <td>when <em>state</em> is <code>gathered</code></td>
-                <td>
-                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>parsed</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                    </div>
-                </td>
-                <td>when <em>state</em> is <code>parsed</code></td>
-                <td>
-                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>rendered</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                    </div>
-                </td>
-                <td>when <em>state</em> is <code>rendered</code></td>
-                <td>
-                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;interface GigabitEthernet0/1&#x27;, &#x27;switchport access vlan 30&#x27;, &#x27;switchport trunk encapsulation dot1q&#x27;]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;interface GigabitEthernet0/1&#x27;, &#x27;switchport access vlan 20&#x27;]</div>
                 </td>
             </tr>
     </table>
@@ -1004,5 +804,4 @@ Status
 Authors
 ~~~~~~~
 
-- Sagar Paul (@KB-petByte)
 - Sumit Jaiswal (@justjais)

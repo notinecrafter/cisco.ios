@@ -47,41 +47,16 @@ def ip_tmplt(config_data):
     return cmd
 
 
-def ipv4_dhcp(config_data):
-    _data = config_data.get("ipv4", {}).get("dhcp")
-    if not _data.get("enable", True):
-        return ""
-    cmd = "ip address dhcp"
-    if _data.get("client_id"):
-        cmd += " client-id {client_id}".format(**_data)
-    if _data.get("hostname"):
-        cmd += " hostname {hostname}".format(**_data)
-    return cmd
-
-
 class L3_interfacesTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
-        super(L3_interfacesTemplate, self).__init__(lines=lines, tmplt=self, module=module)
+        super(L3_interfacesTemplate, self).__init__(
+            lines=lines,
+            tmplt=self,
+            module=module,
+        )
 
     # fmt: off
     PARSERS = [
-        {
-            "name": "autostate",
-            "getval": re.compile(r"""\s+no\s+autostate$""", re.VERBOSE),
-            "setval": "autostate",
-            "result": {"{{ name }}": {"autostate": False}},
-        },
-        {
-            "name": "mac_address",
-            "getval": re.compile(
-                r"""^mac-address
-                    (\s(?P<mac_address>\S+))
-                    $""",
-                re.VERBOSE,
-            ),
-            "setval": "mac-address {{ mac_address }}",
-            "result": {"{{ name }}": {"mac_address": "{{ mac_address }}"}},
-        },
         {
             "name": "name",
             "getval": re.compile(
@@ -147,7 +122,9 @@ class L3_interfacesTemplate(NetworkTemplate):
                     $""",
                 re.VERBOSE,
             ),
-            "setval": ipv4_dhcp,
+            "setval": "ip address dhcp"
+            "{{ (' client-id ' + ipv4.dhcp.client_id) if ipv4.dhcp.client_id is defined else ''}}"
+            "{{ (' hostname ' + ipv4.dhcp.hostname) if ipv4.dhcp.hostname is defined else ''}}",
             "result": {
                 "{{ name }}": {
                     "ipv4": [
@@ -156,33 +133,6 @@ class L3_interfacesTemplate(NetworkTemplate):
                                 "enable": "{{ True if dhcp is defined }}",
                                 "client_id": "{{ client_id }}",
                                 "hostname": "{{ hostname }}",
-                            },
-                        },
-                    ],
-                },
-            },
-        },
-        {
-            "name": "ipv4.source_interface",
-            "getval": re.compile(
-                r"""\s+ip\sunnumbered
-                    (\s(?P<name>\S+))
-                    (\s(?P<poll>poll))?
-                    (\s(?P<point_to_point>point-to-point))?
-                    $""",
-                re.VERBOSE,
-            ),
-            "setval": "ip unnumbered {{ ipv4.source_interface.name }}"
-            "{{ ' poll' if ipv4.source_interface.poll|d(False) else ''}}"
-            "{{ ' point-to-point' if ipv4.source_interface.point_to_point|d(False) else ''}}",
-            "result": {
-                "{{ name }}": {
-                    "ipv4": [
-                        {
-                            "source_interface": {
-                                "name": "{{ True if name is defined }}",
-                                "poll": "{{ True if poll is defined }}",
-                                "point_to_point": "{{ True if point_to_point is defined }}",
                             },
                         },
                     ],
@@ -233,7 +183,7 @@ class L3_interfacesTemplate(NetworkTemplate):
                     $""",
                     re.VERBOSE,
             ),
-            "setval": "{{ 'ipv6 address autoconfig' if ipv6.autoconfig.enable|d(False) or ipv6.autoconfig.default|d(False) else ''}}"
+            "setval": "ipv6 address autoconfig"
             "{{ ' default' if ipv6.autoconfig.default|d(False) else ''}}",
             "result": {
                 "{{ name }}": {
@@ -256,7 +206,7 @@ class L3_interfacesTemplate(NetworkTemplate):
                     $""",
                     re.VERBOSE,
             ),
-            "setval": "{{ 'ipv6 address dhcp' if ipv6.dhcp.enable|d(False)|d(False) or ipv6.dhcp.rapid_commit|d(False)|d(False)else ''}}"
+            "setval": "ipv6 address dhcp"
             "{{ ' rapid-commit' if ipv6.dhcp.rapid_commit|d(False) else ''}}",
             "result": {
                 "{{ name }}": {
@@ -267,18 +217,6 @@ class L3_interfacesTemplate(NetworkTemplate):
                                 "rapid_commit": "{{ True if rapid_commit is defined }}",
                             },
                         },
-                    ],
-                },
-            },
-        },
-        {
-            "name": "ipv6.enable",
-            "getval": re.compile(r"""\s+ipv6\s+enable$""", re.VERBOSE),
-            "setval": "ipv6 enable",
-            "result": {
-                "{{ name }}": {
-                    "ipv6": [
-                        {"enable": True},
                     ],
                 },
             },

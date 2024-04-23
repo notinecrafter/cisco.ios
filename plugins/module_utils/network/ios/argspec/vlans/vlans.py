@@ -47,23 +47,9 @@ class VlansArgs(object):
                 "mtu": {"type": "int"},
                 "remote_span": {"type": "bool"},
                 "state": {"type": "str", "choices": ["active", "suspend"]},
-                "shutdown": {"type": "str", "choices": ["enabled", "disabled"]},
-                "private_vlan": {
-                    "type": "dict",
-                    "options": {
-                        "type": {
-                            "type": "str",
-                            "choices": ["primary", "community", "isolated"],
-                        },
-                        "associated": {"type": "list", "elements": "int"},
-                    },
-                },
-                "member": {
-                    "type": "dict",
-                    "options": {
-                        "vni": {"type": "int", "required": True},
-                        "evi": {"type": "int"},
-                    },
+                "shutdown": {
+                    "type": "str",
+                    "choices": ["enabled", "disabled"],
                 },
             },
             "type": "list",
@@ -77,7 +63,6 @@ class VlansArgs(object):
                 "deleted",
                 "rendered",
                 "parsed",
-                "purged",
                 "gathered",
             ],
             "default": "merged",

@@ -10,7 +10,7 @@
       register: result
       cisco.ios.ios_ospf_interfaces: &id001
         config:
-          - name: GigabitEthernet2
+          - name: GigabitEthernet0/1
             address_family:
               - afi: ipv4
                 authentication:
@@ -36,9 +36,9 @@
               - afi: ipv6
                 adjacency: true
                 database_filter: true
-                # manet:
-                #   link_metrics:
-                #     cost_threshold: 10
+                manet:
+                  link_metrics:
+                    cost_threshold: 10
                 priority: 55
                 transmit_delay: 45
         state: merged
@@ -51,7 +51,7 @@
     - name: Assert that before dicts are correctly generated
       ansible.builtin.assert:
         that:
-          - "{{ merged['before'] | symmetric_difference(result['before']) | length == 0 }}"
+          - "{{ merged['before'] == {} }}"
 
     - name: Assert that after dict is correctly generated
       ansible.builtin.assert:

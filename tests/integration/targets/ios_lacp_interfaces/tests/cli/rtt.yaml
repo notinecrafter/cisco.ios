@@ -9,9 +9,9 @@
       register: base_config
       cisco.ios.ios_lacp_interfaces:
         config:
-          - name: GigabitEthernet2
+          - name: GigabitEthernet0/1
             port_priority: 30
-          - name: GigabitEthernet3
+          - name: GigabitEthernet0/2
             port_priority: 20
           - name: Port-channel10
             fast_switchover: true
@@ -30,7 +30,7 @@
       register: result
       cisco.ios.ios_lacp_interfaces:
         config:
-          - name: GigabitEthernet3
+          - name: GigabitEthernet0/2
             port_priority: 40
           - name: Port-channel40
             fast_switchover: true
@@ -39,8 +39,9 @@
 
     - ansible.builtin.assert:
         that:
+          - result.commands|length == 10
           - result.changed == true
-          - result.commands|symmetric_difference(overridden_rtt.commands) == []
+          - result.commands|symmetric_difference(overridden.commands) == []
 
     - name: Revert back to base configuration using facts round trip
       register: revert
@@ -50,6 +51,7 @@
 
     - ansible.builtin.assert:
         that:
+          - revert.commands|length == 10
           - revert.changed == true
           - revert.commands|symmetric_difference(rtt.commands) == []
   when: ansible_net_version != "15.6(2)T"

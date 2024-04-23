@@ -2171,7 +2171,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOSXE Version 17.3 on CML.
+   - Tested against Cisco IOSv Version 15.6
    - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html
    - The Configuration defaults of the Cisco IOS network devices are supposed to hinder idempotent behavior of plays
 
@@ -2203,17 +2203,17 @@ Examples
           buffered:
             severity: notifications
             size: 5099
-            xml: true
+            xml: True
           console:
             severity: critical
-            xml: true
+            xml: True
           facility: local5
           hosts:
             - hostname: 172.16.1.12
             - hostname: 172.16.1.11
-              xml: true
+              xml: True
             - hostname: 172.16.1.10
-              filtered: true
+              filtered: True
               stream: 10
             - hostname: 172.16.1.13
               transport:
@@ -2225,10 +2225,10 @@ Examples
           snmp_trap:
             - errors
           trap: errors
-          userinfo: true
+          userinfo: True
           policy_firewall:
             rate_limit: 10
-          logging_on: enable
+          logging_on: True
           exception: 4099
           dmvpn:
             rate_limit: 10
@@ -2257,6 +2257,7 @@ Examples
     #       "logging snmp-trap errors",
     #       "logging host 172.16.1.11 xml"
     #     ],
+
 
     # After state:
     # ------------
@@ -2375,7 +2376,7 @@ Examples
         config:
           hosts:
             - hostname: 172.16.1.27
-              filtered: true
+              filtered: True
         state: overridden
 
     # Commands Fired:
@@ -2490,7 +2491,7 @@ Examples
     # Before state:
     # -------------
 
-    # router-ios#show running-config | section logging
+    #router-ios#show running-config | section logging
     # logging exception 4099
     # logging message-counter log
     # logging userinfo
@@ -2608,17 +2609,17 @@ Examples
           buffered:
             severity: notifications
             size: 5099
-            xml: true
+            xml: True
           console:
             severity: critical
-            xml: true
+            xml: True
           facility: local5
           hosts:
             - hostname: 172.16.1.12
             - hostname: 172.16.1.11
-              xml: true
+              xml: True
             - hostname: 172.16.1.10
-              filtered: true
+              filtered: True
               stream: 10
             - hostname: 172.16.1.13
               transport:
@@ -2629,10 +2630,10 @@ Examples
           message_counter: log
           snmp_trap: errors
           trap: errors
-          userinfo: true
+          userinfo: True
           policy_firewall:
-            rate_limit: 10
-          logging_on: enable
+              rate_limit: 10
+          logging_on: True
           exception: 10
           dmvpn:
             rate_limit: 10

@@ -19,528 +19,281 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-
 DOCUMENTATION = """
 module: ios_user
 author: Trishna Guha (@trishnaguha)
 short_description: Module to manage the aggregates of local users.
 description:
-  - This module provides declarative management of the local usernames configured on
-    network devices. It allows playbooks to manage either individual usernames or the
-    aggregate of usernames in the current running config. It also supports purging usernames
-    from the configuration that are not explicitly defined.
+- This module provides declarative management of the local usernames configured on
+  network devices. It allows playbooks to manage either individual usernames or the
+  aggregate of usernames in the current running config. It also supports purging usernames
+  from the configuration that are not explicitly defined.
 version_added: 1.0.0
 notes:
-  - Tested against Cisco IOSXE Version 17.3 on CML.
+  - Tested against IOS 15.6
   - This module works with connection C(network_cli).
     See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html)
 options:
   aggregate:
     description:
-      - The set of username objects to be configured on the remote Cisco IOS device.
-        The list entries can either be the username or a hash of username and properties.
-        This argument is mutually exclusive with the C(name) argument.
+    - The set of username objects to be configured on the remote Cisco IOS device.
+      The list entries can either be the username or a hash of username and properties.
+      This argument is mutually exclusive with the C(name) argument.
     aliases:
-      - users
-      - collection
+    - users
+    - collection
     type: list
     elements: dict
     suboptions:
       name:
         description:
-          - The username to be configured on the Cisco IOS device. This argument accepts
-            a string value and is mutually exclusive with the C(aggregate) argument. Please
-            note that this option is not same as C(provider username).
+        - The username to be configured on the Cisco IOS device. This argument accepts
+          a string value and is mutually exclusive with the C(aggregate) argument. Please
+          note that this option is not same as C(provider username).
         type: str
         required: true
       configured_password:
         description:
-          - The password to be configured on the Cisco IOS device. The password needs to
-            be provided in clear and it will be encrypted on the device. Please note that
-            this option is not same as C(provider password).
+        - The password to be configured on the Cisco IOS device. The password needs to
+          be provided in clear and it will be encrypted on the device. Please note that
+          this option is not same as C(provider password).
         type: str
       update_password:
         description:
-          - Since passwords are encrypted in the device running config, this argument will
-            instruct the module when to change the password.  When set to C(always), the
-            password will always be updated in the device and when set to C(on_create) the
-            password will be updated only if the username is created.
+        - Since passwords are encrypted in the device running config, this argument will
+          instruct the module when to change the password.  When set to C(always), the
+          password will always be updated in the device and when set to C(on_create) the
+          password will be updated only if the username is created.
         choices:
-          - on_create
-          - always
+        - on_create
+        - always
         type: str
       password_type:
         description:
-          - This argument determines whether a 'password' or 'secret' will be configured.
+        - This argument determines whether a 'password' or 'secret' will be configured.
         choices:
-          - secret
-          - password
+        - secret
+        - password
         type: str
       hashed_password:
         description:
-          - This option allows configuring hashed passwords on Cisco IOS devices.
+        - This option allows configuring hashed passwords on Cisco IOS devices.
         type: dict
         suboptions:
           type:
             description:
-              - Specifies the type of hash (e.g., 5 for MD5, 8 for PBKDF2, etc.)
-              - For this to work, the device needs to support the desired hash type
+            - Specifies the type of hash (e.g., 5 for MD5, 8 for PBKDF2, etc.)
+            - For this to work, the device needs to support the desired hash type
             type: int
             required: true
           value:
             description:
-              - The actual hashed password to be configured on the device
+            - The actual hashed password to be configured on the device
             required: true
             type: str
       privilege:
         description:
-          - The C(privilege) argument configures the privilege level of the user when logged
-            into the system. This argument accepts integer values in the range of 1 to 15.
+        - The C(privilege) argument configures the privilege level of the user when logged
+          into the system. This argument accepts integer values in the range of 1 to 15.
         type: int
       view:
         description:
-          - Configures the view for the username in the device running configuration. The
-            argument accepts a string value defining the view name. This argument does not
-            check if the view has been configured on the device.
+        - Configures the view for the username in the device running configuration. The
+          argument accepts a string value defining the view name. This argument does not
+          check if the view has been configured on the device.
         aliases:
-          - role
+        - role
         type: str
       sshkey:
         description:
-          - Specifies one or more SSH public key(s) to configure for the given username.
-          - This argument accepts a valid SSH key value.
+        - Specifies one or more SSH public key(s) to configure for the given username.
+        - This argument accepts a valid SSH key value.
         type: list
         elements: str
       nopassword:
         description:
-          - Defines the username without assigning a password. This will allow the user
-            to login to the system without being authenticated by a password.
+        - Defines the username without assigning a password. This will allow the user
+          to login to the system without being authenticated by a password.
         type: bool
       state:
         description:
-          - Configures the state of the username definition as it relates to the device
-            operational configuration. When set to I(present), the username(s) should be
-            configured in the device active configuration and when set to I(absent) the
-            username(s) should not be in the device active configuration
+        - Configures the state of the username definition as it relates to the device
+          operational configuration. When set to I(present), the username(s) should be
+          configured in the device active configuration and when set to I(absent) the
+          username(s) should not be in the device active configuration
         choices:
-          - present
-          - absent
+        - present
+        - absent
         type: str
   name:
     description:
-      - The username to be configured on the Cisco IOS device. This argument accepts
-        a string value and is mutually exclusive with the C(aggregate) argument. Please
-        note that this option is not same as C(provider username).
+    - The username to be configured on the Cisco IOS device. This argument accepts
+      a string value and is mutually exclusive with the C(aggregate) argument. Please
+      note that this option is not same as C(provider username).
     type: str
   configured_password:
     description:
-      - The password to be configured on the Cisco IOS device. The password needs to
-        be provided in clear and it will be encrypted on the device. Please note that
-        this option is not same as C(provider password).
+    - The password to be configured on the Cisco IOS device. The password needs to
+      be provided in clear and it will be encrypted on the device. Please note that
+      this option is not same as C(provider password).
     type: str
   update_password:
     description:
-      - Since passwords are encrypted in the device running config, this argument will
-        instruct the module when to change the password.  When set to C(always), the
-        password will always be updated in the device and when set to C(on_create) the
-        password will be updated only if the username is created.
+    - Since passwords are encrypted in the device running config, this argument will
+      instruct the module when to change the password.  When set to C(always), the
+      password will always be updated in the device and when set to C(on_create) the
+      password will be updated only if the username is created.
     default: always
     choices:
-      - on_create
-      - always
+    - on_create
+    - always
     type: str
   password_type:
     description:
-      - This argument determines whether a 'password' or 'secret' will be configured.
+    - This argument determines whether a 'password' or 'secret' will be configured.
     default: secret
     choices:
-      - secret
-      - password
+    - secret
+    - password
     type: str
   hashed_password:
     description:
-      - This option allows configuring hashed passwords on Cisco IOS devices.
+    - This option allows configuring hashed passwords on Cisco IOS devices.
     type: dict
     suboptions:
       type:
         description:
-          - Specifies the type of hash (e.g., 5 for MD5, 8 for PBKDF2, etc.)
-          - For this to work, the device needs to support the desired hash type
+        - Specifies the type of hash (e.g., 5 for MD5, 8 for PBKDF2, etc.)
+        - For this to work, the device needs to support the desired hash type
         type: int
         required: true
       value:
         description:
-          - The actual hashed password to be configured on the device
+        - The actual hashed password to be configured on the device
         required: true
         type: str
   privilege:
     description:
-      - The C(privilege) argument configures the privilege level of the user when logged
-        into the system. This argument accepts integer values in the range of 1 to 15.
+    - The C(privilege) argument configures the privilege level of the user when logged
+      into the system. This argument accepts integer values in the range of 1 to 15.
     type: int
   view:
     description:
-      - Configures the view for the username in the device running configuration. The
-        argument accepts a string value defining the view name. This argument does not
-        check if the view has been configured on the device.
+    - Configures the view for the username in the device running configuration. The
+      argument accepts a string value defining the view name. This argument does not
+      check if the view has been configured on the device.
     aliases:
-      - role
+    - role
     type: str
   sshkey:
     description:
-      - Specifies one or more SSH public key(s) to configure for the given username.
-      - This argument accepts a valid SSH key value.
+    - Specifies one or more SSH public key(s) to configure for the given username.
+    - This argument accepts a valid SSH key value.
     type: list
     elements: str
   nopassword:
     description:
-      - Defines the username without assigning a password. This will allow the user
-        to login to the system without being authenticated by a password.
+    - Defines the username without assigning a password. This will allow the user
+      to login to the system without being authenticated by a password.
     type: bool
   purge:
     description:
-      - Instructs the module to consider the resource definition absolute. It will remove
-        any previously configured usernames on the device with the exception of the
-        `admin` user (the current defined set of users).
+    - Instructs the module to consider the resource definition absolute. It will remove
+      any previously configured usernames on the device with the exception of the
+      `admin` user (the current defined set of users).
     type: bool
     default: false
   state:
     description:
-      - Configures the state of the username definition as it relates to the device
-        operational configuration. When set to I(present), the username(s) should be
-        configured in the device active configuration and when set to I(absent) the
-        username(s) should not be in the device active configuration
+    - Configures the state of the username definition as it relates to the device
+      operational configuration. When set to I(present), the username(s) should be
+      configured in the device active configuration and when set to I(absent) the
+      username(s) should not be in the device active configuration
     default: present
     choices:
-      - present
-      - absent
+    - present
+    - absent
     type: str
 extends_documentation_fragment:
-  - cisco.ios.ios
+- cisco.ios.ios
 """
-
 EXAMPLES = """
-# Using state: present
-
-# Before state:
-# -------------
-
-# router-ios#show running-config | section ^username
-# username testuser privilege 15 password 0 password
-
-# Present state create a new user play:
-# -------------------------------------
-
-- name: Create a new user
+- name: create a new user
   cisco.ios.ios_user:
     name: ansible
     nopassword: true
     sshkey: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     state: present
 
-# Task Output
-# -----------
-
-# commands:
-# - ip ssh pubkey-chain
-# - username ansible
-# - key-hash ssh-rsa 2ABB27BBC33ED53EF7D55037952ABB27 test@fedora
-# - exit
-# - exit
-# - username ansible nopassword
-
-# After state:
-# ------------
-
-# router-ios#show running-config | section username
-# username testuser privilege 15 password 0 password
-# username ansible nopassword
-#   username ansible
-#    key-hash ssh-rsa 2ABB27BBC33ED53EF7D55037952ABB27 test@fedora
-
-# Using state: present
-
-# Before state:
-# -------------
-
-# router-ios#show running-config | section ^username
-# username testuser privilege 15 password 0 password
-
-# Present state create a new user with multiple keys play:
-# --------------------------------------------------------
-
-- name: Create a new user with multiple keys
+- name: create a new user with multiple keys
   cisco.ios.ios_user:
     name: ansible
     sshkey:
-      - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
-      - "{{ lookup('file', '~/path/to/public_key') }}"
+    - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    - "{{ lookup('file', '~/path/to/public_key') }}"
     state: present
 
-# Task Output
-# -----------
-
-# commands:
-# - ip ssh pubkey-chain
-# - username ansible
-# - key-hash ssh-rsa 2ABB27BBC33ED53EF7D55037952ABB27 test@fedora
-# - key-hash ssh-rsa 1985673DCF7FA9A0F374BB97DC2ABB27 test@fedora
-# - exit
-# - exit
-
-# After state:
-# ------------
-
-# router-ios#show running-config | section username
-# username testuser privilege 15 password 0 password
-#   username ansible
-#    key-hash ssh-rsa 2ABB27BBC33ED53EF7D55037952ABB27 test@fedora
-#    key-hash ssh-rsa 1985673DCF7FA9A0F374BB97DC2ABB27 test@fedora
-
-# Using Purge: true
-
-# Before state:
-# -------------
-
-# router-ios#show running-config | section ^username
-# username admin privilege 15 password 0 password
-# username testuser privilege 15 password 0 password
-# username ansible nopassword
-#   username ansible
-#    key-hash ssh-rsa 2ABB27BBC33ED53EF7D55037952ABB27 test@fedora
-
-# Purge all users except admin play:
-# ----------------------------------
-
-- name: Remove all users except admin
+- name: remove all users except admin
   cisco.ios.ios_user:
-    purge: true
+    purge: yes
 
-# Task Output
-# -----------
-
-# commands:
-# - no username testuser
-# - no username ansible
-# - ip ssh pubkey-chain
-# - no username ansible
-# - exit
-
-# After state:
-# ------------
-
-# router-ios#show running-config | section username
-# username admin privilege 15 password 0 password
-
-# Using Purge: true
-
-# Before state:
-# -------------
-
-# router-ios#show running-config | section ^username
-# username admin privilege 15 password 0 password
-# username testuser privilege 15 password 0 password1
-# username testuser1 privilege 15 password 0 password2
-# username ansible nopassword
-
-# Purge all users except admin and these listed users play:
-# ---------------------------------------------------------
-
-- name: Remove all users except admin and these listed users
+- name: remove all users except admin and these listed users
   cisco.ios.ios_user:
     aggregate:
-      - name: testuser
-      - name: testuser1
-    purge: true
+    - name: testuser1
+    - name: testuser2
+    - name: testuser3
+    purge: yes
 
-# Task Output
-# -----------
-
-# commands:
-# - no username ansible
-
-# After state:
-# ------------
-
-# router-ios#show running-config | section username
-# username admin privilege 15 password 0 password
-# username testuser privilege 15 password 0 password1
-# username testuser1 privilege 15 password 0 password2
-
-# Using state: present
-
-# Before state:
-# -------------
-
-# router-ios#show running-config | section ^username
-# username admin privilege 15 password 0 password
-# username netop password 0 password1
-# username netend password 0 password2
-
-# Present state set multiple users to privilege level 15 play:
-# ------------------------------------------------------------
-
-- name: Set multiple users to privilege level 15
+- name: set multiple users to privilege level 15
   cisco.ios.ios_user:
     aggregate:
-      - name: netop
-      - name: netend
+    - name: netop
+    - name: netend
     privilege: 15
     state: present
 
-# Task Output
-# -----------
-
-# commands:
-# - username netop privilege 15
-# - username netend privilege 15
-
-# After state:
-# ------------
-
-# router-ios#show running-config | section username
-# username admin privilege 15 password 0 password
-# username netop privilege 15 password 0 password1
-# username netend privilege 15 password 0 password2
-
-# Using state: present
-
-# Before state:
-# -------------
-
-# router-ios#show running-config | section ^username
-# username admin privilege 15 password 0 password
-# username netop privilege 15 password 0 oldpassword
-
-# Present state Change Password for User netop play:
-# --------------------------------------------
+- name: set user view/role
+  cisco.ios.ios_user:
+    name: netop
+    view: network-operator
+    state: present
 
 - name: Change Password for User netop
   cisco.ios.ios_user:
     name: netop
-    configured_password: "newpassword"
-    password_type: password
+    configured_password: '{{ new_password }}'
     update_password: always
     state: present
 
-# Task Output
-# -----------
-
-# commands:
-# - username netop password newpassword
-
-# After state:
-# ------------
-
-# router-ios#show running-config | section username
-# username admin privilege 15 password 0 password
-# username netop privilege 15 password 0 newpassword
-
-# Using state: present
-
-# Before state:
-# -------------
-
-# router-ios#show running-config | section ^username
-# username admin privilege 15 password 0 password
-# username netop privilege 15 password 0 password
-# username netend privilege 15 password 0 password
-
-# Present state set user view/role for users play:
-# --------------------------------------------
-
-- name: Set user view/role for users
+- name: Aggregate of users
   cisco.ios.ios_user:
     aggregate:
-      - name: netop
-      - name: netend
+    - name: ansibletest2
+    - name: ansibletest3
     view: network-admin
-    state: present
 
-# Task Output
-# -----------
+- name: Add a user specifying password type
+  cisco.ios.ios_user:
+    name: ansibletest4
+    configured_password: '{{ new_password }}'
+    password_type: password
 
-# commands:
-# - username netop view network-admin
-# - username netend view network-admin
-
-# After state:
-# ------------
-
-# router-ios#show running-config | section username
-# username admin privilege 15 password 0 password
-# username netop privilege 15 view network-admin password 0 password
-# username netend privilege 15 view network-admin password 0 password
-
-# Using state: present
-
-# Before state:
-# -------------
-
-# router-ios#show running-config | section ^username
-# username admin privilege 15 password 0 password
-
-# Present state create a new user with hashed password play:
-# --------------------------------------------------------------
-
-- name: Create a new user with hashed password
+- name: Add a user with MD5 hashed password
   cisco.ios.ios_user:
     name: ansibletest5
     hashed_password:
-      type: 9
-      value: "thiswillbereplacedwithhashedpassword"
-    state: present
-
-# Task Output
-# -----------
-
-# commands:
-# - username ansibletest5 secret 9 thiswillbereplacedwithhashedpassword
-
-# After state:
-# ------------
-
-# router-ios#show running-config | section username
-# username admin privilege 15 password 0 password
-# username ansibletest5 secret 9 thiswillbereplacedwithhashedpassword
-
-# Using state: absent
-
-# Before state:
-# -------------
-
-# router-ios#show running-config | section ^username
-# username admin privilege 15 password 0 password
-# username ansibletest1 password 0 password
-# username ansibletest2 secret 9 thiswillbereplacedwithhashedpassword
-# username ansibletest3 password 5 thistoowillbereplacedwithhashedpassword
-
-# Absent state remove multiple users play:
-# ----------------------------------------
+      type: 5
+      value: $3$8JcDilcYgFZi.yz4ApaqkHG2.8/
 
 - name: Delete users with aggregate
   cisco.ios.ios_user:
     aggregate:
-      - name: ansibletest1
-      - name: ansibletest2
-      - name: ansibletest3
+    - name: ansibletest1
+    - name: ansibletest2
+    - name: ansibletest3
     state: absent
-
-# Task Output
-# -----------
-
-# commands:
-# - no username ansibletest1
-# - no username ansibletest2
-# - no username ansibletest3
-
-# After state:
-# ------------
-
-# router-ios#show running-config | section username
-# username admin privilege 15 password 0 password
 """
-
 RETURN = """
 commands:
   description: The list of configuration mode commands to send to the device
@@ -565,13 +318,16 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.ios import (
     get_config,
+    ios_argument_spec,
     load_config,
 )
 
 
 def validate_privilege(value, module):
     if value and not 1 <= value <= 15:
-        module.fail_json(msg="privilege must be between 1 and 15, got %s" % value)
+        module.fail_json(
+            msg="privilege must be between 1 and 15, got %s" % value,
+        )
 
 
 def user_del_cmd(username):
@@ -581,18 +337,6 @@ def user_del_cmd(username):
         "answer": "y",
         "newline": False,
     }
-
-
-def add_ssh(command, want, x=None):
-    command.append("ip ssh pubkey-chain")
-    if x:
-        command.append("username %s" % want["name"])
-        for item in x:
-            command.append("key-hash %s" % item)
-        command.append("exit")
-    else:
-        command.append("no username %s" % want["name"])
-    command.append("exit")
 
 
 def sshkey_fingerprint(sshkey):
@@ -622,10 +366,21 @@ def map_obj_to_commands(updates, module):
     def add(command, want, x):
         command.append("username %s %s" % (want["name"], x))
 
-    def add_hashed_password(command, want, x, password_type):
+    def add_hashed_password(command, want, x):
         command.append(
-            "username %s %s %s %s" % (want["name"], password_type, x.get("type"), x.get("value")),
+            "username %s secret %s %s" % (want["name"], x.get("type"), x.get("value")),
         )
+
+    def add_ssh(command, want, x=None):
+        command.append("ip ssh pubkey-chain")
+        if x:
+            command.append("username %s" % want["name"])
+            for item in x:
+                command.append("key-hash %s" % item)
+            command.append("exit")
+        else:
+            command.append("no username %s" % want["name"])
+        command.append("exit")
 
     for update in updates:
         want, have = update
@@ -647,9 +402,13 @@ def map_obj_to_commands(updates, module):
                         msg="Can not have both a user password and a user secret."
                         + " Please choose one or the other.",
                     )
-                add(commands, want, "%s %s" % (password_type, want["configured_password"]))
+                add(
+                    commands,
+                    want,
+                    "%s %s" % (password_type, want["configured_password"]),
+                )
         if needs_update(want, have, "hashed_password"):
-            add_hashed_password(commands, want, want["hashed_password"], password_type)
+            add_hashed_password(commands, want, want["hashed_password"])
         if needs_update(want, have, "nopassword"):
             if want["nopassword"]:
                 add(commands, want, "nopassword")
@@ -669,7 +428,11 @@ def parse_sshkey(data, user):
     sshcfg = re.search(sshregex, data, re.M)
     key_list = []
     if sshcfg:
-        match = re.findall("key-hash (\\S+ \\S+(?: .+)?)$", sshcfg.group(), re.M)
+        match = re.findall(
+            "key-hash (\\S+ \\S+(?: .+)?)$",
+            sshcfg.group(),
+            re.M,
+        )
         if match:
             key_list = match
     return key_list
@@ -698,7 +461,6 @@ def map_config_to_obj(module):
         regex = "username %s .+$" % user
         cfg = re.findall(regex, data, re.M)
         cfg = "\n".join(cfg)
-        ssh_key_list = parse_sshkey(data, user)
         obj = {
             "name": user,
             "state": "present",
@@ -706,9 +468,7 @@ def map_config_to_obj(module):
             "configured_password": None,
             "hashed_password": None,
             "password_type": parse_password_type(cfg),
-            "sshkey": ssh_key_list,
-            "is_only_ssh_user": False if cfg.strip() and ssh_key_list else True,
-            "is_only_normal_user": True if cfg.strip() and ssh_key_list == [] else False,
+            "sshkey": parse_sshkey(data, user),
             "privilege": parse_privilege(cfg),
             "view": parse_view(cfg),
         }
@@ -786,14 +546,6 @@ def update_objects(want, have):
     return updates
 
 
-def find_set_difference(list1, list2, key):
-    want_users = [x[key] for x in list1]
-    have_users = [x[key] for x in list2]
-    setdifference = set(have_users).difference(want_users)
-    result = [item for item in list2 if item[key] in setdifference]
-    return result
-
-
 def main():
     """main entry point for module execution"""
     hashed_password_spec = dict(
@@ -803,9 +555,16 @@ def main():
     element_spec = dict(
         name=dict(),
         configured_password=dict(no_log=True),
-        hashed_password=dict(no_log=True, type="dict", options=hashed_password_spec),
+        hashed_password=dict(
+            no_log=True,
+            type="dict",
+            options=hashed_password_spec,
+        ),
         nopassword=dict(type="bool"),
-        update_password=dict(default="always", choices=["on_create", "always"]),
+        update_password=dict(
+            default="always",
+            choices=["on_create", "always"],
+        ),
         password_type=dict(default="secret", choices=["secret", "password"]),
         privilege=dict(type="int"),
         view=dict(aliases=["role"]),
@@ -826,6 +585,7 @@ def main():
         purge=dict(type="bool", default=False),
     )
     argument_spec.update(element_spec)
+    argument_spec.update(ios_argument_spec)
     mutually_exclusive = [
         ("name", "aggregate"),
         ("nopassword", "hashed_password", "configured_password"),
@@ -839,19 +599,13 @@ def main():
     result = {"changed": False, "warnings": warnings}
     want = map_params_to_obj(module)
     have = map_config_to_obj(module)
-
     commands = map_obj_to_commands(update_objects(want, have), module)
     if module.params["purge"]:
-        setdifference = find_set_difference(want, have, "name")
-        for item in setdifference:
-            if item["name"] != "admin":
-                if item["is_only_ssh_user"]:
-                    add_ssh(commands, item)
-                if item["is_only_normal_user"]:
-                    commands.append(user_del_cmd(item["name"]))
-                if item["is_only_normal_user"] is False and item["is_only_ssh_user"] is False:
-                    add_ssh(commands, item)
-                    commands.append(user_del_cmd(item["name"]))
+        want_users = [x["name"] for x in want]
+        have_users = [x["name"] for x in have]
+        for item in set(have_users).difference(want_users):
+            if item != "admin":
+                commands.append(user_del_cmd(item))
     result["commands"] = commands
     if commands:
         if not module.check_mode:

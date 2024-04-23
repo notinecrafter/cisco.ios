@@ -30,12 +30,12 @@ Parameters
 
     <table  border=0 cellpadding=0 class="documentation-table">
         <tr>
-            <th colspan="1">Parameter</th>
+            <th colspan="2">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>commands</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -52,7 +52,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>interval</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -68,7 +68,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>match</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -87,7 +87,159 @@ Parameters
                 </td>
             </tr>
             <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>provider</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div><b>Deprecated</b></div>
+                        <div>Starting with Ansible 2.5 we recommend using <code>connection: network_cli</code>.</div>
+                        <div>For more information please see the <a href='https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html'>https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html</a>.</div>
+                        <div><hr/></div>
+                        <div>A dict object containing connection details.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
                 <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>auth_pass</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the password to use if required to enter privileged mode on the remote device.  If <em>authorize</em> is false, then this argument does nothing. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_AUTH_PASS</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>authorize</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Instructs the module to enter privileged mode on the remote device before sending any commands.  If not specified, the device will attempt to execute all commands in non-privileged mode. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_AUTHORIZE</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>host</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the DNS host name or address for connecting to the remote device over the specified transport.  The value of host is used as the destination address for the transport.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the password to use to authenticate the connection to the remote device.   This value is used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_PASSWORD</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the port to use when building the connection to the remote device.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ssh_keyfile</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">path</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the SSH key to use to authenticate the connection to the remote device.   This value is the path to the key used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_SSH_KEYFILE</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>timeout</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the timeout in seconds for communicating with the network device for either connecting or sending commands.  If the timeout is exceeded before the operation is completed, the module will error.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Configures the username to use to authenticate the connection to the remote device.  This value is used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_USERNAME</code> will be used instead.</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>retries</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -96,14 +248,14 @@ Parameters
                     </div>
                 </td>
                 <td>
-                        <b>Default:</b><br/><div style="color: blue">9</div>
+                        <b>Default:</b><br/><div style="color: blue">10</div>
                 </td>
                 <td>
                         <div>Specifies the number of retries a command should by tried before it is considered failed. The command is run on the target device every retry and evaluated against the <em>wait_for</em> conditions.</div>
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>wait_for</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -127,7 +279,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOSXE Version 17.3 on CML.
+   - Tested against IOS 15.6
    - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
    - For more information on using Ansible to manage Cisco devices see the `Cisco integration page <https://www.ansible.com/integrations/networks/cisco>`_.
@@ -139,255 +291,39 @@ Examples
 
 .. code-block:: yaml
 
-    - name: Run show version on remote devices
+    - name: run show version on remote devices
       cisco.ios.ios_command:
         commands: show version
 
-    # output-
-
-    # ok: [iosxeappliance] => {
-    #     "changed": false,
-    #     "invocation": {
-    #         "module_args": {
-    #             "commands": [
-    #                 "show version"
-    #             ],
-    #             "interval": 1,
-    #             "match": "all",
-    #             "retries": 10,
-    #             "wait_for": null
-    #         }
-    #     },
-    #     "stdout": [
-    #         "Cisco IOS XE Software, Version 17.03.04a\nCisco IOS Software [Amsterdam], Virtual XE Software ... register is 0x2102"
-    #     ],
-    #     "stdout_lines": [
-    #         [
-    #             "Cisco IOS XE Software, Version 17.03.04a",
-    #             "Cisco IOS Software [Amsterdam], Virtual XE Software",
-    #             "..."
-    #             "Configuration register is 0x2102"
-    #         ]
-    #     ]
-    # }
-
-    - name: Run show version and check to see if output contains IOS
+    - name: run show version and check to see if output contains IOS
       cisco.ios.ios_command:
         commands: show version
         wait_for: result[0] contains IOS
 
-    # output-
-
-    # ok: [iosxeappliance] => {
-    #     "changed": false,
-    #     "invocation": {
-    #         "module_args": {
-    #             "commands": [
-    #                 "show version"
-    #             ],
-    #             "interval": 1,
-    #             "match": "all",
-    #             "retries": 10,
-    #             "wait_for": [
-    #                 "result[0] contains IOS"
-    #             ]
-    #         }
-    #     },
-    #     "stdout": [
-    #         "Cisco IOS XE Software, Version 17.03.04a\nCisco IOS Software [Amsterdam], Virtual XE Software ... register is 0x2102"
-    #     ],
-    #     "stdout_lines": [
-    #         [
-    #             "Cisco IOS XE Software, Version 17.03.04a",
-    #             "Cisco IOS Software [Amsterdam], Virtual XE Software",
-    #             "..."
-    #             "Configuration register is 0x2102"
-    #         ]
-    #     ]
-    # }
-
-    - name: Run multiple commands on remote nodes
+    - name: run multiple commands on remote nodes
       cisco.ios.ios_command:
         commands:
-          - show version
-          - show interfaces
+        - show version
+        - show interfaces
 
-    # output-
-
-    # ok: [iosxeappliance] => {
-    #     "changed": false,
-    #     "invocation": {
-    #         "module_args": {
-    #             "commands": [
-    #                 "show version",
-    #                 "show interfaces"
-    #             ],
-    #             "interval": 1,
-    #             "match": "all",
-    #             "retries": 10,
-    #             "wait_for": null
-    #         }
-    #     },
-    #     "stdout": [
-    #         "Cisco IOS XE Software, Version 17.03.04a\nCisco IOS Software [Amsterdam], Virtual XE Software Configuration register is 0x2102",
-    #         "Loopback999 is up, line protocol is up ...failures, 0 output buffers swapped out"
-    #     ],
-    #     "stdout_lines": [
-    #         [
-    #             "Cisco IOS XE Software, Version 17.03.04a",
-    #             "Cisco IOS Software [Amsterdam], Virtual XE Software",
-    #             "..."
-    #             "Configuration register is 0x2102"
-    #         ],
-    #         [
-    #             "Loopback999 is up, line protocol is up ",
-    #             "  Hardware is Loopback",
-    #             "  Description: this is a test",
-    #             "  MTU 1514 bytes, BW 8000000 Kbit/sec, DLY 5000 usec, ",
-    #             "     reliability 255/255, txload 1/255, rxload 1/255",
-    #             "  Encapsulation LOOPBACK, loopback not set",
-    #             "  Keepalive set (10 sec)",
-    #             "  Last input never, output never, output hang never",
-    #             "  Last clearing of \"show interface\" counters never",
-    #             "  Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0",
-    #             "  Queueing strategy: fifo",
-    #             "  Output queue: 0/0 (size/max)",
-    #             "  5 minute input rate 0 bits/sec, 0 packets/sec",
-    #             "  5 minute output rate 0 bits/sec, 0 packets/sec",
-    #             "     0 packets input, 0 bytes, 0 no buffer",
-    #             "     Received 0 broadcasts (0 IP multicasts)",
-    #             "     0 runts, 0 giants, 0 throttles ",
-    #             "     0 input errors, 0 CRC, 0 frame, 0 overrun, 0 ignored, 0 abort",
-    #             "     0 packets output, 0 bytes, 0 underruns",
-    #             "     Output 0 broadcasts (0 IP multicasts)",
-    #             "     0 output errors, 0 collisions, 0 interface resets",
-    #             "     0 unknown protocol drops",
-    #             "     0 output buffer failures, 0 output buffers swapped out"
-    #         ]
-    #     ]
-    # }
-
-    - name: Run multiple commands and evaluate the output
+    - name: run multiple commands and evaluate the output
       cisco.ios.ios_command:
         commands:
-          - show version
-          - show interfaces
+        - show version
+        - show interfaces
         wait_for:
-          - result[0] contains IOS
-          - result[1] contains Loopback0
+        - result[0] contains IOS
+        - result[1] contains Loopback0
 
-    # output-
-    # failed play as result[1] contains Loopback0 is false
-
-    # fatal: [iosxeappliance]: FAILED! => {
-    #     "changed": false,
-    #     "failed_conditions": [
-    #         "result[1] contains Loopback0"
-    #     ],
-    #     "invocation": {
-    #         "module_args": {
-    #             "commands": [
-    #                 "show version",
-    #                 "show interfaces"
-    #             ],
-    #             "interval": 1,
-    #             "match": "all",
-    #             "retries": 10,
-    #             "wait_for": [
-    #                 "result[0] contains IOS",
-    #                 "result[1] contains Loopback0"
-    #             ]
-    #         }
-    #     },
-    #     "msg": "One or more conditional statements have not been satisfied"
-    # }
-
-    - name: Run commands that require answering a prompt
+    - name: run commands that require answering a prompt
       cisco.ios.ios_command:
         commands:
-          - command: "clear counters GigabitEthernet2"
-            prompt: 'Clear "show interface" counters on this interface \[confirm\]'
-            answer: "y"
-          - command: "clear counters GigabitEthernet3"
-            prompt: "[confirm]"
-            answer: "\r"
-
-    # output-
-
-    # ok: [iosxeappliance] => {
-    #     "changed": false,
-    #     "invocation": {
-    #         "module_args": {
-    #             "commands": [
-    #                 {
-    #                     "answer": "y",
-    #                     "check_all": false,
-    #                     "command": "clear counters GigabitEthernet2",
-    #                     "newline": true,
-    #                     "output": null,
-    #                     "prompt": "Clear \"show interface\" counters on this interface \\[confirm\\]",
-    #                     "sendonly": false
-    #                 },
-    #                 {
-    #                     "answer": "\r",
-    #                     "check_all": false,
-    #                     "command": "clear counters GigabitEthernet3",
-    #                     "newline": true,
-    #                     "output": null,
-    #                     "prompt": "[confirm]",
-    #                     "sendonly": false
-    #                 }
-    #             ],
-    #             "interval": 1,
-    #             "match": "all",
-    #             "retries": 10,
-    #             "wait_for": null
-    #         }
-    #     },
-    #     "stdout": [
-    #         "Clear \"show interface\" counters on this interface [confirm]y",
-    #         "Clear \"show interface\" counters on this interface [confirm]"
-    #     ],
-    #     "stdout_lines": [
-    #         [
-    #             "Clear \"show interface\" counters on this interface [confirm]y"
-    #         ],
-    #         [
-    #             "Clear \"show interface\" counters on this interface [confirm]"
-    #         ]
-    #     ]
-    # }
-
-    - name: Run commands with complex values like special characters in variables
-      cisco.ios.ios_command:
-        commands:
-          ["{{ 'test aaa group TEST ' ~ user ~ ' ' ~ password ~ ' new-code' }}"]
-      vars:
-        user: "dummy"
-        password: "!dummy"
-
-    # ok: [iosxeappliance] => {
-    #     "changed": false,
-    #     "invocation": {
-    #         "module_args": {
-    #             "commands": [
-    #                 "test aaa group group test !dummy new-code"
-    #             ],
-    #             "interval": 1,
-    #             "match": "all",
-    #             "retries": 10,
-    #             "wait_for": null
-    #         }
-    #     },
-    #     "stdout": [
-    #         "User was successfully authenticated."
-    #     ],
-    #     "stdout_lines": [
-    #         [
-    #             "User was successfully authenticated."
-    #         ]
-    #     ]
-    # }
+        - command: 'clear counters GigabitEthernet0/1'
+          prompt: 'Clear "show interface" counters on this interface \[confirm\]'
+          answer: 'y'
+        - command: 'clear counters GigabitEthernet0/2'
+          prompt: '[confirm]'
+          answer: "\r"
 
 
 

@@ -7,10 +7,11 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
+
 from textwrap import dedent
-from unittest.mock import patch
 
 from ansible_collections.cisco.ios.plugins.modules import ios_ntp_global
+from ansible_collections.cisco.ios.tests.unit.compat.mock import patch
 from ansible_collections.cisco.ios.tests.unit.modules.utils import set_module_args
 
 from .ios_module import TestIosModule
@@ -22,11 +23,32 @@ class TestIosNtpGlobalModule(TestIosModule):
     def setUp(self):
         super(TestIosNtpGlobalModule, self).setUp()
 
+        self.mock_get_config = patch(
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
+        )
+        self.get_config = self.mock_get_config.start()
+
+        self.mock_load_config = patch(
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
+        )
+        self.load_config = self.mock_load_config.start()
+
+        self.mock_get_resource_connection_config = patch(
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base."
+            "get_resource_connection",
+        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
+
         self.mock_get_resource_connection_facts = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base."
             "get_resource_connection",
         )
         self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
+
+        self.mock_edit_config = patch(
+            "ansible_collections.cisco.ios.plugins.module_utils.network.ios.providers.providers.CliProvider.edit_config",
+        )
+        self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
             "ansible_collections.cisco.ios.plugins.module_utils.network.ios.facts.ntp_global.ntp_global."
@@ -36,7 +58,11 @@ class TestIosNtpGlobalModule(TestIosModule):
 
     def tearDown(self):
         super(TestIosNtpGlobalModule, self).tearDown()
+        self.mock_get_resource_connection_config.stop()
         self.mock_get_resource_connection_facts.stop()
+        self.mock_edit_config.stop()
+        self.mock_get_config.stop()
+        self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
 
     def test_ios_ntp_global_merged_idempotent(self):
@@ -79,7 +105,11 @@ class TestIosNtpGlobalModule(TestIosModule):
                     access_group=dict(
                         peer=[
                             dict(access_list="2", kod=True),
-                            dict(access_list="preauth_ipv6_acl", ipv6=True, kod=True),
+                            dict(
+                                access_list="preauth_ipv6_acl",
+                                ipv6=True,
+                                kod=True,
+                            ),
                         ],
                     ),
                     allow=dict(control=dict(rate_limit=4)),
@@ -115,12 +145,22 @@ class TestIosNtpGlobalModule(TestIosModule):
                             use_ipv4=True,
                         ),
                         dict(peer="checkPeerDomainIpv6.com", use_ipv6=True),
-                        dict(peer="testPeerDomainIpv6.com", prefer=True, use_ipv6=True),
+                        dict(
+                            peer="testPeerDomainIpv6.com",
+                            prefer=True,
+                            use_ipv6=True,
+                        ),
                     ],
                     servers=[
                         dict(server="172.16.1.12", version=2),
-                        dict(server="172.16.1.13", source="GigabitEthernet0/1"),
-                        dict(server="checkServerDomainIpv6.com", use_ipv6=True),
+                        dict(
+                            server="172.16.1.13",
+                            source="GigabitEthernet0/1",
+                        ),
+                        dict(
+                            server="checkServerDomainIpv6.com",
+                            use_ipv6=True,
+                        ),
                     ],
                     source="GigabitEthernet0/1",
                     trusted_keys=[
@@ -149,7 +189,11 @@ class TestIosNtpGlobalModule(TestIosModule):
                     access_group=dict(
                         peer=[
                             dict(access_list="2", kod=True),
-                            dict(access_list="preauth_ipv6_acl", ipv6=True, kod=True),
+                            dict(
+                                access_list="preauth_ipv6_acl",
+                                ipv6=True,
+                                kod=True,
+                            ),
                         ],
                     ),
                     allow=dict(control=dict(rate_limit=4)),
@@ -185,13 +229,23 @@ class TestIosNtpGlobalModule(TestIosModule):
                             use_ipv4=True,
                         ),
                         dict(peer="checkPeerDomainIpv6.com", use_ipv6=True),
-                        dict(peer="testPeerDomainIpv6.com", prefer=True, use_ipv6=True),
+                        dict(
+                            peer="testPeerDomainIpv6.com",
+                            prefer=True,
+                            use_ipv6=True,
+                        ),
                     ],
                     servers=[
                         dict(server="172.16.1.12", version=2),
                         dict(server="172.16.1.110", key_id=2),
-                        dict(server="172.16.1.13", source="GigabitEthernet0/1"),
-                        dict(server="checkServerDomainIpv6.com", use_ipv6=True),
+                        dict(
+                            server="172.16.1.13",
+                            source="GigabitEthernet0/1",
+                        ),
+                        dict(
+                            server="checkServerDomainIpv6.com",
+                            use_ipv6=True,
+                        ),
                     ],
                     source="GigabitEthernet0/1",
                     trusted_keys=[
@@ -353,7 +407,11 @@ class TestIosNtpGlobalModule(TestIosModule):
                     access_group=dict(
                         peer=[
                             dict(access_list="2", kod=True),
-                            dict(access_list="preauth_ipv6_acl", ipv6=True, kod=True),
+                            dict(
+                                access_list="preauth_ipv6_acl",
+                                ipv6=True,
+                                kod=True,
+                            ),
                         ],
                     ),
                     allow=dict(control=dict(rate_limit=4)),
@@ -389,12 +447,22 @@ class TestIosNtpGlobalModule(TestIosModule):
                             use_ipv4=True,
                         ),
                         dict(peer="checkPeerDomainIpv6.com", use_ipv6=True),
-                        dict(peer="testPeerDomainIpv6.com", prefer=True, use_ipv6=True),
+                        dict(
+                            peer="testPeerDomainIpv6.com",
+                            prefer=True,
+                            use_ipv6=True,
+                        ),
                     ],
                     servers=[
                         dict(server="172.16.1.12", version=2),
-                        dict(server="172.16.1.13", source="GigabitEthernet0/1"),
-                        dict(server="checkServerDomainIpv6.com", use_ipv6=True),
+                        dict(
+                            server="172.16.1.13",
+                            source="GigabitEthernet0/1",
+                        ),
+                        dict(
+                            server="checkServerDomainIpv6.com",
+                            use_ipv6=True,
+                        ),
                     ],
                     source="GigabitEthernet0/1",
                     trusted_keys=[
@@ -462,7 +530,11 @@ class TestIosNtpGlobalModule(TestIosModule):
                     access_group=dict(
                         peer=[
                             dict(access_list="2", kod=True),
-                            dict(access_list="preauth_ipv6_acl", ipv6=True, kod=True),
+                            dict(
+                                access_list="preauth_ipv6_acl",
+                                ipv6=True,
+                                kod=True,
+                            ),
                         ],
                     ),
                     allow=dict(control=dict(rate_limit=4)),
@@ -498,8 +570,14 @@ class TestIosNtpGlobalModule(TestIosModule):
                         ),
                     ],
                     servers=[
-                        dict(server="172.16.1.13", source="GigabitEthernet0/1"),
-                        dict(server="checkServerDomainIpv6.com", use_ipv6=True),
+                        dict(
+                            server="172.16.1.13",
+                            source="GigabitEthernet0/1",
+                        ),
+                        dict(
+                            server="checkServerDomainIpv6.com",
+                            use_ipv6=True,
+                        ),
                     ],
                     source="Loopback888",
                     trusted_keys=[

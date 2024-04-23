@@ -14,10 +14,10 @@
           - name: GigabitEthernet0/0
             receive: true
             transmit: true
-          - name: GigabitEthernet2
+          - name: GigabitEthernet0/1
             receive: true
             transmit: true
-          - name: GigabitEthernet3
+          - name: GigabitEthernet0/2
             receive: true
             transmit: true
         state: merged
@@ -37,7 +37,7 @@
           - name: GigabitEthernet0/0
             receive: true
             transmit: true
-          - name: GigabitEthernet3
+          - name: GigabitEthernet0/2
             receive: true
         state: overridden
 

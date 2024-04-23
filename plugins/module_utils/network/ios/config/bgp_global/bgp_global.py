@@ -19,7 +19,7 @@ created.
 """
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
     ResourceModule,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
@@ -61,8 +61,6 @@ class Bgp_global(ResourceModule):
         "route_server_context.description",
         "synchronization",
         "table_map",
-        "template.peer_policy",
-        "template.peer_session",
         "timers",
         "bgp.additional_paths",
         "bgp.advertise_best_external",
@@ -81,8 +79,6 @@ class Bgp_global(ResourceModule):
         "bgp.consistency_checker.auto_repair",
         "bgp.consistency_checker.error_message",
         "bgp.dampening",
-        "bgp.default.ipv4_unicast",
-        "bgp.default.route_target.filter",
         "bgp.deterministic_med",
         "bgp.dmzlink_bw",
         "bgp.enforce_first_as",
@@ -152,7 +148,7 @@ class Bgp_global(ResourceModule):
         """Generate configuration commands to send based on
         want, have and desired state.
         """
-        if self.state in ["merged", "replaced", "overridden"]:
+        if self.state in ["merged", "replaced"]:
             w_asn = self.want.get("as_number")
             h_asn = self.have.get("as_number")
 
@@ -172,10 +168,7 @@ class Bgp_global(ResourceModule):
         if self.state == "deleted":
             # deleted, clean up global params
             if not self.want or (self.have.get("as_number") == self.want.get("as_number")):
-                if "as_number" not in self.want:
-                    self.want["as_number"] = self.have.get("as_number")
-                self._set_bgp_defaults(self.want)
-                self._compare(self.want, have=self.have)
+                self._compare(want={}, have=self.have)
 
         elif self.state == "purged":
             # delete as_number takes down whole bgp config
@@ -196,17 +189,15 @@ class Bgp_global(ResourceModule):
         the `want` and `have` data with the `parsers` defined
         for the Bgp_global network resource.
         """
-        self.generic_list_parsers = ["distributes", "aggregate_addresses", "networks"]
-
+        self.generic_list_parsers = [
+            "distributes",
+            "aggregate_addresses",
+            "networks",
+        ]
         if self._has_bgp_inject_maps(want):
             self.generic_list_parsers.insert(0, "inject_maps")
 
         cmd_len = len(self.commands)  # holds command length to add as_number
-
-        # for clean bgp global setup
-        if not have.get("bgp", {}).get("default"):
-            self._set_bgp_defaults(have)
-
         # for dict type attributes
         self.compare(parsers=self.parsers, want=want, have=have)
 
@@ -237,22 +228,12 @@ class Bgp_global(ResourceModule):
             have.get("redistribute", {}),
         )
 
-        # add as_number in the beginning of commands set if commands generated
+        # add as_number in the begining fo command set if commands generated
         if len(self.commands) != cmd_len or (not have and want):
             self.commands.insert(
                 0,
                 self._tmplt.render(want or have, "as_number", False),
             )
-
-    def _set_bgp_defaults(self, bgp_dict):
-        bgp_dict.setdefault("bgp", {}).setdefault("default", {}).setdefault(
-            "ipv4_unicast",
-            True,
-        )
-        bgp_dict.setdefault("bgp", {}).setdefault("default", {}).setdefault(
-            "route_target",
-            {},
-        ).setdefault("filter", True)
 
     def _has_bgp_inject_maps(self, want):
         if want.get("bgp", {}).get("inject_maps", {}):
@@ -307,7 +288,7 @@ class Bgp_global(ResourceModule):
             "path_attribute.treat_as_withdraw",
             "shutdown",
             "soft_reconfiguration",
-            "ntimers",
+            "timers",
             "transport.connection_mode",
             "transport.multi_session",
             "transport.path_mtu_discovery",
@@ -360,27 +341,20 @@ class Bgp_global(ResourceModule):
         ]
 
         for name, w_neighbor in want.items():
-            handle_shutdown_default = False
             have_nbr = have.pop(name, {})
             want_route = w_neighbor.pop("route_maps", {})
             have_route = have_nbr.pop("route_maps", {})
-            if (
-                not w_neighbor.get("shutdown", {}).get("set")
-                and have_nbr.get("shutdown", {}).get("set")
-                and self.state in ["merged", "replaced", "overridden"]
-            ):
-                neig_parses.remove("shutdown")
-                handle_shutdown_default = True
             self.compare(parsers=neig_parses, want=w_neighbor, have=have_nbr)
-            if handle_shutdown_default:
-                self.addcmd(have_nbr, "shutdown", True)
-
             if want_route:
                 for k_rmps, w_rmps in want_route.items():
                     have_rmps = have_route.pop(k_rmps, {})
-                    w_rmps["neighbor_address"] = w_neighbor.get("neighbor_address")
+                    w_rmps["neighbor_address"] = w_neighbor.get(
+                        "neighbor_address",
+                    )
                     if have_rmps:
-                        have_rmps["neighbor_address"] = have_nbr.get("neighbor_address")
+                        have_rmps["neighbor_address"] = have_nbr.get(
+                            "neighbor_address",
+                        )
                         have_rmps = {"route_maps": have_rmps}
                     self.compare(
                         parsers=["route_maps"],
@@ -422,13 +396,14 @@ class Bgp_global(ResourceModule):
             ],
         }
         for k, _v in p_key.items():
-            if tmp_data.get(k) and k not in ["distributes", "redistribute", "bgp"]:
+            if tmp_data.get(k) and k not in [
+                "distributes",
+                "redistribute",
+                "bgp",
+            ]:
                 if k == "neighbors":
                     for neb in tmp_data.get("neighbors"):
                         neb = self._bgp_global_list_to_dict(neb)
-                        _ntimer = neb.pop("timers", {})
-                        if _ntimer:
-                            neb["ntimers"] = _ntimer
                 tmp_data[k] = {str(i[p_key[k]]): i for i in tmp_data[k]}
             elif tmp_data.get("distributes") and k == "distributes":
                 tmp_data[k] = {str("".join([i.get(j, "") for j in _v])): i for i in tmp_data[k]}
@@ -466,9 +441,13 @@ class Bgp_global(ResourceModule):
         if not is_nbr:
             if want.get("aggregate_address"):
                 if want.get("aggregate_addresses"):
-                    want["aggregate_addresses"].append(want.pop("aggregate_address"))
+                    want["aggregate_addresses"].append(
+                        want.pop("aggregate_address"),
+                    )
                 else:
-                    want["aggregate_addresses"] = [want.pop("aggregate_address")]
+                    want["aggregate_addresses"] = [
+                        want.pop("aggregate_address"),
+                    ]
             if want.get("bgp"):
                 _want_bgp = want.get("bgp", {})
                 if _want_bgp.get("bestpath"):
@@ -483,18 +462,26 @@ class Bgp_global(ResourceModule):
                     _want_bgp["nopeerup_delay_options"] = npdelay
                 if _want_bgp.get("inject_map"):
                     if _want_bgp.get("inject_maps"):
-                        _want_bgp["inject_maps"].append(_want_bgp.pop("inject_map"))
+                        _want_bgp["inject_maps"].append(
+                            _want_bgp.pop("inject_map"),
+                        )
                     else:
-                        _want_bgp["inject_maps"] = [_want_bgp.pop("inject_map")]
+                        _want_bgp["inject_maps"] = [
+                            _want_bgp.pop("inject_map"),
+                        ]
                 if _want_bgp.get("listen", {}).get("range"):
                     if _want_bgp.get("listen").get("range").get("ipv4_with_subnet"):
                         _want_bgp["listen"]["range"]["host_with_subnet"] = _want_bgp["listen"][
                             "range"
-                        ].pop("ipv4_with_subnet")
+                        ].pop(
+                            "ipv4_with_subnet",
+                        )
                     elif _want_bgp.get("listen").get("range").get("ipv6_with_subnet"):
                         _want_bgp["listen"]["range"]["host_with_subnet"] = _want_bgp["listen"][
                             "range"
-                        ].pop("ipv6_with_subnet")
+                        ].pop(
+                            "ipv6_with_subnet",
+                        )
             if want.get("distribute_list"):
                 if want.get("distributes"):
                     want["distributes"].append(want.pop("distribute_list"))

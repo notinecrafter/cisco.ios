@@ -29,12 +29,12 @@ Parameters
 
     <table  border=0 cellpadding=0 class="documentation-table">
         <tr>
-            <th colspan="1">Parameter</th>
+            <th colspan="2">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
             <th width="100%">Comments</th>
         </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>available_network_resources</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -53,7 +53,7 @@ Parameters
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>gather_network_resources</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -65,11 +65,11 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>When supplied, this argument will restrict the facts collected to a given subset. Possible values for this argument include all and the resources like interfaces, vlans etc. Can specify a list of values to include a larger subset. Values can also be used with an initial <code>!</code> to specify that a specific subset should not be collected. Valid subsets are &#x27;bgp_global&#x27;, &#x27;l3_interfaces&#x27;, &#x27;lag_interfaces&#x27;, &#x27;ntp_global&#x27;, &#x27;acls&#x27;, &#x27;hostname&#x27;, &#x27;interfaces&#x27;, &#x27;lldp_interfaces&#x27;, &#x27;logging_global&#x27;, &#x27;ospf_interfaces&#x27;, &#x27;ospfv2&#x27;, &#x27;prefix_lists&#x27;, &#x27;static_routes&#x27;, &#x27;acl_interfaces&#x27;, &#x27;all&#x27;, &#x27;bgp_address_family&#x27;, &#x27;l2_interfaces&#x27;, &#x27;lacp&#x27;, &#x27;lacp_interfaces&#x27;, &#x27;lldp_global&#x27;, &#x27;ospfv3&#x27;, &#x27;snmp_server&#x27;, &#x27;vlans&#x27;, &#x27;service&#x27;.</div>
+                        <div>When supplied, this argument will restrict the facts collected to a given subset. Possible values for this argument include all and the resources like interfaces, vlans etc. Can specify a list of values to include a larger subset. Values can also be used with an initial <code>!</code> to specify that a specific subset should not be collected. Valid subsets are &#x27;bgp_global&#x27;, &#x27;l3_interfaces&#x27;, &#x27;lag_interfaces&#x27;, &#x27;ntp_global&#x27;, &#x27;acls&#x27;, &#x27;hostname&#x27;, &#x27;interfaces&#x27;, &#x27;lldp_interfaces&#x27;, &#x27;logging_global&#x27;, &#x27;ospf_interfaces&#x27;, &#x27;ospfv2&#x27;, &#x27;prefix_lists&#x27;, &#x27;static_routes&#x27;, &#x27;acl_interfaces&#x27;, &#x27;all&#x27;, &#x27;bgp_address_family&#x27;, &#x27;l2_interfaces&#x27;, &#x27;lacp&#x27;, &#x27;lacp_interfaces&#x27;, &#x27;lldp_global&#x27;, &#x27;ospfv3&#x27;, &#x27;snmp_server&#x27;, &#x27;vlans&#x27;.</div>
                 </td>
             </tr>
             <tr>
-                <td colspan="1">
+                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>gather_subset</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
@@ -83,11 +83,163 @@ Parameters
                 </td>
                 <td>
                         <div>When supplied, this argument restricts the facts collected to a given subset.</div>
-                        <div>Possible values for this argument include <code>all</code>, <code>min</code>, <code>default</code>, <code>hardware</code>, <code>config</code>, and <code>interfaces</code>.</div>
+                        <div>Possible values for this argument include <code>all</code>, <code>min</code>, <code>hardware</code>, <code>config</code>, and <code>interfaces</code>.</div>
                         <div>Specify a list of values to include a larger subset.</div>
                         <div>Use a value with an initial <code>!</code> to collect all facts except that subset.</div>
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>provider</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div><b>Deprecated</b></div>
+                        <div>Starting with Ansible 2.5 we recommend using <code>connection: network_cli</code>.</div>
+                        <div>For more information please see the <a href='https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html'>https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html</a>.</div>
+                        <div><hr/></div>
+                        <div>A dict object containing connection details.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>auth_pass</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the password to use if required to enter privileged mode on the remote device.  If <em>authorize</em> is false, then this argument does nothing. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_AUTH_PASS</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>authorize</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Instructs the module to enter privileged mode on the remote device before sending any commands.  If not specified, the device will attempt to execute all commands in non-privileged mode. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_AUTHORIZE</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>host</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the DNS host name or address for connecting to the remote device over the specified transport.  The value of host is used as the destination address for the transport.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the password to use to authenticate the connection to the remote device.   This value is used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_PASSWORD</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>port</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the port to use when building the connection to the remote device.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>ssh_keyfile</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">path</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the SSH key to use to authenticate the connection to the remote device.   This value is the path to the key used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_SSH_KEYFILE</code> will be used instead.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>timeout</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Specifies the timeout in seconds for communicating with the network device for either connecting or sending commands.  If the timeout is exceeded before the operation is completed, the module will error.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Configures the username to use to authenticate the connection to the remote device.  This value is used to authenticate the SSH session. If the value is not specified in the task, the value of environment variable <code>ANSIBLE_NET_USERNAME</code> will be used instead.</div>
+                </td>
+            </tr>
+
     </table>
     <br/>
 
@@ -96,7 +248,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Cisco IOSXE Version 17.3 on CML and IOS 15.6 for L2 specific resource.
+   - Tested against IOS 15.6
    - Facts gathering for L3 devices are supposed to produce blank output for unsupported resources like vlan.
    - This module works with connection ``network_cli``. See https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
@@ -116,12 +268,12 @@ Examples
     - name: Gather only the config and default facts
       cisco.ios.ios_facts:
         gather_subset:
-          - config
+        - config
 
     - name: Do not gather hardware facts
       cisco.ios.ios_facts:
         gather_subset:
-          - "!hardware"
+        - '!hardware'
 
     - name: Gather legacy and resource facts
       cisco.ios.ios_facts:
@@ -131,10 +283,10 @@ Examples
     - name: Gather only the interfaces resource facts and no legacy facts
       cisco.ios.ios_facts:
         gather_subset:
-          - "!all"
-          - "!min"
+        - '!all'
+        - '!min'
         gather_network_resources:
-          - interfaces
+        - interfaces
 
     - name: Gather interfaces resource and minimal legacy facts
       cisco.ios.ios_facts:
@@ -222,21 +374,6 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                 <td>when config is configured</td>
                 <td>
                             <div>The current active config from the device</div>
-                    <br/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>ansible_net_cpu_utilization</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>when hardware is configured</td>
-                <td>
-                            <div>The current CPU utilization of the device</div>
                     <br/>
                 </td>
             </tr>

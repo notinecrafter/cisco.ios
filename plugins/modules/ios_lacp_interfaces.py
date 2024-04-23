@@ -27,13 +27,12 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: ios_lacp_interfaces
 short_description: Resource module to configure LACP interfaces.
-description:
-  This module provides declarative management of LACP on Cisco IOS network
+description: This module provides declarative management of LACP on Cisco IOS network
   devices lacp_interfaces.
 version_added: 1.0.0
 author: Sumit Jaiswal (@justjais)
 notes:
-  - Tested against Cisco IOSXE Version 17.3 on CML.
+  - Tested against Cisco IOSv Version 15.2 on VIRL.
   - This module works with connection C(network_cli).
     See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_ios.html)
 options:
@@ -44,22 +43,22 @@ options:
     suboptions:
       name:
         description:
-          - Name of the Interface for configuring LACP.
+        - Name of the Interface for configuring LACP.
         type: str
         required: true
       port_priority:
         description:
-          - LACP priority on this interface.
-          - Refer to vendor documentation for valid port values.
+        - LACP priority on this interface.
+        - Refer to vendor documentation for valid port values.
         type: int
       fast_switchover:
         description:
-          - LACP fast switchover supported on this port channel.
+        - LACP fast switchover supported on this port channel.
         type: bool
       max_bundle:
         description:
-          - LACP maximum number of ports to bundle in this port channel.
-          - Refer to vendor documentation for valid port values.
+        - LACP maximum number of ports to bundle in this port channel.
+        - Refer to vendor documentation for valid port values.
         type: int
   running_config:
     description:
@@ -90,13 +89,13 @@ options:
         connection to remote host is not required.
     type: str
     choices:
-      - merged
-      - replaced
-      - overridden
-      - deleted
-      - rendered
-      - gathered
-      - parsed
+    - merged
+    - replaced
+    - overridden
+    - deleted
+    - rendered
+    - gathered
+    - parsed
     default: merged
 """
 
@@ -120,15 +119,15 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   cisco.ios.ios_lacp_interfaces:
     config:
-      - name: GigabitEthernet0/1
-        port_priority: 10
-      - name: GigabitEthernet0/2
-        port_priority: 20
-      - name: GigabitEthernet0/3
-        port_priority: 30
-      - name: Port-channel10
-        fast_switchover: true
-        max_bundle: 5
+    - name: GigabitEthernet0/1
+      port_priority: 10
+    - name: GigabitEthernet0/2
+      port_priority: 20
+    - name: GigabitEthernet0/3
+      port_priority: 30
+    - name: Port-channel10
+      fast_switchover: true
+      max_bundle: 5
     state: merged
 
 # After state:
@@ -173,10 +172,10 @@ EXAMPLES = """
 - name: Override device configuration of all lacp_interfaces with provided configuration
   cisco.ios.ios_lacp_interfaces:
     config:
-      - name: GigabitEthernet0/1
-        port_priority: 20
-      - name: Port-channel10
-        max_bundle: 2
+    - name: GigabitEthernet0/1
+      port_priority: 20
+    - name: Port-channel10
+      max_bundle: 2
     state: overridden
 
 # After state:
@@ -218,11 +217,11 @@ EXAMPLES = """
 - name: Replaces device configuration of listed lacp_interfaces with provided configuration
   cisco.ios.ios_lacp_interfaces:
     config:
-      - name: GigabitEthernet0/3
-        port_priority: 40
-      - name: Port-channel10
-        fast_switchover: true
-        max_bundle: 2
+    - name: GigabitEthernet0/3
+      port_priority: 40
+    - name: Port-channel10
+      fast_switchover: true
+      max_bundle: 2
     state: replaced
 
 # After state:
@@ -267,7 +266,7 @@ EXAMPLES = """
 - name: "Delete LACP attributes of given interfaces (Note: This won't delete the interface itself)"
   cisco.ios.ios_lacp_interfaces:
     config:
-      - name: GigabitEthernet0/1
+    - name: GigabitEthernet0/1
     state: deleted
 
 # After state:
@@ -394,13 +393,13 @@ EXAMPLES = """
 - name: Render the commands for provided  configuration
   cisco.ios.ios_lacp_interfaces:
     config:
-      - name: GigabitEthernet0/1
-        port_priority: 10
-      - name: GigabitEthernet0/2
-        port_priority: 20
-      - name: Port-channel10
-        fast_switchover: true
-        max_bundle: 2
+    - name: GigabitEthernet0/1
+      port_priority: 10
+    - name: GigabitEthernet0/2
+      port_priority: 20
+    - name: Port-channel10
+      fast_switchover: true
+      max_bundle: 2
     state: rendered
 
 # Module Execution Result:
@@ -451,8 +450,8 @@ EXAMPLES = """
 #             "name": "Port-channel10"
 #         }
 #     ]
-"""
 
+"""
 RETURN = """
 before:
   description: The configuration as structured data prior to module invocation.

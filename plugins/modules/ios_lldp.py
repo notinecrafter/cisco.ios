@@ -19,19 +19,18 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-
 DOCUMENTATION = """
 module: ios_lldp
 author: Ganesh Nalawade (@ganeshrn)
 short_description: (deprecated, removed after 2024-06-01) Manage LLDP configuration on Cisco IOS network devices.
 description:
-  - This module provides declarative management of LLDP service on Cisco IOS network
-    devices.
+- This module provides declarative management of LLDP service on Cisco IOS network
+  devices.
 version_added: 1.0.0
 deprecated:
   alternative: ios_lldp_global
   why: Newer and updated modules released with more functionality.
-  removed_at_date: "2024-06-01"
+  removed_at_date: '2024-06-01'
 notes:
   - Tested against IOS 15.2
   - This module works with connection C(network_cli).
@@ -39,19 +38,18 @@ notes:
 options:
   state:
     description:
-      - State of the LLDP configuration. If value is I(present) lldp will be enabled
-        else if it is I(absent) it will be disabled.
+    - State of the LLDP configuration. If value is I(present) lldp will be enabled
+      else if it is I(absent) it will be disabled.
     default: present
     choices:
-      - present
-      - absent
-      - enabled
-      - disabled
+    - present
+    - absent
+    - enabled
+    - disabled
     type: str
 extends_documentation_fragment:
-  - cisco.ios.ios
+- cisco.ios.ios
 """
-
 EXAMPLES = """
 - name: Enable LLDP service
   cisco.ios.ios_lldp:
@@ -61,7 +59,6 @@ EXAMPLES = """
   cisco.ios.ios_lldp:
     state: absent
 """
-
 RETURN = """
 commands:
   description: The list of configuration mode commands to send to the device
@@ -73,6 +70,7 @@ commands:
 from ansible.module_utils.basic import AnsibleModule
 
 from ansible_collections.cisco.ios.plugins.module_utils.network.ios.ios import (
+    ios_argument_spec,
     load_config,
     run_commands,
 )
@@ -89,9 +87,16 @@ def has_lldp(module):
 def main():
     """main entry point for module execution"""
     argument_spec = dict(
-        state=dict(default="present", choices=["present", "absent", "enabled", "disabled"]),
+        state=dict(
+            default="present",
+            choices=["present", "absent", "enabled", "disabled"],
+        ),
     )
-    module = AnsibleModule(argument_spec=argument_spec, supports_check_mode=True)
+    argument_spec.update(ios_argument_spec)
+    module = AnsibleModule(
+        argument_spec=argument_spec,
+        supports_check_mode=True,
+    )
     warnings = list()
     result = {"changed": False}
     if warnings:

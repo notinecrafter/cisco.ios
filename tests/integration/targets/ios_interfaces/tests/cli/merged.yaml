@@ -9,13 +9,18 @@
       register: result
       cisco.ios.ios_interfaces: &id001
         config:
-          - name: GigabitEthernet2
+          - name: GigabitEthernet0/1
             description: Configured and Merged by Ansible-Network
+            mtu: 110
             enabled: true
+            duplex: half
 
-          - name: GigabitEthernet3
-            description: 04j
+          - name: GigabitEthernet0/2
+            description: Configured and Merged by Ansible-Network
+            mtu: 2800
             enabled: false
+            speed: 100
+            duplex: full
         state: merged
 
     - name: Assert that correct set of commands were generated

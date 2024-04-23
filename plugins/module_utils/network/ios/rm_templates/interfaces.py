@@ -24,7 +24,11 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 
 class InterfacesTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
-        super(InterfacesTemplate, self).__init__(lines=lines, tmplt=self, module=module)
+        super(InterfacesTemplate, self).__init__(
+            lines=lines,
+            tmplt=self,
+            module=module,
+        )
 
     # fmt: off
     PARSERS = [
@@ -53,7 +57,7 @@ class InterfacesTemplate(NetworkTemplate):
             "setval": "description {{ description }}",
             "result": {
                 '{{ name }}': {
-                    'description': "'{{ description }}'",
+                    'description': '{{ description }}',
                 },
             },
         },
@@ -69,21 +73,6 @@ class InterfacesTemplate(NetworkTemplate):
             "result": {
                 '{{ name }}': {
                     'enabled': "{{ False if shutdown is defined and negate is not defined else True }}",
-                },
-            },
-        },
-        {  # only applicable for switches
-            "name": "mode",
-            "getval": re.compile(
-                r"""
-                (?P<negate>\sno)?
-                (?P<switchport>\sswitchport)
-                $""", re.VERBOSE,
-            ),
-            "setval": "switchport",
-            "result": {
-                '{{ name }}': {
-                    'mode': "{{ 'layer2' if switchport is defined and negate is not defined else 'layer3' }}",
                 },
             },
         },
@@ -126,20 +115,6 @@ class InterfacesTemplate(NetworkTemplate):
             "result": {
                 '{{ name }}': {
                     'duplex': '{{ duplex }}',
-                },
-            },
-        },
-        {
-            "name": "template",
-            "getval": re.compile(
-                r"""
-                \s+source\stemplate\s(?P<template>.+$)
-                """, re.VERBOSE,
-            ),
-            "setval": "source template {{ template }}",
-            "result": {
-                '{{ name }}': {
-                    'template': '{{ template }}',
                 },
             },
         },

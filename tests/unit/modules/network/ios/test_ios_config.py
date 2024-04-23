@@ -21,16 +21,17 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-from unittest.mock import MagicMock, patch
 
 from ansible_collections.cisco.ios.plugins.cliconf.ios import Cliconf
 from ansible_collections.cisco.ios.plugins.modules import ios_config
+from ansible_collections.cisco.ios.tests.unit.compat.mock import MagicMock, patch
 from ansible_collections.cisco.ios.tests.unit.modules.utils import set_module_args
 
 from .ios_module import TestIosModule, load_fixture
 
 
 class TestIosConfigModule(TestIosModule):
+
     module = ios_config
 
     def setUp(self):
@@ -70,7 +71,9 @@ class TestIosConfigModule(TestIosModule):
 
     def test_ios_config_unchanged(self):
         src = load_fixture("ios_config_config.cfg")
-        self.conn.get_diff = MagicMock(return_value=self.cliconf_obj.get_diff(src, src))
+        self.conn.get_diff = MagicMock(
+            return_value=self.cliconf_obj.get_diff(src, src),
+        )
         set_module_args(dict(src=src))
         self.execute_module()
 
@@ -80,7 +83,11 @@ class TestIosConfigModule(TestIosModule):
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(src, self.running_config),
         )
-        commands = ["hostname foo", "interface GigabitEthernet0/0", "no ip address"]
+        commands = [
+            "hostname foo",
+            "interface GigabitEthernet0/0",
+            "no ip address",
+        ]
         self.execute_module(changed=True, commands=commands)
 
     def test_ios_config_backup(self):
@@ -91,7 +98,11 @@ class TestIosConfigModule(TestIosModule):
     def test_ios_config_save_changed_true(self):
         src = load_fixture("ios_config_src.cfg")
         set_module_args(dict(src=src, save_when="changed"))
-        commands = ["hostname foo", "interface GigabitEthernet0/0", "no ip address"]
+        commands = [
+            "hostname foo",
+            "interface GigabitEthernet0/0",
+            "no ip address",
+        ]
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(src, self.running_config),
         )
@@ -176,7 +187,11 @@ class TestIosConfigModule(TestIosModule):
     def test_ios_config_before_after_no_change(self):
         lines = ["hostname router"]
         set_module_args(
-            dict(lines=lines, before=["test1", "test2"], after=["test3", "test4"]),
+            dict(
+                lines=lines,
+                before=["test1", "test2"],
+                after=["test3", "test4"],
+            ),
         )
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
@@ -215,15 +230,6 @@ class TestIosConfigModule(TestIosModule):
         )
 
         commands = parents + lines
-        self.execute_module(changed=True, commands=commands)
-
-    def test_ios_config_replace_block_src(self):
-        src = load_fixture("ios_config_src.cfg")
-        set_module_args(dict(src=src, replace="block"))
-        self.conn.get_diff = MagicMock(
-            return_value=self.cliconf_obj.get_diff(src, self.running_config),
-        )
-        commands = ["hostname foo", "interface GigabitEthernet0/0", "no ip address"]
         self.execute_module(changed=True, commands=commands)
 
     def test_ios_config_match_none(self):
